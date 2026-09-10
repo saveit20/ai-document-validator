@@ -221,7 +221,12 @@ def create_app(settings: Settings | None = None, pipeline: Pipeline | None = Non
         token = request_id_var.set(request_id)
         started = time.perf_counter()
         try:
-            response = await call_next(request)
+            try:
+                response = await call_next(request)
+            except Exception:
+                # Handled here, not by an exception handler, so the 500 keeps its request id.
+                logger.exception("unhandled_error", extra={"request_id": request_id})
+                response = _error(500, "internal_error", "unexpected server error")
             response.headers["X-Request-ID"] = request_id
             # One line per request: id, latency, and for document requests the model and verdict.
             logger.info(

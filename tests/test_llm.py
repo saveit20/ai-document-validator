@@ -1,5 +1,6 @@
 import json
 from dataclasses import replace
+from datetime import date
 from decimal import Decimal
 from types import SimpleNamespace
 
@@ -12,7 +13,7 @@ from validator.extraction import build_extraction
 from validator.heuristic import HeuristicExtractor
 from validator.ingest import document_from_text
 from validator.llm import LLMExtractor
-from validator.models import FIELD_NAMES
+from validator.models import FIELD_NAMES, RuleConfig, Status
 from validator.pipeline import Pipeline
 from validator.pricing import estimate_cost_usd
 from validator.prompts import OUTPUT_SCHEMA, PROMPT_VERSION, RESPONSE_SCHEMA, PromptSpec
@@ -110,6 +111,70 @@ def test_fallback_keeps_the_cost_of_a_paid_call_with_unusable_output() -> None:
     assert run.llm is not None
     assert run.llm.input_tokens > 0
     assert run.llm.estimated_cost_usd > 0
+
+
+SWAP_DOCUMENT = document_from_text(
+    "INVOICE\n"
+    "From: Alpha Supplies Ltd, VAT GB111111111\n"
+    "Bill to: Beta Buyers Ltd, VAT GB222222222\n"
+    "Invoice number: A-1\n"
+    "Invoice date: 2026-06-01\n"
+    "Total: 100.00 EUR\n"
+)
+
+
+def _validate(reply: str, document=SWAP_DOCUMENT):
+    pipeline = Pipeline(LLMExtractor(FakeTransport(reply), "claude-opus-5"), HeuristicExtractor())
+    config = RuleConfig(document_type="SUPPLIER_INVOICE", max_age_days=90)
+    return pipeline.validate(document, config, date(2026, 6, 30))
+
+
+def test_supplier_quoted_from_the_customer_block_goes_to_review() -> None:
+    run = _validate(
+        llm_reply(
+            supplier_name=("Beta Buyers Ltd", "Bill to: Beta Buyers Ltd"),
+            invoice_number=("A-1", "Invoice number: A-1"),
+            invoice_date=("2026-06-01", "Invoice date: 2026-06-01"),
+            total_amount=("100.00", "Total: 100.00 EUR"),
+            currency=("EUR", "Total: 100.00 EUR"),
+            tax_id=("GB222222222", "Bill to: Beta Buyers Ltd, VAT GB222222222"),
+            customer_name=("Alpha Supplies Ltd", "From: Alpha Supplies Ltd"),
+            customer_tax_id=("GB111111111", "From: Alpha Supplies Ltd, VAT GB111111111"),
+        )
+    )
+    assert run.extraction.supplier_name.confidence < 1.0
+    assert run.extraction.tax_id.confidence < 1.0
+    assert run.status is Status.REVIEW
+
+
+def test_supplier_equal_to_customer_goes_to_review() -> None:
+    run = _validate(
+        llm_reply(
+            supplier_name=("Alpha Supplies Ltd", "From: Alpha Supplies Ltd"),
+            invoice_number=("A-1", "Invoice number: A-1"),
+            invoice_date=("2026-06-01", "Invoice date: 2026-06-01"),
+            total_amount=("100.00", "Total: 100.00 EUR"),
+            customer_name=("Alpha Supplies Ltd", "From: Alpha Supplies Ltd"),
+        )
+    )
+    assert run.extraction.supplier_name.confidence < 1.0
+    assert run.status is Status.REVIEW
+
+
+def test_correct_parties_stay_confident() -> None:
+    run = _validate(
+        llm_reply(
+            supplier_name=("Alpha Supplies Ltd", "From: Alpha Supplies Ltd"),
+            invoice_number=("A-1", "Invoice number: A-1"),
+            invoice_date=("2026-06-01", "Invoice date: 2026-06-01"),
+            total_amount=("100.00", "Total: 100.00 EUR"),
+            tax_id=("GB111111111", "From: Alpha Supplies Ltd, VAT GB111111111"),
+            customer_name=("Beta Buyers Ltd", "Bill to: Beta Buyers Ltd"),
+        )
+    )
+    assert run.extraction.supplier_name.confidence == 1.0
+    assert run.extraction.tax_id.confidence == 1.0
+    assert run.status is Status.PASS
 
 
 def _request(model: str = "claude-opus-5") -> LLMRequest:

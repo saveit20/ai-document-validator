@@ -208,7 +208,7 @@ read a section only when you want to challenge the decision it covers.
   In that comparison no model produced a wrong `PASS`/`FAIL`, so what a cheaper model costs is mainly extra
   manual reviews, not wrong decisions ([evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5)). Replayed with
   today's code the numbers move by a point or two and the choice is the same.
-  On the test split, run once with prompt v4b, Opus 5 scored 98% of fields and 96% of verdicts at $0.034 per
+  On the test split, run once with prompt v4b, Opus 5 scored 98% of fields and 95% of verdicts at $0.034 per
   invoice, with no wrong `PASS`/`FAIL` ([evaluation §6](evaluation.md#6-final-results-on-the-test-split)).
 - **Why 3 points, and why fixed in advance.** Dev has 80 invoices, so one invoice moves a score by 1.25
   points. A gap of 3 points or less is two invoices: within the noise of a sample this size, so it counts
@@ -221,10 +221,10 @@ read a section only when you want to challenge the decision it covers.
   | | Opus 5 | Haiku 4.5 |
   |---|---|---|
   | Cost per invoice | $0.0335 | $0.0073 |
-  | Invoices left undecided (`REVIEW` where a `PASS` or `FAIL` was due) | 8 of 80 | 13 of 80 |
+  | Invoices left undecided (`REVIEW` where a `PASS` or `FAIL` was due) | 9 of 80 | 14 of 80 |
   | Wrong decisions | 0 | 1 (an invoice that should `FAIL` got `PASS`) |
 
-  With the final prompt (v4b) Haiku makes no wrong decision but leaves 15 of 80 undecided. Per 1,000
+  With the final prompt (v4b) Haiku makes no wrong decision but leaves 16 of 80 undecided. Per 1,000
   invoices, Haiku saves about **$26** and adds about **90 manual reviews** (plus, with v3, about a dozen
   wrong `PASS`es). Opus pays for itself as soon as one review costs more than **about $0.30**, which is
   under a minute of a finance clerk's time; a real review (open the PDF, check the fields, decide) takes
@@ -271,7 +271,7 @@ read a section only when you want to challenge the decision it covers.
   (0 < confidence < 1), or if one of the six brief fields is missing. A missing optional field does not
   trigger a call. After the call, each field keeps whichever candidate scores higher; ties go to the LLM.
   All three modes are measured on the same data.
-- **Why:** measured on test, the hybrid matches the LLM (98% fields, 96% verdicts, no wrong `PASS`/`FAIL`)
+- **Why:** measured on test, the hybrid matches the LLM (98% fields, 95% verdicts, no wrong `PASS`/`FAIL`)
   but saves nothing: the general heuristic (B9) is never sure of a whole invoice on these varied layouts,
   so it called the LLM on 80 of 80. With rules written for one frequent template it skipped the LLM on 36
   of 80 invoices at the same verdict agreement and cut the cost per invoice by a third ($0.034 → $0.023).
@@ -340,9 +340,16 @@ read a section only when you want to challenge the decision it covers.
 - **Why:** this is what turns model errors into `REVIEW`. The line-by-line rule and the space/NBSP
   thousands separators came from the Haiku pilot, where correct values were being rejected: same
   recordings, dev verdicts 27% → 64% ([evaluation §4, contamination log](evaluation.md#contamination-log)).
+- **Role check.** Grounding proves a value is printed, not whose it is: a model that returns the customer
+  as the supplier, quoting "Bill to: …", would pass it (shown by an independent review with a probe, now a
+  test). So a supplier name or tax id quoted from a customer block ("Bill to", "Customer", "Cliente"…), or
+  equal to the customer's name or tax id, gets confidence 0.6 and its rule returns `REVIEW`. On the
+  evaluation data the customer-label part flagged nothing; the equality part flagged GOBL samples that
+  print one demo tax id for both parties, which cost one test verdict (96% → 95%). In a real invoice a shared
+  tax id is itself a reason to look.
 - **Rejected:** trusting the model's evidence; fuzzy matching (it would accept near-hallucinations).
 - **Revisit if:** unnecessary `REVIEW`s from evidence formatting (like `355.07` vs `355,07`) become a
-  measurable share of reviews.
+  measurable share of reviews. Matching evidence by position on the page would make the role check exact.
 
 ### C3 — Numeric date order is decided per document
 

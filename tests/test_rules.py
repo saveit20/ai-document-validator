@@ -68,7 +68,7 @@ def test_total_amount_must_be_positive(amount: str, expected: Status) -> None:
     assert statuses(make(total_amount=fv(Decimal(amount))))["total_amount_positive"] is expected
 
 
-def test_missing_supplier_fails_both_presence_rules() -> None:
+def test_missing_supplier_sends_both_presence_rules_to_review() -> None:
     result = statuses(make(supplier_name=fv(None, 0.0)))
     assert result["supplier_name_present"] is Status.REVIEW
     assert result["required_fields_present"] is Status.REVIEW

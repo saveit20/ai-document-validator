@@ -85,7 +85,7 @@ and let the hybrid skip the LLM on 45% of invoices, but the gain came almost ent
 present in both halves.
 
 **Result.** The published figures describe invoices the system has not been tuned on (Opus 5 on test: 98%
-of fields, 96% of verdicts, no wrong `PASS` or `FAIL`), and the removed rules are documented as what they
+of fields, 95% of verdicts, no wrong `PASS` or `FAIL`), and the removed rules are documented as what they
 really are: per-customer configuration for known suppliers, the case the hybrid is built for
 ([decisions.md](docs/decisions.md) E1, B9).
 

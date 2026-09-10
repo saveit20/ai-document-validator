@@ -125,6 +125,7 @@ Rules we held ourselves to:
 | Finance labelling policy | IDSEM and GOBL labels were aligned with the pre-registered guide (tax total summed from per-rate lines, credit notes negative), by rule and without looking at any test output | The heuristic's IDSEM field score fell from 43% to 37% (it does not sum tax lines); its quality-gate baseline was lowered accordingly, with this reason |
 | Prompt v3 | Two general instructions: copy numbers in the evidence with their original separators (the model rewrote `$ 802,73` as `$ 802.73`, which the check rightly rejected), and read numeric dates in the issuer's convention | Recordings invalidated and re-recorded on dev |
 | Missing-field rule | After an independent review, a required field that was not extracted became `REVIEW` instead of `FAIL`: an extractor that finds nothing has not proved the document lacks the field (decisions D1). A change of definition, applied to every configuration and not tuned to any case; the two labels whose supplier is genuinely missing moved from `FAIL` to `REVIEW` by the same rule | All figures re-replayed: Opus on test 95% → 96%; the heuristic stays at 55% but its 26 wrong `FAIL`s became `REVIEW`s; CI baselines updated with this reason |
+| Supplier/customer role check | A second independent review showed that a model quoting the customer as the supplier passed grounding. A supplier name or tax id quoted from a customer block, or equal to the customer's, now gets confidence 0.6 (decisions C2). A general rule, not tuned to any case; labels unchanged | Opus on test 96% → 95% and on dev 90% → 89%: GOBL samples print one demo tax id for both parties, which the check now sends to review. The customer-label part flagged no evaluation invoice |
 
 ## 5. Metrics
 
@@ -150,19 +151,20 @@ frozen. `python -m evals.run --extractor llm --model claude-opus-5 --split test`
 | Configuration | Field exact match | Verdict agreement | Verdict errors | Mean / p95 latency | Cost / invoice |
 |---|---|---|---|---|---|
 | Heuristic | 64% | 55% | 36, all `REVIEW` (34 valid invoices, 2 that should fail) | 0.11 s / 0.44 s | $0 |
-| **Opus 5, PDF + text, prompt v4b** | **98%** | **96%** | 3, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
-| Hybrid, heuristic then Opus 5 | 98% | 96% | 3, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
+| **Opus 5, PDF + text, prompt v4b** | **98%** | **95%** | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
+| Hybrid, heuristic then Opus 5 | 98% | 95% | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
 
 Opus 5 per source (fields / verdicts): Mendeley 100% / 100%, Mustang 97% / 100%, IDSEM 100% / 93%,
-SalorWorks 94% / 100%, GOBL 95% / 85%, stress set 98% / 100%.
+SalorWorks 94% / 100%, GOBL 95% / 77%, stress set 98% / 100%.
 
-- **No wrong `PASS` or `FAIL`.** The three disagreements are invoices that should have passed; the system
-  sent them to a person instead of deciding wrongly.
+- **No wrong `PASS` or `FAIL`.** The four disagreements are invoices that should have passed; the system
+  sent them to a person instead of deciding wrongly. One is a GOBL sample that prints the same demo tax id
+  for supplier and customer, which the role check sends to review on purpose.
 - **How far that goes.** The split expects 36 `PASS`, 42 `FAIL` and 2 `REVIEW`, and most expected `FAIL`s
   are an out-of-window date or a disallowed currency. Without the single-template Mendeley set, Opus agrees
-  on 41 of 44 verdicts (93%). Zero wrong decisions in 80 still allows a true rate of up to about 4% (95%
+  on 40 of 44 verdicts (91%). Zero wrong decisions in 80 still allows a true rate of up to about 4% (95%
   confidence).
-- **Test is better than dev (96% against 90%)**, because the dev figure for Opus was measured with the
+- **Test is better than dev (95% against 89%)**, because the dev figure for Opus was measured with the
   earlier prompt (v3) and the test run uses v4b. We report both.
 - **The weakest source is GOBL** (13 test invoices), the one with the most countries and document types.
   Per-case failures on test stay hidden by design.
@@ -226,7 +228,7 @@ chosen model.
 
 Dev as it was at that point (67 invoices, before the GOBL source was added), PDF + text input (§8),
 prompt v3, all replayed with the same code. On the final 80-invoice dev split, Opus 5 with v3 scores 97%
-of fields and 90% of verdicts.
+of fields and 89% of verdicts.
 
 | Configuration | Field exact match | Verdict agreement | Cost / document | p95 latency |
 |---|---|---|---|---|
@@ -236,9 +238,9 @@ of fields and 90% of verdicts.
 | **Opus 5** | **98%** | **90%** | $0.0351 | 8.6 s |
 | Hybrid (heuristic → Opus 5) | 98% | 88% | $0.0351 | 8.6 s |
 
-These are the numbers measured when the choice was made. Replaying the same recordings with today's code
-(which later gained general normalisation and heuristic fixes) moves them by a point or two — Haiku 97% /
-81%, Sonnet 96% / 75%, Opus 97% / 90% — and the rule still picks Opus 5.
+These are the numbers measured when the choice was made. Replaying the recordings with the final code
+(later general fixes, the missing-field rule and the role check) moves them by a point or two — on the
+final 80-invoice dev split, Opus 97% / 89% and Haiku 97% / 81% — and the rule still picks Opus 5.
 
 - **The rule selects Opus 5.** Haiku is 11 verdict points behind and Sonnet 17, both outside the 3-point
   margin. Sonnet does not beat Haiku on this data despite costing twice as much.
@@ -298,8 +300,8 @@ text, so the same grounding check applies. Sending only the PDF would make the e
 ### What we measured
 
 Same prompt (v3), same model (Haiku 4.5), same 47 dev invoices (the dev split at that point); only the
-input changes. Numbers as measured then; replayed with today's code, mode C reaches 96% verdicts instead of
-94%, and the ranking is the same.
+input changes. Numbers as measured then; later general fixes move them by a point or two, and the ranking is
+the same.
 
 | Mode | Field exact match | Invoice date | Verdict agreement | Cost / document | p95 latency |
 |---|---|---|---|---|---|

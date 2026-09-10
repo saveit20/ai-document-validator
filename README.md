@@ -5,29 +5,25 @@ rules and returns `PASS`, `FAIL` or `REVIEW`, with the evidence behind every val
 dispute the result.
 
 **The idea in one line:** the LLM only *proposes* values; everything that *decides* — normalisation,
-confidence, rules and the verdict — is deterministic code that checks each value against the document. When
-the model is wrong, the invoice goes to a person (`REVIEW`); it does not get a wrong `PASS` or `FAIL`.
+confidence, rules and the verdict — is deterministic code that checks each value against the document. The
+checks are built so that a model error ends in `REVIEW`, for a person, rather than in a wrong decision.
 
-**Result on the test split** — 80 invoices from six independent sources, never used for tuning, run once
-with code and prompt frozen:
+**Result on the test split** — 80 invoices from six independent sources, not used for tuning:
 
-- **With the LLM, no invoice got a wrong `PASS` or `FAIL`.** The 3 disagreements with the expected verdict
-  are valid invoices sent to `REVIEW`.
-- Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **96%** of
+- Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **95%** of
   invoices, at **$0.034** and ~7 s per invoice (p95 10.9 s).
-- The free rule-based extractor scores 64% of fields and 55% of verdicts on the same invoices; what it
-  cannot read goes to a person rather than to a wrong decision.
+- **No invoice got a wrong `PASS` or `FAIL`.** The 4 disagreements are valid invoices sent to `REVIEW`.
+- The free rule-based extractor scores 64% of fields and 55% of verdicts; what it cannot read goes to a
+  person, not to a wrong decision.
 
-## How this answers the brief
-
-| What the brief values | What we did | Where |
-|---|---|---|
-| **Judgment** — heuristic vs LLM vs hybrid | All three behind one interface, measured on the same invoices, with a recommendation for each. The heuristic was kept general on purpose, although template-specific rules scored better on our data. The model was chosen by a rule fixed before seeing results, the prompt by a side-by-side comparison on dev | [Which mode to use](#which-mode-to-use) |
-| **Production mindset** | Typed contracts, timeouts and retries, fallback when the LLM fails, JSON logs, cost and latency measured per invoice, prompt caching, a hard cap on paid API calls | [Cost, latency and risk](#cost-latency-and-risk) |
-| **Extraction + rules design** | Rules are small classes behind a `Protocol`; confidence comes from checking evidence against the document, never from the model | [Architecture](#architecture) |
-| **Evaluation mindset** | 160 invoices: five third-party datasets and a stress set written by AI agents that never saw the code; every label checked against the printed PDF, a dev half for fixing and a test half run once, metrics per source, failures printed | [Evaluation](#evaluation) |
-| **AI-assisted engineering** | What each tool did, the author's decisions and their reasons, what was rejected | [AI_USAGE.md](AI_USAGE.md) |
-| **Craft** | ruff, type hints, 273 tests including every LLM failure mode; CI runs lint, tests, three quality gates and the Docker image | [Testing](#testing) |
+| What the brief values | Where to look |
+|---|---|
+| Judgment: heuristic vs LLM vs hybrid | [Which mode to use](#which-mode-to-use), [Key trade-offs](#key-trade-offs) |
+| Production mindset | [Cost, latency and risk](#cost-latency-and-risk) |
+| Extraction + rules design | [Architecture](#architecture), [src/validator/rules.py](src/validator/rules.py) |
+| Evaluation mindset | [Evaluation](#evaluation), [docs/evaluation.md](docs/evaluation.md) |
+| AI-assisted engineering | [AI_USAGE.md](AI_USAGE.md), [docs/process.md](docs/process.md) |
+| Every decision, with its reason | [docs/decisions.md](docs/decisions.md) (one-page table first) |
 
 ## Architecture
 
@@ -46,40 +42,36 @@ flowchart LR
 
 **Why this shape.** A compliance verdict must be auditable, and an LLM is not. So the model does the one
 thing it is good at — reading a messy, unknown layout — and code checks everything it returns. That check is
-**grounding**: the model must quote, for each value, the text it read it from; the quote must appear in the
-document's extracted text and must contain the value. If it does not, the field's confidence drops to 0.3
-and any rule that depends on it returns `REVIEW`. The same checks apply to all three extractors, which is
-what makes them comparable. Letting the model return the verdict was rejected as untestable; agents, model
-ensembles or a vector store, because nothing in the brief needs them.
+**grounding**: for each value the model must quote the text it read it from; the quote must appear in the
+document's extracted text and must contain the value. A supplier name or tax id quoted from the customer's
+block ("Bill to", "Cliente"…), or equal to the customer's, is doubted too: printed, but not the supplier's.
+The same checks apply to all three extractors, which is what makes them comparable.
 
 **Per-field confidence, our definition** (the same for every extractor, never reported by the model):
 
 | Confidence | Meaning |
 |---|---|
 | 1.0 | grounded and unambiguous |
-| 0.6 | grounded but ambiguous: a number such as `1.500`, a date that reads both ways, a tax total summed from printed lines that the totals do not yet confirm |
+| 0.6 | grounded but ambiguous: a number such as `1.500`, a date that reads both ways, a tax total summed from printed lines that the totals do not yet confirm, a supplier value that may be the customer's |
 | 0.3 | not grounded (possible hallucination) or not parseable |
 | 0.0 | not found |
 
 Any rule that depends on a field below 1.0 returns `REVIEW`.
 
-The three extractors do not run in parallel: a deployment uses one, chosen with `EXTRACTOR`.
-
 ### Which mode to use
 
-| Mode | Use it when | Test result |
-|---|---|---|
-| **`llm`** (Claude Opus 5) | **Recommended for production**: suppliers and layouts vary | 98% fields, 96% verdicts, no wrong `PASS`/`FAIL`, $0.034 per invoice |
-| `hybrid` | Most invoices come from a few known templates with rules written for them; the heuristic answers those for free | Same as `llm` on our data: the general heuristic was never sure of a whole invoice |
-| `heuristic` | No API key or no network (the default, so the service runs offline), and as the automatic fallback when the LLM fails | 64% fields, 55% verdicts, no wrong `PASS`/`FAIL` on test; what it cannot read goes to `REVIEW` (34 of 36 valid invoices), so it is safe but rarely decides |
+| Mode | Use it when |
+|---|---|
+| **`llm`** (Claude Opus 5) | **Recommended for production**: suppliers and layouts vary |
+| `hybrid` | Most invoices come from a few known templates with rules written for them; the heuristic answers those for free. On our varied data it saves nothing |
+| `heuristic` | No API key or no network (the default, so the service runs offline), and as the automatic fallback when the LLM fails. Safe, but rarely decides on unfamiliar layouts |
 
 The LLM sits behind two layers: a **transport** that only moves text (the Anthropic client, a replayer of
 recorded responses, or a test double) and a **typed layer** that parses, validates and grounds the answer.
-That split is what makes timeouts, rate limits and malformed model output testable.
-
-Code map, `src/validator/`: `api.py` (HTTP), `pipeline.py`, `config.py`, `ingest.py`, `heuristic.py`,
-`llm.py` + `transport.py` + `prompts.py` (LLM), `hybrid.py`, `extraction.py`, `normalize.py`,
-`confidence.py`, `rules.py`, `models.py` (contracts), `pricing.py`, `observability.py` (JSON logs).
+That split is what makes timeouts, rate limits and malformed model output testable. Code map,
+`src/validator/`: `api.py`, `pipeline.py`, `config.py`, `ingest.py`, `heuristic.py`, `llm.py` +
+`transport.py` + `prompts.py`, `hybrid.py`, `extraction.py`, `normalize.py`, `confidence.py`, `rules.py`,
+`models.py` (contracts), `pricing.py`, `observability.py`.
 
 ## Quick start
 
@@ -95,12 +87,10 @@ uvicorn validator.api:create_app --factory --port 8000
 python -m evals.run --extractor heuristic   # the evaluation, offline (more commands below)
 ```
 
-Replayed LLM responses exist only for the 160 evaluation invoices. With `EXTRACTOR=llm` and no API key,
-any other document falls back to the heuristic, and the response says so in `extractor_used` and
-`warnings`.
-
-Open <http://localhost:8000/docs> for the OpenAPI schema. With Docker instead: `docker compose up --build`
-(built and health-checked in CI).
+OpenAPI schema at <http://localhost:8000/docs>. With Docker: `docker compose up --build` (built and
+health-checked in CI). Replayed LLM responses exist only for the 160 evaluation invoices; with `EXTRACTOR=llm`
+and no key, any other document falls back to the heuristic, and the response says so in `extractor_used`
+and `warnings`.
 
 | Variable | Default | Meaning |
 |---|---|---|
@@ -111,7 +101,7 @@ Open <http://localhost:8000/docs> for the OpenAPI schema. With Docker instead: `
 | `LLM_INPUT` | `pdf` | `pdf` sends the PDF itself plus our text, so the model sees the layout; `text` sends only the text |
 | `PDF_TEXT` | `plain` | `plain` or `layout` text extraction |
 | `LLM_TIMEOUT_S` | `30` | per-request timeout; the SDK retries 408/409/429/5xx twice |
-| `LOG_LEVEL` | `INFO` | JSON logs to stdout |
+| `LOG_LEVEL` | `INFO` | JSON logs to stdout, one line per request |
 
 Invalid combinations fail at start-up with a clear message (for example `EXTRACTOR=llm` with
 `LLM_TRANSPORT=live` and no key).
@@ -126,34 +116,17 @@ Invalid combinations fail at start-up with a clear message (for example `EXTRACT
 
 JSON body: `{"document": {"text": "..."} | {"content_base64": "...", "media_type": "application/pdf"},
 "config": {...}, "reference_date": "YYYY-MM-DD"}`. Multipart: a `file` part, a `config` part holding the
-JSON config, and an optional `reference_date` (defaults to today; the invoice age is measured against it).
+JSON config, and an optional `reference_date` (defaults to today). Rule config: `document_type`
+(`SUPPLIER_INVOICE`), `max_age_days`, and optionally `allowed_currencies`, `required_fields` and
+`expected_customer_tax_id`.
+
+### Sample request and response
 
 ```bash
 curl -s -X POST localhost:8000/v1/validate -H "X-Request-ID: demo-0001" \
   -F "file=@evals/golden/inv_06_traps.txt;type=text/plain" \
   -F 'config={"document_type":"SUPPLIER_INVOICE","max_age_days":90,"allowed_currencies":["EUR","GBP"],"required_fields":["supplier_name","invoice_number","invoice_date","total_amount"]}' \
   -F "reference_date=2026-06-30"
-```
-
-Rule config: `document_type` (`SUPPLIER_INVOICE`), `max_age_days`, and optionally `allowed_currencies`,
-`required_fields` and `expected_customer_tax_id` (the invoice must be addressed to this tax id).
-
-### Sample request and response
-
-The same request as JSON (the text of `evals/golden/inv_06_traps.txt`: the customer block comes before the supplier, a due
-date before the issue date, a subtotal and VAT line before the total):
-
-```json
-{
-  "document": {"text": "TAX INVOICE\n\nBill to:\nNorthwind Construction S.L.\n..."},
-  "reference_date": "2026-06-30",
-  "config": {
-    "document_type": "SUPPLIER_INVOICE",
-    "max_age_days": 90,
-    "allowed_currencies": ["EUR", "GBP"],
-    "required_fields": ["supplier_name", "invoice_number", "invoice_date", "total_amount"]
-  }
-}
 ```
 
 Response (abridged to 3 of the 10 fields; headers include `X-Request-ID`):
@@ -183,10 +156,11 @@ Response (abridged to 3 of the 10 fields; headers include `X-Request-ID`):
 ```
 
 Each rule reports `passed` (the brief's boolean) and `status`, which also carries `REVIEW` when the data was
-too uncertain to decide. When an LLM was used, `llm` carries `model`, `prompt_version`, `latency_ms`, `input_tokens`,
-`output_tokens`, `estimated_cost_usd` and whether the response was replayed. Errors never expose stack
-traces: `413 document_too_large`, `415 unsupported_media_type`, `422 invalid_request` (with the validation
-details), `422 unreadable_document` (a PDF without a text layer).
+too uncertain to decide. When an LLM was used, `llm` carries `model`, `prompt_version`, `latency_ms`,
+`input_tokens`, `output_tokens`, `estimated_cost_usd` and whether the response was replayed. Errors never
+expose stack traces: `413 document_too_large`, `415 unsupported_media_type`, `422 invalid_request` (with
+the validation details), `422 unreadable_document` (a PDF without a text layer), `500 internal_error` (with
+the request id).
 
 ## Evaluation
 
@@ -201,32 +175,39 @@ Each report gives field exact match, precision and recall per field, verdict agr
 matrix, a breakdown per source and per difficulty, latency and cost, and prints the failures (on dev; test
 failures stay hidden unless `--show-test-failures`).
 
-**The evaluation set** (the brief's "golden set") is 160 invoices from six sources the author did not write,
-chosen for variety (the largest source, one US invoice template, is 72 of the 160, so every result is also
-reported per source): a US invoice template, German e-invoices, Spanish electricity
-bills, Gulf invoices in AED and KWD, e-invoicing examples from 14 countries, and a "stress set" of 16
-deliberately messy layouts, mostly European, written by Claude subagents that never saw the code. 21 countries, 12 currencies, 6 label languages, credit
-notes, multi-page and multi-rate invoices. Every label was checked against the printed PDF. Each source is
-split 50/50 into **dev** (failures inspected and fixed) and **test** (run once, at the end). The 14 invoices
-in `evals/golden/` were written by the author and serve only as unit-test fixtures.
+**The evaluation set** (the brief's "golden set") is 160 invoices from six sources the author did not write:
+a US invoice template (the largest source, 72 of the 160, so every result is also reported per source),
+German e-invoices, Spanish electricity bills, Gulf invoices in AED and KWD, e-invoicing examples from 14
+countries, and a "stress set" of 16 deliberately messy layouts written by Claude subagents that never saw
+the code. 21 countries, 12 currencies, 6 label languages, credit notes, multi-page and multi-rate invoices;
+every label checked against the printed PDF. Each source is split 50/50 into **dev** (failures inspected and
+fixed) and **test**. The 14 files in `evals/golden/` are *not* this set: the author wrote them, and they
+serve only as unit-test fixtures.
 
-**Test split, run once:**
+**Test split** (field figures cover all 10 fields; on the brief's six alone, Opus scores 99% and the
+heuristic 75%):
 
 | Configuration | Field exact match | Verdict agreement | Wrong `PASS`/`FAIL` | LLM calls | Cost / invoice |
 |---|---|---|---|---|---|
 | Heuristic | 64% | 55% | 0 (34 of 36 valid invoices sent to `REVIEW`) | 0 | $0 |
-| **LLM — Opus 5, PDF + text, final prompt** | **98%** | **96%** | **0** | 80 | $0.034 |
-| Hybrid — heuristic first, Opus 5 when unsure | 98% | 96% | 0 | 80 (no saving on this data) | $0.034 |
+| **LLM — Opus 5, PDF + text, final prompt** | **98%** | **95%** | **0** | 80 | $0.034 |
+| Hybrid — heuristic first, Opus 5 when unsure | 98% | 95% | 0 | 80 (no saving here) | $0.034 |
 
-**How far these numbers go.** The test split expects 36 `PASS`, 42 `FAIL` and 2 `REVIEW`; most expected
-`FAIL`s are an out-of-window date or a disallowed currency, which are easy verdicts once the fields are
-right. The single-template Mendeley set is 36 of the 80; without it, Opus agrees on 41 of 44 verdicts
-(93%). Zero wrong decisions in 80 invoices still allows a true rate of up to about 4% (95% confidence):
-strong evidence, not proof, which is why production monitoring samples `PASS` invoices.
+**How far these numbers go.**
+- The split expects 36 `PASS`, 42 `FAIL` and 2 `REVIEW`; most expected `FAIL`s are an out-of-window date
+  or a disallowed currency, easy verdicts once the fields are right. Without the single-template set, Opus
+  agrees on 40 of 44 verdicts (91%).
+- Zero wrong decisions in 80 invoices still allows a true rate of up to about 4% (95% confidence): strong
+  evidence, not a guarantee, which is why production monitoring samples `PASS` invoices.
+- The test split was first run once with code and prompt frozen (Opus: 95% of verdicts). Two definition
+  changes made after independent reviews were then re-scored on it: a field that was not extracted became
+  `REVIEW` instead of `FAIL`, and the supplier/customer role check. Neither was tuned to a case; both are
+  declared, with before and after figures, in the
+  [contamination log](docs/evaluation.md#contamination-log).
 
-How the model, the input and the prompt were chosen on dev — three models, three ways of sending the
-document, four prompt variants — and every result per source: [docs/evaluation.md](docs/evaluation.md).
-What each data source adds and how it was built and licensed: [docs/data.md](docs/data.md).
+How the model, the input and the prompt were chosen on dev, and every result per source:
+[docs/evaluation.md](docs/evaluation.md). How each data source was built and licensed:
+[docs/data.md](docs/data.md).
 
 ## Cost, latency and risk
 
@@ -235,9 +216,9 @@ What each data source adds and how it was built and licensed: [docs/data.md](doc
 - **When the invoice carries its own data.** E-invoices such as ZUGFeRD / Factur-X embed an XML with every
   field; reading it is exact, free and instant.
 - **When most invoices come from a few known templates.** Rules written for them answer in ~0.1 s for
-  nothing, and the hybrid calls the LLM only for the rest. We measured it: with rules for one frequent
-  template, the hybrid skipped the LLM on 45% of test invoices at the same accuracy and cut the cost by a
-  third. We did not ship those rules, because that template is also in our test data
+  nothing, and the hybrid calls the LLM only for the rest. Measured: with rules for one frequent template,
+  the hybrid skipped the LLM on 45% of test invoices at the same accuracy and cut the cost by a third. We did
+  not ship those rules, because that template is also in our test data
   ([why](docs/decisions.md#b9--the-heuristic-stays-general-no-rules-learnt-from-one-template)).
 - **When the document cannot leave the premises**, or a sub-second answer is required.
 
@@ -249,10 +230,11 @@ What each data source adds and how it was built and licensed: [docs/data.md](doc
 | Latency per invoice, heuristic (PDF parsing included, laptop) | 0.11 s | 0.44 s |
 | Cost per invoice, Opus 5 | $0.034 | — (the 2–4-page utility bills average $0.069) |
 
-About $34 per 1,000 invoices. Prompt caching of the instructions makes each Opus call ~24% cheaper
-(measured). Claude Haiku 4.5 costs about a fifth as much; on dev, with the final prompt, it extracts 99% of
-fields but agrees on fewer verdicts (81%); the Batch API would halve the price for non-urgent bulk runs. The whole
-evaluation — every model, prompt and input experiment, 661 recorded calls — cost about $9.20.
+About $34 per 1,000 invoices. Prompt caching of the instructions makes each Opus call ~24% cheaper. Claude
+Haiku 4.5 costs about a fifth as much but leaves more invoices for manual review (below); the Batch API
+would halve the price for non-urgent bulk runs. The whole evaluation — every model, prompt and input
+experiment, 661 recorded calls — cost about $9.20. Latency and cost are the values recorded when the calls
+were made; replays reproduce them, they do not re-measure them.
 
 **What would we monitor in production?**
 
@@ -262,45 +244,40 @@ evaluation — every model, prompt and input experiment, 661 recorded calls — 
 | Share of fields that fail grounding | the model stating what the document does not say, or a broken text layer |
 | `FAIL` rate per rule | a business signal, and a sanity check when it moves suddenly |
 | LLM errors, fallbacks (`extractor_used`), p95 latency | provider incidents, timeouts, rate limits |
-| Cost and tokens per invoice (`llm.estimated_cost_usd`, `input_tokens`, `output_tokens`) | spend drifts when documents grow or caching breaks |
+| Cost and tokens per invoice, including failed calls | spend drifts when documents grow or caching breaks |
 | A weekly sample of `PASS` invoices checked by a person | the only way to catch a wrong `PASS`, which the system cannot see |
 
-Every LLM response, and its log line, carries the model id and the prompt version, so a change can be tied to a
+Every LLM response and its log line carry the model id and the prompt version, so a change can be tied to a
 deploy; the CI quality gates block a regression before one.
 
 ## Key trade-offs
 
-- **The model sees the PDF, not only its text.** Text extraction loses the layout; sending the page as well
-  raised dev verdict agreement from 74% to 94% on Haiku for +57% cost. Evidence still has to quote our text,
-  so every value stays checkable.
-- **Review over automation.** Doubtful fields go to `REVIEW` rather than risk a wrong decision: 0 wrong
-  `PASS`/`FAIL`, at the price of 3 reviews in 80.
-- **A general heuristic over a better score.** Template-specific rules would have lifted the heuristic from
-  55% to 78% of verdicts on test — by learning our own data. We kept it general: in production, clear and
-  recurring layouts get rules of their own and never reach the LLM; this service is judged on the hard,
-  unconventional ones, and tuning to our own templates would only make that measurement lie.
+- **The model sees the PDF, not only its text.** Sending the page as well raised dev verdict agreement from
+  74% to 94% on Haiku for +57% cost. Evidence still has to quote our text, so every value stays checkable.
+- **Review over automation.** A field that was not extracted, or is doubtful, goes to `REVIEW`; `FAIL` is
+  kept for reliable values that break a rule. Price: 4 reviews in 80 with Opus.
+- **Opus 5 over a model five times cheaper, by a rule fixed in advance:** the cheapest model within 3 points
+  of the best on dev (3 points is two invoices out of 80). Haiku 4.5 is 8 verdict points behind; per 1,000
+  invoices it would save about $26 and add about 90 manual reviews, so Opus pays for itself once a review
+  costs more than about $0.30 ([decisions.md](docs/decisions.md) B5).
+- **A general heuristic over a better score.** Template-specific rules would have lifted it from 55% to 78%
+  of test verdicts by learning our own data. In production, known layouts get rules of their own; this
+  service is judged on the unfamiliar ones.
 - **Accounting rules, still verified.** Credit notes are booked negative and a tax total may be the sum of
   the printed per-rate lines, as a finance team books them; the sum is trusted only when subtotal + tax =
   total.
-- **Opus 5 over a model five times cheaper, by a rule fixed in advance:** the cheapest model within 3 points
-  of the best on dev (3 points is two invoices out of 80, the noise of the sample). Haiku 4.5 is 8 verdict
-  points behind. Per 1,000 invoices it would save about $26 and add about 90 manual reviews, so Opus pays
-  for itself as soon as a review costs more than about $0.30 — under a minute of a clerk's time. Haiku
-  matches Opus on clean layouts; the gap is on hard ones, which is what the LLM is for
-  ([decisions.md](docs/decisions.md) B5).
-
-Every decision — problem, choice, evidence, rejected alternatives, when to revisit — is in
-[docs/decisions.md](docs/decisions.md), starting with a one-page table.
 
 ## Assumptions
 
 - Only `SUPPLIER_INVOICE`; other document types are rejected with a clear error.
 - PDFs need a text layer; scans are rejected (OCR is out of scope).
 - `max_age_days` counts back from `reference_date` (default today), inclusive; a future date fails.
+- "Must be present" is read as "must be reliably extracted": a required field that was not extracted goes
+  to `REVIEW` ("check it manually"), because an extractor that finds nothing has not proved the document
+  lacks it ([decisions.md](docs/decisions.md) D1). A missing currency when `allowed_currencies` is set is
+  also `REVIEW`.
 - Numeric dates follow the issuer's convention (a US address means month-first); with no signal, a date
   like `04/08/2026` is ambiguous and goes to `REVIEW`.
-- A missing currency when `allowed_currencies` is set is `REVIEW`, not `FAIL`; `required_fields` is a rule of
-  its own.
 
 ## Data handling
 
@@ -314,7 +291,8 @@ available, EU inference.
 1. **Route by layout, and price a review.** Send known, clean templates to rules or to Haiku and only hard
    layouts to Opus; measure what a manual review costs the customer, which settles the model trade-off.
 2. **Match evidence by position, not only by text.** The Spanish utility bills print labels and amounts in
-   separate blocks, so correct answers cannot be verified and go to `REVIEW`.
+   separate blocks, so correct answers cannot be verified and go to `REVIEW`; positions would also make the
+   supplier/customer check exact.
 3. **OCR for scanned invoices,** producing a text layer the same checks can use.
 4. **Calibrate confidence and validate tax ids** (checksums per country, VIES) on labelled customer data.
 
@@ -327,10 +305,11 @@ documents (freely licensed real invoices do not exist, so the evaluation data is
 pytest -q
 ```
 
-273 tests. No test can reach the real API: a fixture removes the key, and every LLM failure mode —
-timeouts, rate limits, malformed or truncated JSON, refusals, hallucinated values — is driven through a fake
-transport. Rules, normalisation, the heuristic, the hybrid, the HTTP API (JSON and multipart, errors,
-OpenAPI) and the evaluation metrics each have their own tests.
+277 tests. No test can reach the real API: a fixture removes the key, and every LLM failure mode —
+timeouts, rate limits, malformed or truncated JSON, refusals, hallucinated values, a supplier swapped with
+the customer — is driven through a fake transport. Rules, normalisation, the heuristic, the hybrid, the
+HTTP API (JSON and multipart, 413/415/422/500 errors, OpenAPI, request ids) and the evaluation metrics each
+have their own tests.
 
 ## AI usage
 

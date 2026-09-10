@@ -223,6 +223,9 @@ def _check_baseline(summaries: list[Summary]) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Reports contain non-ASCII text (names, currency symbols); a redirected Windows console is cp1252.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     load_dotenv()
     logging.basicConfig(level=logging.ERROR)
     parser = argparse.ArgumentParser(
@@ -296,11 +299,11 @@ def main(argv: list[str] | None = None) -> int:
             for s in missing
         )
         report = notice + "\n\n" + report
-    print(report)
 
     RESULTS_DIR.mkdir(exist_ok=True)
     target = "latest.md" if args.all else f"{configs[0][0]}_{args.split}.md"
     (RESULTS_DIR / target).write_text(report, encoding="utf-8")
+    print(report)
 
     if args.update_baseline:
         baseline = (

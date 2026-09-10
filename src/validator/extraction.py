@@ -1,5 +1,6 @@
 """Extractor contract and the deterministic step from raw candidates to typed, scored fields."""
 
+import re
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Protocol
@@ -75,7 +76,37 @@ def build_extraction(candidates: dict[str, Candidate], document: Document) -> Ex
         page = candidate.page if candidate.page is not None else document.page_of(evidence)
         fields[name] = FieldValue(value=value, confidence=conf, evidence=evidence, page=page)
     _reconcile_tax(fields)
+    _check_roles(fields)
     return Extraction(**fields)
+
+
+# Labels that introduce the invoice's recipient. Grounding proves a value is printed, not whose it is.
+_CUSTOMER_LABEL = re.compile(
+    r"\b(bill(?:ed)?\s+to|sold\s+to|ship\s+to|invoice\s+to|customer|client|cliente|buyer|recipient|"
+    r"destinatario|destinataire|facturar\s+a|kunde|rechnungsempf[aä]nger)\b",
+    re.IGNORECASE,
+)
+
+
+def _check_roles(fields: dict[str, FieldValue]) -> None:
+    """Doubt the supplier's name and tax id when they are the customer's, or quoted from the customer's
+    block: a value that is printed on the invoice but belongs to the other party is still wrong."""
+    name, tax_id = fields["supplier_name"], fields["tax_id"]
+    customer, customer_tax_id = fields["customer_name"], fields["customer_tax_id"]
+    same_party = (
+        name.value is not None
+        and customer.value is not None
+        and normalize.canon(name.value) == normalize.canon(customer.value)
+    ) or (
+        tax_id.value is not None
+        and customer_tax_id.value is not None
+        and normalize.same_tax_id(tax_id.value, customer_tax_id.value)
+    )
+    for field_name in ("supplier_name", "tax_id"):
+        field = fields[field_name]
+        from_customer_block = bool(field.evidence and _CUSTOMER_LABEL.search(field.evidence))
+        if field.confidence == confidence.HIGH and (same_party or from_customer_block):
+            fields[field_name] = field.model_copy(update={"confidence": confidence.AMBIGUOUS})
 
 
 def _reconcile_tax(fields: dict[str, FieldValue]) -> None:

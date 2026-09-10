@@ -150,6 +150,25 @@ def test_unsafe_request_id_is_replaced(client: TestClient, supplied: str) -> Non
     assert len(response.headers["X-Request-ID"]) == 32
 
 
+class _BrokenPipeline:
+    def extract(self, document):
+        raise RuntimeError("boom")
+
+    validate = extract
+
+
+def test_unexpected_error_is_500_and_keeps_the_request_id() -> None:
+    app = create_app(settings=Settings(), pipeline=_BrokenPipeline())  # type: ignore[arg-type]
+    client = TestClient(app, raise_server_exceptions=False)
+    response = client.post(
+        "/v1/extract", json={"document": {"text": "Invoice"}}, headers={"X-Request-ID": "err-1"}
+    )
+    assert response.status_code == 500
+    assert response.json()["error"]["code"] == "internal_error"
+    assert response.headers["X-Request-ID"] == "err-1"
+    assert "boom" not in response.text
+
+
 def test_validate_rejects_invalid_config(client: TestClient) -> None:
     body = {"document": {"text": "x"}, "config": {**CONFIG, "max_age_days": 0}}
     response = client.post("/v1/validate", json=body)
