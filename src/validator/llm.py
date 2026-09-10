@@ -69,7 +69,11 @@ class LLMExtractor:
             input_tokens=response.input_tokens,
             output_tokens=response.output_tokens,
             estimated_cost_usd=estimate_cost_usd(
-                self._model, response.input_tokens, response.output_tokens
+                self._model,
+                response.input_tokens,
+                response.output_tokens,
+                cache_read_tokens=response.cache_read_tokens,
+                cache_write_tokens=response.cache_write_tokens,
             ),
             recorded=response.recorded,
         )

@@ -48,6 +48,8 @@ class LLMResponse:
     input_tokens: int
     output_tokens: int
     latency_ms: int
+    cache_read_tokens: int = 0
+    cache_write_tokens: int = 0
     recorded: bool = False
 
 
@@ -80,7 +82,16 @@ class AnthropicTransport:
             message = self._client.messages.create(
                 model=request.model,
                 max_tokens=request.max_tokens,
-                system=request.system,
+                # The instructions are identical on every call, so they are a cacheable prefix. The
+                # API ignores the marker when the prefix is below the model's minimum (4096 tokens
+                # on Haiku 4.5, 1024 on Sonnet 5, 512 on Opus 5).
+                system=[
+                    {
+                        "type": "text",
+                        "text": request.system,
+                        "cache_control": {"type": "ephemeral"},
+                    }
+                ],
                 messages=[{"role": "user", "content": request.user}],
                 output_config=output_config,
             )
@@ -98,6 +109,8 @@ class AnthropicTransport:
             input_tokens=message.usage.input_tokens,
             output_tokens=message.usage.output_tokens,
             latency_ms=latency_ms,
+            cache_read_tokens=getattr(message.usage, "cache_read_input_tokens", None) or 0,
+            cache_write_tokens=getattr(message.usage, "cache_creation_input_tokens", None) or 0,
         )
 
 

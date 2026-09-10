@@ -13,6 +13,7 @@ from validator.ingest import document_from_text
 from validator.llm import LLMExtractor
 from validator.models import FIELD_NAMES
 from validator.pipeline import Pipeline
+from validator.pricing import estimate_cost_usd
 from validator.prompts import OUTPUT_SCHEMA, PROMPT_VERSION
 from validator.transport import (
     AnthropicTransport,
@@ -135,6 +136,39 @@ def test_anthropic_transport_sends_structured_output_and_low_effort() -> None:
     assert messages.kwargs["output_config"]["format"]["type"] == "json_schema"
     assert messages.kwargs["output_config"]["effort"] == "low"
     assert "temperature" not in messages.kwargs
+
+
+def test_anthropic_transport_marks_the_static_system_prompt_for_caching() -> None:
+    messages = _StubMessages(result=_message())
+    _transport(messages).complete(_request())
+    [block] = messages.kwargs["system"]
+    assert block == {"type": "text", "text": "s", "cache_control": {"type": "ephemeral"}}
+
+
+def test_anthropic_transport_reports_cache_tokens() -> None:
+    message = _message()
+    message.usage = SimpleNamespace(
+        input_tokens=300,
+        output_tokens=5,
+        cache_read_input_tokens=1700,
+        cache_creation_input_tokens=0,
+    )
+    response = _transport(_StubMessages(result=message)).complete(_request())
+    assert (response.input_tokens, response.cache_read_tokens, response.cache_write_tokens) == (
+        300,
+        1700,
+        0,
+    )
+
+
+def test_cost_prices_cache_reads_and_writes() -> None:
+    # Sonnet 5: $2/MTok input; reads 0.1x, writes 1.25x.
+    assert estimate_cost_usd("claude-sonnet-5", 1_000_000, 0, cache_read_tokens=1_000_000) == (
+        pytest.approx(2.2)
+    )
+    assert estimate_cost_usd("claude-sonnet-5", 0, 0, cache_write_tokens=1_000_000) == (
+        pytest.approx(2.5)
+    )
 
 
 def test_anthropic_transport_omits_effort_for_haiku() -> None:
