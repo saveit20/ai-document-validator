@@ -1,6 +1,6 @@
 # Evaluation
 
-How quality is measured, on which data, and why that data was chosen. The short version: two sources that
+How quality is measured, on which data, and why that data was chosen. The short version: six sources that
 the system's author did not write, split 50/50 into a dev half we inspect and a test half we do not, with
 every number broken down by source.
 
@@ -40,17 +40,18 @@ embedded data were left out.
 **IDSEM.** Synthetic Spanish household electricity bills from a 75,000-bill research dataset: six
 utility-style templates, 2–4 pages each, dates written out in Spanish or as dd.mm.yyyy, IVA or IGIC
 (Canary Islands) tax, placeholder amounts such as `X,XX €` in the detail pages. Five bills per template were
-read out of the 30.9 GB archive with HTTP range requests (6.3 MB transferred). The bills print two VAT lines
-and never their sum, so `tax_amount` is expected to be null: the evaluation only expects what is printed.
+read out of the 30.9 GB archive with HTTP range requests (6.3 MB transferred, 7.4 MB of PDFs once decompressed). The bills print one VAT line per rate and
+never their sum; `tax_amount` is labelled as the sum of those printed lines (labelling policy in
+[data.md](data.md)).
 
 **SalorWorks.** Fictional e-commerce invoices from the Gulf: AED, KWD with three decimals, a USD invoice for
 a UAE seller, discounts, freight and duty, a two-page invoice. The pack also has five Arabic, bilingual or
 scanned invoices; they are raster images with no text layer, which this system rejects by design, so they
 are not in the metric set.
 
-**GOBL.** Example invoices from an open-source e-invoicing library, covering 13 countries (Spain, France,
+**GOBL.** Example invoices from an open-source e-invoicing library, covering 14 countries (Spain, France,
 Poland, Germany, Italy, Portugal, Greece, Mexico, Colombia, Argentina, Saudi Arabia, Singapore, the US and
-Zimbabwe), 9 currencies, labels in English, Spanish, French and Polish, and credit notes, corrective and
+Zimbabwe), 8 currencies, labels in English, Spanish, French and Polish, and credit notes, corrective and
 simplified invoices, reverse charge, tax-included prices and withholding. The library ships the rendered
 HTML of its examples; we printed it to PDF with a headless browser, so the PDFs have a real text layer and
 the structured JSON is the ground truth, checked against the printed text. It adds many locales but a single
@@ -106,8 +107,10 @@ Rules we held ourselves to:
 - Fixes found on dev must be **general**. Dev and test share the Mendeley template, so a template-specific
   fix would raise the test score without making the system generalise.
 - Every exposure to held-out content is logged below, even accidental ones.
-- The LLM extraction prompt was written before the evaluation data existed. A later draft that added
-  instructions aimed at specific difficulty categories was reverted before any model call.
+- The first LLM prompt was written before the evaluation data existed. It was later improved only with
+  general instructions driven by dev errors, and the final prompt was chosen by a controlled comparison on
+  dev (§9). A draft that added instructions aimed at specific difficulty categories was reverted before any
+  model call.
 
 ### Contamination log
 
@@ -116,7 +119,7 @@ Rules we held ourselves to:
 | Customer-block fix | A dev bug (PDF text loses blank lines, so the customer block never ended) was fixed with a general rule | Also raised the then-hidden held-out score; declared |
 | Formatting the generator | Reformatting `generate_batch_a.py` displayed part of one held-out invoice | No code or prompt changed; PDFs verified byte-identical |
 | Prompt draft | Five instructions mirrored held-out difficulty categories | Reverted before any model call |
-| Haiku pilot on dev | Fields 96% but verdicts 27%: the grounding check rejected correct values (space thousands separators, US dates, bare `$`, evidence split across table columns). Fixed with general rules, each driven by a unit test written from invented inputs (D16) | Same recordings, dev verdicts 27% → 64%. Test not inspected |
+| Haiku pilot on dev | Fields 96% but verdicts 27%: the grounding check rejected correct values (space thousands separators, US dates, bare `$`, evidence split across table columns). Fixed with general rules, each driven by a unit test written from invented inputs | Same recordings, dev verdicts 27% → 64%. Test not inspected |
 | Heuristic fixes after the test run | General fixes designed on dev errors only; heuristic and hybrid then re-run on test (a second look, for these two configurations only). A version with template-specific labels was measured and rejected as overfitting | Test figures for the heuristic and the hybrid in §6 are from this second run; the LLM figures are unchanged |
 | Finance labelling policy | IDSEM and GOBL labels were aligned with the pre-registered guide (tax total summed from per-rate lines, credit notes negative), by rule and without looking at any test output | The heuristic's IDSEM field score fell from 43% to 37% (it does not sum tax lines); its quality-gate baseline was lowered accordingly, with this reason |
 | Prompt v3 | Two general instructions: copy numbers in the evidence with their original separators (the model rewrote `$ 802,73` as `$ 802.73`, which the check rightly rejected), and read numeric dates in the issuer's convention | Recordings invalidated and re-recorded on dev |
@@ -133,7 +136,7 @@ Rules we held ourselves to:
 
 Every figure is reported for the whole split and separately per source.
 
-Because Mendeley invoices date from 2012–2021 and are in USD, the brief's config would make every one of them
+Because Mendeley invoices date from 2011–2021 and are in USD, the brief's config would make every one of them
 fail. Each Mendeley case therefore carries its own config and reference date, cycling through three
 scenarios (pass, disallowed currency, invoice too old), so verdicts carry information.
 
@@ -146,7 +149,7 @@ frozen. `python -m evals.run --extractor llm --model claude-opus-5 --split test`
 |---|---|---|---|---|---|
 | Heuristic | 64% | 55% | 36: 26 `FAIL` (25 on valid invoices), 10 `REVIEW` | 0.11 s / 0.44 s | $0 |
 | **Opus 5, PDF + text, prompt v4b** | **98%** | **95%** | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
-| Hybrid, heuristic then Opus 5 | 98% | 96% | 3, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
+| Hybrid, heuristic then Opus 5 | 98% | 95% | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
 
 Opus 5 per source (fields / verdicts): Mendeley 100% / 100%, Mustang 97% / 100%, IDSEM 100% / 93%,
 SalorWorks 94% / 100%, GOBL 95% / 77%, held-out 98% / 100%.
@@ -154,15 +157,14 @@ SalorWorks 94% / 100%, GOBL 95% / 77%, held-out 98% / 100%.
 - **No wrong `PASS` or `FAIL`.** Of the four disagreements, three are invoices that should have passed and
   one that should have failed; the system sent all four to a person instead of deciding wrongly.
 - **Test is better than dev (95% against 90%)**, because the dev figure for Opus was measured with the
-  earlier prompt (v3) and the test run uses v4b. We report both rather than re-running dev, which would have
-  cost another ~$2.7.
+  earlier prompt (v3) and the test run uses v4b. We report both.
 - **The weakest source is GOBL** (13 test invoices), the one with the most countries and document types.
   Per-case failures on test stay hidden by design.
 - **The hybrid saves nothing with a general heuristic**: it called the LLM on all 80 invoices.
 
 The heuristic fails the other way: it wrongly rejects 25 of the 80 test invoices. On layouts it was not
 written for it misses a required field, and a field that is reliably absent is a `FAIL`. It never wrongly
-passes an invoice, but a system that rejects a third of valid invoices is not usable on varied layouts,
+passes an invoice, but a system that rejects 25 of the 36 valid test invoices is not usable on varied layouts,
 which is why the LLM path exists.
 
 ### The heuristic: improved, but kept general on purpose
@@ -189,7 +191,7 @@ service must work on invoices we have not seen. The measurement stays here becau
 the hybrid pays — once rules exist for a customer's frequent templates.
 
 **What the whole evaluation cost:** 661 recorded calls (Haiku 4.5 434, Sonnet 5 67, Opus 5 160), about
-$9.40, including every experiment.
+$9.20, including every experiment.
 
 ## 7. How the LLM runs are spent: in stages, dev first
 
@@ -226,6 +228,10 @@ of fields and 90% of verdicts.
 | **Opus 5** | **98%** | **90%** | $0.0351 | 8.6 s |
 | Hybrid (heuristic → Opus 5) | 98% | 88% | $0.0351 | 8.6 s |
 
+These are the numbers measured when the choice was made. Replaying the same recordings with today's code
+(which later gained general normalisation and heuristic fixes) moves them by a point or two — Haiku 97% /
+81%, Sonnet 96% / 75%, Opus 97% / 90% — and the rule still picks Opus 5.
+
 - **The rule selects Opus 5.** Haiku is 11 verdict points behind and Sonnet 17, both outside the 3-point
   margin. Sonnet does not beat Haiku on this data despite costing twice as much.
 - **No model produced a wrong `PASS` or `FAIL`.** Every verdict error of every model is a `REVIEW` on an
@@ -235,15 +241,15 @@ of fields and 90% of verdicts.
   field, so the cascade calls the LLM on 67 of 67 invoices. It would pay off on a stream dominated by a few
   known, clean templates, where the heuristic alone reaches full confidence (see the README on when not to
   use an LLM).
-- **Prompt caching, measured.** Opus 5 and Sonnet 5 each read ~2,240 cached tokens on 66 of 67 calls (the
-  first call writes the cache). On Opus 5 that saves ~$0.010 per invoice, about 22% of what it would cost
-  uncached; on Sonnet 5, ~$0.004, also ~22%. Haiku 4.5 needs a 4,096-token prefix: 0 cache hits in 181
-  calls, as the documentation predicts. LLM latencies above are API time; PDF parsing adds the heuristic's
+- **Prompt caching, measured.** Across all recorded calls, Opus 5 read the cached instructions on 157 of
+  160 calls (~24% cheaper per invoice, ~$0.011) and Sonnet 5 on 66 of 67 (~22%, ~$0.004); the calls that
+  miss are the ones that write the cache. Haiku 4.5 needs a 4,096-token prefix: 0 cache hits in 434 calls,
+  as the documentation predicts. LLM latencies above are API time; PDF parsing adds the heuristic's
   ~0.1 s.
 - **Where the best model still fails:** the IDSEM bills print two VAT lines and never their sum; models
   often add them up (a value not printed, rejected by the check), and the scrambled text layer of those
-  bills makes some evidence unverifiable. Both end in `REVIEW` (IDSEM verdicts: Opus 73%, Haiku and Sonnet
-  27%).
+  bills makes some evidence unverifiable. Both end in `REVIEW` (IDSEM verdicts: Opus 73%, Haiku 27%, Sonnet
+  33%).
 
 ## 8. How the document reaches the model
 
@@ -251,7 +257,7 @@ The prompt is only half of what the model sees. The other half is the document i
 turned into model input can lose information before the model reads a word. We measured it instead of
 assuming it.
 
-### What the pipeline does by default
+### What the pipeline did at first
 
 1. `pypdf` extracts the text layer of each page (`extract_text()`, "plain" mode). The text follows the
    order in which the PDF draws its runs, not the visual layout.
@@ -259,7 +265,8 @@ assuming it.
 3. The model returns a value and an evidence string per field; the evidence must be found in the same
    extracted text, so every answer is checked against what the document says.
 
-The model never sees the page. Two consequences were visible in dev:
+The model never saw the page. Two consequences were visible in dev (the outcome of this section is that the
+service now sends the PDF as well, `LLM_INPUT=pdf`):
 
 - **Columns come apart.** In the Mendeley template the totals table prints all labels, then all values:
   `Net worth / VAT / Gross worth / 20,00 / 2,00 / 22,00`. In a two-column header, the seller and customer
@@ -271,7 +278,7 @@ The model never sees the page. Two consequences were visible in dev:
 
 | Mode | What the model receives | Cost per page (from the API docs) | What it can fix | Risk |
 |---|---|---|---|---|
-| A. Plain text (default) | pypdf plain text | text only (~0.3–1k tokens per invoice here) | — | layout lost |
+| A. Plain text (the original default) | pypdf plain text | text only (~0.3–1k tokens per invoice here) | — | layout lost |
 | B. Layout text | pypdf `extraction_mode="layout"`: runs placed by position, so columns printed side by side stay on one line; padding cut to 3 spaces | about 2× the characters of A | label/value pairing, two-column headers | wide tables wrap; more tokens |
 | C. PDF + text | the PDF as a `document` block (the API renders each page as an image and extracts its text) **plus** our text in `<document>` tags; evidence must still be copied from our text | 1,500–3,000 text tokens per page plus the page image (~1.5k visual tokens on Haiku 4.5; up to ~4.8k on Opus 5 / Sonnet 5, which read images at high resolution) | layout, visual cues (bold totals, stamps), and in principle scanned pages | several times the cost of A; evidence may be copied from the rendering and not match our text |
 
@@ -281,7 +288,8 @@ text, so the same grounding check applies. Sending only the PDF would make the e
 ### What we measured
 
 Same prompt (v3), same model (Haiku 4.5), same 47 dev invoices (the dev split at that point); only the
-input changes.
+input changes. Numbers as measured then; replayed with today's code, mode C reaches 96% verdicts instead of
+94%, and the ranking is the same.
 
 | Mode | Field exact match | Invoice date | Verdict agreement | Cost / document | p95 latency |
 |---|---|---|---|---|---|

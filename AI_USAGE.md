@@ -40,30 +40,32 @@ what the assistant had produced; each one is a decision with a reason, not a pre
 validation into one step, and then a test double of the client can only return valid objects: there is no
 way to test what the system does when the model returns truncated JSON, a missing field or a wrong type,
 nor to record and replay raw responses. The two-level boundary (raw-text transport + typed layer) exists
-precisely so those failure modes can be tested. See [docs/decisions.md](docs/decisions.md) D6.
+precisely so those failure modes can be tested. See [docs/decisions.md](docs/decisions.md) A2.
 
 **Example 2 — a prompt tuned to the test.** After the held-out invoices existed, the assistant drafted a
 revised extraction prompt with five new instructions: prefer the legal name in the footer, ignore a
 balance due after a prepayment, accept currency names, allow month-first dates, sum several VAT rates.
 Each one matched a difficulty category of the held-out set. The assistant flagged it itself and the change
 was reverted **before any model call**: tuning the prompt to the test categories would have inflated the
-headline number. The prompt used is the one written before the evaluation data existed (D14).
+headline number. From then on the prompt changed only through general instructions driven by dev errors,
+and the final one was chosen by a controlled comparison on dev
+([evaluation §9](docs/evaluation.md#9-prompt-variants)); nothing was tuned on the test split.
 
 Other rejections and corrections, in short:
 
 | Suggestion | Source | Outcome |
 |---|---|---|
-| Enable the API's server-side model fallback by default | API guidance | Rejected: it silently switches models and would corrupt the per-model comparison and cost figures (D12) |
-| A single LLM boundary that returns validated objects | Claude's first design | Rejected after Codex's review: it cannot simulate corrupt model output (D6) |
-| Treat the six fields in the brief as a closed set | Claude | Corrected by the author: the brief says "minimum"; four fields were added, only where they enable a rule (D13) |
-| An evaluation set of clean invoices written by the extractor's author | Claude | Rejected by the author as circular and unrealistic; replaced by independent sources (D15, [docs/evaluation.md](docs/evaluation.md)) |
+| Enable the API's server-side model fallback by default | API guidance | Rejected: it silently switches models and would corrupt the per-model comparison and cost figures (decisions B6) |
+| A single LLM boundary that returns validated objects | Claude's first design | Rejected after Codex's review: it cannot simulate corrupt model output (decisions A2) |
+| Treat the six fields in the brief as a closed set | Claude | Corrected by the author: the brief says "minimum"; four fields were added, only where they enable a rule (decisions A4) |
+| An evaluation set of clean invoices written by the extractor's author | Claude | Rejected by the author as circular and unrealistic; replaced by independent sources (decisions E1, [docs/evaluation.md](docs/evaluation.md)) |
 | Evaluate only on the downloaded public invoices, assumed to be real | The author | Discussed: the public set is also synthetic and single-template; both independent sources were mixed and split 50/50 instead |
 | Transcribing the brief by reading the rendered PDF | Claude | The transcript wrongly reported a truncated config example; the author caught it; the brief was re-extracted and diffed word by word |
-| Drop optional items (Dockerfile, CI, multipart) to save time | Claude | Rejected by the author; the Dockerfile is verified in CI because no local Docker was available (D3) |
+| Drop optional items (Dockerfile, CI, multipart) to save time | Claude | Rejected by the author; the Dockerfile is verified in CI because no local Docker was available (decisions F4) |
 
 ## 3. How correctness was verified
 
-- **Test-first** for every module; failure modes of the LLM (timeouts, 429s, malformed or truncated JSON,
+- **Tests written with every module**; failure modes of the LLM (timeouts, 429s, malformed or truncated JSON,
   refusals, hallucinated values) are driven through a fake transport. No test can reach the real API: a
   fixture removes the key.
 - **CI on every push**: lint, format, tests, a Docker build with a health check, and an evaluation quality

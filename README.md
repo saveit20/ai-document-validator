@@ -1,30 +1,32 @@
 # AI Document Validator
 
 Extracts structured fields from supplier invoices (PDF or text), checks them against configurable business
-rules and returns `PASS`, `FAIL` or `REVIEW` — with the evidence behind every value, so a reviewer can trust
-or dispute the result.
+rules and returns `PASS`, `FAIL` or `REVIEW`, with the evidence behind every value, so a person can trust or
+dispute the result.
 
 **The idea in one line:** the LLM only *proposes* values; everything that *decides* — normalisation,
-confidence, rules and the verdict — is deterministic code that checks each value against the document.
-When the model is wrong, the result is a `REVIEW` for a person, not a wrong `PASS` or `FAIL`.
+confidence, rules and the verdict — is deterministic code that checks each value against the document. When
+the model is wrong, the invoice goes to a person (`REVIEW`); it does not get a wrong `PASS` or `FAIL`.
 
-**Result on the held-back test split** (80 invoices, six sources, run once with code and prompt frozen):
-Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **95%** of
-invoices, at **$0.034** and ~7 s per invoice (p95 10.9 s). The free heuristic scores 64% and 55%. **No
-invoice got a wrong `PASS` or `FAIL`**: the four disagreements are all `REVIEW`s, where the system was unsure
-and asked for a person.
+**Result on the test split** — 80 invoices from six independent sources, never used for tuning, run once
+with code and prompt frozen:
+
+- **No invoice got a wrong `PASS` or `FAIL`.** The 4 disagreements with the expected verdict are all
+  `REVIEW`s.
+- Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **95%** of
+  invoices, at **$0.034** and ~7 s per invoice (p95 10.9 s).
+- The free rule-based extractor scores 64% of fields and 55% of verdicts on the same invoices.
 
 ## How this answers the brief
 
-| What the brief values | What we did | Where to check |
+| What the brief values | What we did | Where |
 |---|---|---|
-| **Judgment** — heuristic vs LLM vs hybrid, and why | All three behind one interface, measured on the same 160 invoices, and a clear recommendation: the LLM for varied suppliers, the hybrid only once a customer's frequent templates are known, the heuristic offline. The heuristic was kept general on purpose, even though template-specific rules scored better on our data. Model and prompt chosen by rules written before seeing results | [Which mode to use](#which-mode-to-use), [Evaluation](#evaluation) |
-| **Production mindset** — contracts, failure modes, observability, cost/latency | Typed Pydantic contracts; timeouts, retries and a fallback to the heuristic when the LLM fails; JSON logs with request id, latency, model and verdict; cost and latency measured per document; prompt caching; a hard cap on paid calls | [API](#api), [Cost, latency and risk](#cost-latency-and-risk) |
-| **Extraction + rules design** — extensibility, typing, failure handling | Rules are small classes behind a `Protocol`: adding one is a class and a line. Confidence comes from checking evidence against the document, never from the model | [Architecture](#architecture), [docs/decisions.md](docs/decisions.md) |
-| **Evaluation mindset** — golden set quality, metrics honesty | 160 invoices from six sources the author did not write, labels checked against the printed PDF, a dev half for fixing and a test half run once. Every metric per source; failures printed | [Evaluation](#evaluation), [docs/evaluation.md](docs/evaluation.md), [docs/data.md](docs/data.md) |
-| **AI-assisted engineering** — deliberate use, ownership, accepted/rejected | What each tool did, what the author decided, what was rejected and why | [AI_USAGE.md](AI_USAGE.md) |
-| **Communication** — a README a teammate can run and challenge in 15 minutes | This page: run it, see the numbers, read the trade-offs. Details are one link away | — |
-| **Craft** — clean Python, tests that protect behaviour | ruff, type hints, ~240 tests including every LLM failure mode through a fake transport; CI runs lint, tests, a quality gate and the Docker image | [Testing](#testing) |
+| **Judgment** — heuristic vs LLM vs hybrid | All three behind one interface, measured on the same invoices, with a recommendation for each. The heuristic was kept general on purpose, although template-specific rules scored better on our data. Model and prompt chosen by rules fixed before seeing results | [Which mode to use](#which-mode-to-use) |
+| **Production mindset** | Typed contracts, timeouts and retries, fallback when the LLM fails, JSON logs, cost and latency measured per invoice, prompt caching, a hard cap on paid API calls | [Cost, latency and risk](#cost-latency-and-risk) |
+| **Extraction + rules design** | Rules are small classes behind a `Protocol`; confidence comes from checking evidence against the document, never from the model | [Architecture](#architecture) |
+| **Evaluation mindset** | 160 invoices from six sources the author did not write, every label checked against the printed PDF, a dev half for fixing and a test half run once, metrics per source, failures printed | [Evaluation](#evaluation) |
+| **AI-assisted engineering** | What each tool did, the author's decisions and their reasons, what was rejected | [AI_USAGE.md](AI_USAGE.md) |
+| **Craft** | ruff, type hints, 259 tests including every LLM failure mode; CI runs lint, tests, three quality gates and the Docker image | [Testing](#testing) |
 
 ## Architecture
 
@@ -41,45 +43,36 @@ flowchart LR
     I --> J[verdict<br/>FAIL > REVIEW > PASS]
 ```
 
-The three extractors do not run in parallel: a deployment uses one, chosen with `EXTRACTOR`. All three
-feed the same checks, which is what made it possible to compare them on the same data and choose.
+**Why this shape.** A compliance verdict must be auditable, and an LLM is not. So the model does the one
+thing it is good at — reading a messy, unknown layout — and code checks everything it returns. That check is
+**grounding**: the model must quote, for each value, the text it read it from; the quote must appear in the
+document's extracted text and must contain the value. If it does not, the field's confidence drops to 0.3
+and any rule that depends on it returns `REVIEW`. The same checks apply to all three extractors, which is
+what makes them comparable. Letting the model return the verdict was rejected as untestable; agents, model
+ensembles or a vector store, because nothing in the brief needs them.
+
+The three extractors do not run in parallel: a deployment uses one, chosen with `EXTRACTOR`.
 
 ### Which mode to use
 
 | Mode | Use it when | Test result |
 |---|---|---|
-| **`llm`** — Claude Opus 5 | **Recommended for production**: suppliers and layouts vary | 98% fields, 95% verdicts, no wrong `PASS`/`FAIL`, $0.034 per invoice |
-| `hybrid` | Most invoices come from a few known templates, for which rules have been written: the heuristic answers those for free | Same as `llm` on our data: the general heuristic was never sure of a whole invoice, so it always called the LLM |
-| `heuristic` | No API key or no network (the default, so the service runs offline), and as the automatic fallback when the LLM fails | 64% fields, 55% verdicts; it rejects valid invoices it cannot read, and never passes a bad one |
+| **`llm`** (Claude Opus 5) | **Recommended for production**: suppliers and layouts vary | 98% fields, 95% verdicts, no wrong `PASS`/`FAIL`, $0.034 per invoice |
+| `hybrid` | Most invoices come from a few known templates with rules written for them; the heuristic answers those for free | Same as `llm` on our data: the general heuristic was never sure of a whole invoice |
+| `heuristic` | No API key or no network (the default, so the service runs offline), and as the automatic fallback when the LLM fails | 64% fields, 55% verdicts; it rejects valid invoices it cannot read and never passes a bad one |
 
-**Why this shape.** A compliance verdict must be auditable, and an LLM is not. So the model is used for
-the one thing it is good at — reading a messy, unknown layout — and everything it returns is checked by
-code: the evidence must be in the document and must contain the value, or the field drops to low
-confidence and the verdict to `REVIEW`. The same checks apply to all three extractors, which is what makes
-them comparable. We rejected the simpler alternative (let the model return the verdict) because it cannot
-be tested or explained, and the more elaborate ones (agents, several models voting, a vector store) because
-nothing in the brief needs them.
+The LLM sits behind two layers: a **transport** that only moves text (the Anthropic client, a replayer of
+recorded responses, or a test double) and a **typed layer** that parses, validates and grounds the answer.
+That split is what makes timeouts, rate limits and malformed model output testable.
 
-| Step | What it does | Deterministic |
-|---|---|---|
-| ingest | PDF (text layer, via `pypdf`) or UTF-8 text → pages; the original PDF is kept | yes |
-| extractor | proposes a raw value and an evidence snippet per field. The LLM receives the PDF itself (so it sees the layout) plus our extracted text, and must quote the text | heuristic yes, LLM no |
-| normalise | dates → ISO, amounts → `Decimal`, currency → ISO 4217, tax ids → canonical | yes |
-| confidence | checks the evidence is in the document and supports the value | yes |
-| rules | seven independent rules, each `PASS` / `FAIL` / `REVIEW` with a message | yes |
-
-The LLM sits behind a two-level boundary: a **transport** that only moves text (real Anthropic client, a
-recorded-response replayer, or a test double) and a **typed layer** that parses, validates and grounds the
-answer. That split is what makes timeouts, rate limits and malformed model output testable. If the LLM
-fails, the pipeline falls back to the heuristic and says so in the response.
-
-Code map: `src/validator/` — `api.py` (HTTP), `pipeline.py` (orchestration), `ingest.py`, `heuristic.py`,
-`llm.py` + `transport.py` + `prompts.py` (LLM path), `hybrid.py`, `normalize.py`, `confidence.py`,
-`rules.py`, `models.py` (contracts), `observability.py` (JSON logs).
+Code map, `src/validator/`: `api.py` (HTTP), `pipeline.py`, `config.py`, `ingest.py`, `heuristic.py`,
+`llm.py` + `transport.py` + `prompts.py` (LLM), `hybrid.py`, `extraction.py`, `normalize.py`,
+`confidence.py`, `rules.py`, `models.py` (contracts), `pricing.py`, `observability.py` (JSON logs).
 
 ## Quick start
 
-Requires Python 3.12+.
+Requires Python 3.12+. No API key needed: LLM responses for the evaluation invoices are recorded in the
+repository and replayed.
 
 ```bash
 python -m venv .venv
@@ -89,22 +82,19 @@ cp .env.example .env              # defaults run fully offline
 uvicorn validator.api:create_app --factory --port 8000
 ```
 
-Open <http://localhost:8000/docs> for the interactive OpenAPI schema.
-
-With Docker instead: `docker compose up --build` (the image is built and health-checked in CI).
-
-### Configuration
+Open <http://localhost:8000/docs> for the OpenAPI schema. With Docker instead: `docker compose up --build`
+(built and health-checked in CI).
 
 | Variable | Default | Meaning |
 |---|---|---|
 | `EXTRACTOR` | `heuristic` | `heuristic`, `llm` or `hybrid` |
 | `LLM_MODEL` | `claude-opus-5` | Claude model for `llm` / `hybrid` |
-| `LLM_TRANSPORT` | `replay` in `.env.example` (`live` if unset) | `replay` uses recorded responses (no key); `live` calls the API |
+| `LLM_TRANSPORT` | `replay` in `.env.example` (`live` if unset) | `replay` uses recorded responses; `live` calls the API |
 | `ANTHROPIC_API_KEY` | empty | only needed with `LLM_TRANSPORT=live` |
+| `LLM_INPUT` | `pdf` | `pdf` sends the PDF itself plus our text, so the model sees the layout; `text` sends only the text |
+| `PDF_TEXT` | `plain` | `plain` or `layout` text extraction |
 | `LLM_TIMEOUT_S` | `30` | per-request timeout; the SDK retries 408/409/429/5xx twice |
-| `LLM_INPUT` | `pdf` | `pdf` also sends the original PDF so the model sees the page layout; `text` sends only the extracted text. Evidence is always checked against the extracted text ([measured](docs/evaluation.md#8-how-the-document-reaches-the-model)) |
-| `PDF_TEXT` | `plain` | `plain` or `layout` text extraction from the PDF |
-| `LOG_LEVEL` | `INFO` | JSON logs to stdout, one line per request |
+| `LOG_LEVEL` | `INFO` | JSON logs to stdout |
 
 Invalid combinations fail at start-up with a clear message (for example `EXTRACTOR=llm` with
 `LLM_TRANSPORT=live` and no key).
@@ -117,9 +107,9 @@ Invalid combinations fail at start-up with a clear message (for example `EXTRACT
 | `POST` | `/v1/extract` | JSON or multipart: document only | extraction |
 | `GET` | `/health` | — | liveness |
 
-JSON body: `{"document": {"text": "..."} | {"content_base64": "...", "media_type": "application/pdf"}, "config": {...}, "reference_date": "YYYY-MM-DD"}`.
-Multipart: a `file` part, a `config` part holding the JSON config, and an optional `reference_date`.
-`reference_date` defaults to today; the invoice age rule is measured against it.
+JSON body: `{"document": {"text": "..."} | {"content_base64": "...", "media_type": "application/pdf"},
+"config": {...}, "reference_date": "YYYY-MM-DD"}`. Multipart: a `file` part, a `config` part holding the
+JSON config, and an optional `reference_date` (defaults to today; the invoice age is measured against it).
 
 ```bash
 curl -s -X POST localhost:8000/v1/validate \
@@ -128,20 +118,13 @@ curl -s -X POST localhost:8000/v1/validate \
   -F "reference_date=2026-06-30"
 ```
 
-### Rule config
-
-| Field | Required | Meaning |
-|---|---|---|
-| `document_type` | yes | `SUPPLIER_INVOICE` |
-| `max_age_days` | yes | the invoice date must be within this many days before `reference_date` |
-| `allowed_currencies` | no | ISO 4217 codes; missing currency → `REVIEW` |
-| `required_fields` | no | fields that must be present |
-| `expected_customer_tax_id` | no | the invoice must be addressed to this tax id (`ESB12345678` equals `B12345678`) |
+Rule config: `document_type` (`SUPPLIER_INVOICE`), `max_age_days`, and optionally `allowed_currencies`,
+`required_fields` and `expected_customer_tax_id` (the invoice must be addressed to this tax id).
 
 ### Sample request and response
 
-Request (the invoice text is `evals/golden/inv_06_traps.txt`: the customer block comes before the
-supplier, a due date before the issue date, and a subtotal and VAT line before the total):
+Request (the text of `evals/golden/inv_06_traps.txt`: the customer block comes before the supplier, a due
+date before the issue date, a subtotal and VAT line before the total):
 
 ```json
 {
@@ -182,181 +165,129 @@ Response (abridged to 3 of the 10 fields; headers include `X-Request-ID`):
 }
 ```
 
-When an LLM was used, `llm` carries `model`, `latency_ms`, `input_tokens`, `output_tokens`,
-`estimated_cost_usd` and whether the response was replayed from a recording.
-
-Errors never expose stack traces:
-
-```json
-{"error": {"code": "invalid_request", "message": "request body does not match the schema",
-  "details": [{"type": "greater_than", "loc": ["config", "max_age_days"], "msg": "Input should be greater than 0"}]}}
-```
-
-| Status | Code | When |
-|---|---|---|
-| 413 | `document_too_large` | document over 5 MB |
-| 415 | `unsupported_media_type` | neither JSON nor multipart, or a non-PDF/non-text file |
-| 422 | `invalid_request` | body or config does not match the schema |
-| 422 | `unreadable_document` | PDF without a text layer (scans need OCR, which is out of scope) |
+When an LLM was used, `llm` carries `model`, `prompt_version`, `latency_ms`, `input_tokens`,
+`output_tokens`, `estimated_cost_usd` and whether the response was replayed. Errors never expose stack
+traces: `413 document_too_large`, `415 unsupported_media_type`, `422 invalid_request` (with the validation
+details), `422 unreadable_document` (a PDF without a text layer).
 
 ## Evaluation
 
 ```bash
-python -m evals.run --extractor heuristic          # dev and test splits, broken down by source
-python -m evals.run --all                           # heuristic, three Claude models, hybrid
-python -m evals.run --all --check-baseline          # the CI quality gate
+python -m evals.run --extractor heuristic                                  # dev and test, offline
+python -m evals.run --extractor llm --model claude-opus-5 --split test     # replays the headline run
+python -m evals.run --extractor hybrid --model claude-opus-5 --split test
+python -m evals.run --extractor llm --model claude-opus-5 --split test --check-baseline   # a CI gate
 ```
 
-160 invoices from six sources the author did not write, chosen to avoid tuning to one template: a US
-template (Mendeley), German e-invoices (Mustang), Spanish electricity bills (IDSEM), Gulf invoices in AED and
-KWD (SalorWorks), 13 countries from an e-invoicing library (GOBL) and a held-out set of deliberately messy
-European layouts. 18 countries, 12 currencies, 6 label languages; credit notes, multi-page and multi-rate
-invoices. Every label was checked against the printed PDF. Each source is split 50/50 into **dev** (failures
-inspected and fixed) and **test** (run once, at the end, with code and prompt frozen). Invoices written by
-the author are excluded from every metric.
+Each report gives field exact match, precision and recall per field, verdict agreement with a confusion
+matrix, a breakdown per source and per difficulty, latency and cost, and prints the failures (on dev; test
+failures stay hidden unless `--show-test-failures`).
 
-What the data covers and how it was built: [docs/data.md](docs/data.md). Method, experiments and the
-contamination log: [docs/evaluation.md](docs/evaluation.md).
+**The evaluation set** (the brief's "golden set") is 160 invoices from six sources the author did not write,
+chosen so that no single template dominates: a US invoice template, German e-invoices, Spanish electricity
+bills, Gulf invoices in AED and KWD, e-invoicing examples from 14 countries, and 16 deliberately messy
+European layouts written by independent agents. 18 countries, 12 currencies, 6 label languages, credit
+notes, multi-page and multi-rate invoices. Every label was checked against the printed PDF. Each source is
+split 50/50 into **dev** (failures inspected and fixed) and **test** (run once, at the end). The 14 invoices
+in `evals/golden/` were written by the author and serve only as unit-test fixtures.
 
-**Test split, run once** (80 invoices; the chosen configuration and the free alternatives):
+**Test split, run once:**
 
 | Configuration | Field exact match | Verdict agreement | Wrong `PASS`/`FAIL` | LLM calls | Cost / invoice |
 |---|---|---|---|---|---|
-| Heuristic | 64% | 55% | 25 wrong `FAIL`, 0 wrong `PASS` | 0 | $0 |
-| **LLM — Opus 5, PDF + text, prompt v4b** | **98%** | **95%** | **0** | 80 | $0.034 |
-| Hybrid — heuristic first, Opus 5 when unsure | 98% | 96% | 0 | 80 | $0.034 |
+| Heuristic | 64% | 55% | 26 wrong `FAIL` (25 valid invoices rejected), 0 wrong `PASS` | 0 | $0 |
+| **LLM — Opus 5, PDF + text, final prompt** | **98%** | **95%** | **0** | 80 | $0.034 |
+| Hybrid — heuristic first, Opus 5 when unsure | 98% | 95% | 0 | 80 | $0.034 |
 
-Opus 5 per source on test: Mendeley 100% verdicts, Mustang 100%, IDSEM 93%, SalorWorks 100%, GOBL 77%,
-held-out 100%. On dev the three models were compared first and a rule written in advance picked Opus 5
-(Haiku 4.5 and Sonnet 5 were more than 3 points behind on verdicts); four prompt variants were compared on
-dev before the test run. Details: [docs/evaluation.md](docs/evaluation.md).
-
-The hybrid called the LLM on all 80 invoices: the heuristic is deliberately general, and on varied layouts
-it is never sure of a whole invoice. We measured what template-specific rules would change — adding the
-Mendeley template's own labels let the hybrid skip the LLM on 45% of test invoices (36 of 80) at the same 95%
-verdict agreement, for $0.023 per invoice — and **did not ship them**: that template appears in both dev and
-test, so the gain would be learnt from the evaluation data, not earned. In production those rules would be
-written for a customer's frequent suppliers, which is where the hybrid pays
-([evaluation §6](docs/evaluation.md#6-final-results-on-the-test-split)).
+How the model, the input and the prompt were chosen on dev — three models, three ways of sending the
+document, four prompt variants — and every result per source: [docs/evaluation.md](docs/evaluation.md).
+What each data source adds and how it was built and licensed: [docs/data.md](docs/data.md).
 
 ## Cost, latency and risk
 
 **When would we not use an LLM?**
 
-- **When the invoice carries its own data.** E-invoices such as ZUGFeRD / Factur-X (the Mustang source) embed
-  an EN 16931 XML with every field. Reading that XML is exact, free and instant; an LLM there only adds cost
-  and risk.
-- **When the stream is a few known, clean templates.** The heuristic costs nothing and takes ~0.1 s; the
-  hybrid mode calls the LLM only when the heuristic is unsure. With rules written for one frequent template,
-  it skipped the LLM on 45% of our test invoices and cut the cost per invoice by a third; with general rules
-  only, it never skipped. So it pays off once a customer's frequent templates are known — measure the share
-  of `hybrid:heuristic_only` responses before relying on it.
-- **When the document cannot leave the premises**, or a sub-second synchronous answer is required.
+- **When the invoice carries its own data.** E-invoices such as ZUGFeRD / Factur-X embed an XML with every
+  field; reading it is exact, free and instant.
+- **When most invoices come from a few known templates.** Rules written for them answer in ~0.1 s for
+  nothing, and the hybrid calls the LLM only for the rest. We measured it: with rules for one frequent
+  template, the hybrid skipped the LLM on 45% of test invoices at the same accuracy and cut the cost by a
+  third. We did not ship those rules, because that template is also in our test data
+  ([why](docs/decisions.md#b9--the-heuristic-stays-general-no-rules-learnt-from-one-template)).
+- **When the document cannot leave the premises**, or a sub-second answer is required.
 
-**What did we measure?** Per invoice, on the test split with the chosen configuration (Opus 5, PDF + text,
-prompt v4b):
+**What did we measure?** On the test split, chosen configuration:
 
 | | Mean | p95 |
 |---|---|---|
-| Latency, LLM call (PDF + text) | 7.0 s | 10.9 s |
-| Latency, heuristic only (PDF parsing included) | 0.11 s | 0.44 s |
-| Cost per invoice, Opus 5 | $0.034 | $0.069 on the 2–4-page utility bills |
-| Cost per 1,000 invoices, Opus 5 | ~$34 | |
+| Latency per invoice, LLM | 7.0 s | 10.9 s |
+| Latency per invoice, heuristic (PDF parsing included, laptop) | 0.11 s | 0.44 s |
+| Cost per invoice, Opus 5 | $0.034 | — (the 2–4-page utility bills average $0.069) |
 
-The whole evaluation — every model, prompt variant and input experiment, 661 recorded calls — cost about
-$9.40 in API usage.
-
-On dev, the same measurement for the cheaper models: Haiku 4.5 costs about 1/4.5 of Opus per invoice
-(~$0.0076) and Sonnet 5 ~$0.014. With the tuned prompt Haiku extracts 99% of dev fields correctly, but it
-sends more invoices to `REVIEW` than Opus (81% verdict agreement on dev, against 90% for Opus with the
-earlier prompt) ([evaluation §7 and §9](docs/evaluation.md)). Prompt caching of the instructions saves
-~22% per invoice on Opus and Sonnet (measured: cache hits on 66 of 67 calls). For bulk, non-urgent
-processing the Batch API would halve the price again. The heuristic path costs nothing and takes 0.11 s on
-average, PDF parsing included.
+About $34 per 1,000 invoices. Prompt caching of the instructions makes each Opus call ~24% cheaper
+(measured). Haiku 4.5 costs about a fifth as much and extracts as many fields with the final prompt, but
+sends more invoices to `REVIEW`; the Batch API would halve the price for non-urgent bulk runs. The whole
+evaluation — every model, prompt and input experiment, 661 recorded calls — cost about $9.20.
 
 **What would we monitor in production?**
 
-| Signal | Why | Where it comes from |
-|---|---|---|
-| `REVIEW` rate, per customer and per supplier | the real cost of the system is the people reviewing; a jump means a new layout or a model change | verdict in the JSON log |
-| Share of fields that fail grounding (confidence 0.3) | the model saying things the document does not say: hallucination or a broken text layer | per-field confidence |
-| Share of `FAIL` per rule | a business signal (old invoices, wrong currency), and a sanity check when it moves suddenly | rule results |
-| LLM errors, fallbacks, p95 latency | provider incidents, timeouts, rate limits | `extractor_used`, latency in the log |
-| Cost per invoice, tokens, cache hit rate | spend drifts when documents get longer or caching breaks | `usage` returned by the API |
-| A weekly sample of `PASS` invoices checked by a person | the only way to catch a wrong `PASS`, which the system cannot see by itself | review queue |
+| Signal | Why |
+|---|---|
+| `REVIEW` rate per customer and supplier | reviews are the real cost; a jump means a new layout or a model change |
+| Share of fields that fail grounding | the model stating what the document does not say, or a broken text layer |
+| `FAIL` rate per rule | a business signal, and a sanity check when it moves suddenly |
+| LLM errors, fallbacks (`extractor_used`), p95 latency | provider incidents, timeouts, rate limits |
+| Cost and tokens per invoice (`llm.estimated_cost_usd`, `input_tokens`, `output_tokens`) | spend drifts when documents grow or caching breaks |
+| A weekly sample of `PASS` invoices checked by a person | the only way to catch a wrong `PASS`, which the system cannot see |
 
-Every model call is logged with the model id and the prompt version, so a change in any of these can be tied
-to a deploy. Before changing model or prompt, the evaluation set is re-run and the CI quality gate blocks a
-regression.
+Every response and log line carries the model id and the prompt version, so a change can be tied to a
+deploy; the CI quality gates block a regression before one.
 
-## Design decisions and trade-offs
+## Key trade-offs
 
-Every decision — problem, choice, evidence, what we rejected and when we would revisit it — is in
-[docs/decisions.md](docs/decisions.md), starting with a one-page table. The ones that matter most:
+- **The model sees the PDF, not only its text.** Text extraction loses the layout; sending the page as well
+  raised dev verdict agreement from 74% to 94% on Haiku for +57% cost. Evidence still has to quote our text,
+  so every value stays checkable.
+- **Review over automation.** Doubtful fields go to `REVIEW` rather than risk a wrong decision: 0 wrong
+  `PASS`/`FAIL`, at the price of 4 reviews in 80.
+- **A general heuristic over a better score.** Template-specific rules would have lifted the heuristic from
+  55% to 78% of verdicts on test — by learning our own data. We kept it general.
+- **Finance rules, still verified.** Credit notes are booked negative; a tax total may be the sum of printed
+  per-rate lines, trusted only when subtotal + tax = total.
+- **The most accurate model by a rule fixed in advance**, not by price or by taste: the cheapest model
+  within 3 points of the best on dev.
 
-- **The model sees the PDF, not only extracted text** — PDF text extraction loses the layout; sending the page
-  as well raised dev verdict agreement from 74% to 94% on Haiku for +57% cost. Evidence must still quote our
-  text, so every value stays checkable ([measured](docs/evaluation.md#8-how-the-document-reaches-the-model)).
-- **Model chosen by a rule written before the results** — the cheapest model within 3 points of the best.
-- **Prompt chosen by a controlled experiment**, not by intuition: four variants on the same dev invoices; an
-  instruction that sounded helpful made dates worse, and forcing the model to state the issuer's country and
-  date format first fixed them ([measured](docs/evaluation.md#9-prompt-variants)).
-- **Finance rules, still verified** — credit notes are booked negative, and a tax total may be the sum of
-  printed per-rate lines, trusted only when subtotal + tax = total.
-- **Structured output validated by us, not by the SDK helper** — so corrupt model output can be simulated
-  and tested, and responses recorded and replayed.
-- **Confidence from grounding, in four discrete levels** — model self-confidence is not calibrated; a value
-  must be found in the document to count.
-- **`REVIEW` means "not sure", `FAIL` means "the document breaks a rule"** — a missing field fails; a doubtful
-  one goes to a person. A subtotal + tax ≠ total mismatch is `REVIEW`, because withholdings such as Spanish
-  IRPF legitimately cause it.
-- **Rules as small independent classes** — adding one is a class and a line; no registry or DSL.
-- **Graceful degradation** — if the LLM fails, the heuristic answers and the response says so.
-- **No server-side model fallback and no sampling parameters** — the model in the response is always the
-  one that answered; stability comes from schema-constrained output and recordings.
+Every decision — problem, choice, evidence, rejected alternatives, when to revisit — is in
+[docs/decisions.md](docs/decisions.md), starting with a one-page table.
 
 ## Assumptions
 
-The brief leaves these open; each is documented with its alternatives in [docs/decisions.md](docs/decisions.md).
-
-- Only `SUPPLIER_INVOICE` is supported; other types are rejected with a clear error.
-- PDFs must have a text layer; scanned PDFs are rejected (OCR is out of scope).
-- `max_age_days` is measured against `reference_date` (default today), inclusive; a future date fails.
-- Numeric dates follow the issuer's convention: a US address means month-first, European signals mean
-  day-first; with no signal a date like `04/08/2026` is ambiguous and goes to `REVIEW`.
-- Amounts accept European, English, Swiss and space-grouped separators; a lone `1.500` is ambiguous and
-  lowers confidence, except in three-decimal currencies such as KWD.
-- Credit notes are negative, even when printed without a minus sign; corrective invoices keep their sign.
-- The tax total may be the sum of the printed per-rate tax lines when no total line is printed.
-- A missing currency when `allowed_currencies` is set gives `REVIEW`, not `FAIL`.
-- `required_fields` is a rule of its own; overlapping rules each report independently.
+- Only `SUPPLIER_INVOICE`; other document types are rejected with a clear error.
+- PDFs need a text layer; scans are rejected (OCR is out of scope).
+- `max_age_days` counts back from `reference_date` (default today), inclusive; a future date fails.
+- Numeric dates follow the issuer's convention (a US address means month-first); with no signal, a date
+  like `04/08/2026` is ambiguous and goes to `REVIEW`.
+- A missing currency when `allowed_currencies` is set is `REVIEW`, not `FAIL`; `required_fields` is a rule of
+  its own.
 
 ## Data handling
 
-The document is sent to the LLM provider only in `llm` and `hybrid` modes: by default the PDF itself plus
-its extracted text, because seeing the page measurably improves extraction; `LLM_INPUT=text` sends only the
-text. Logs record the request id, latency, extractor, model, token counts, verdict, and the
-document's length and a hash — never its content. No keys in the repository; `.env` is ignored. In
-production: a data processing agreement with the provider, zero-retention where available, and EU
-inference.
+The document goes to the LLM provider only in `llm` and `hybrid` modes (by default the PDF plus its text).
+Logs hold the request id, latency, extractor, model, tokens, verdict and a hash of the document, never its
+content. No keys in the repository. In production: a data processing agreement, zero retention where
+available, EU inference.
 
-## Limitations and next steps
+## What I would do with another day
 
-- **No OCR**: scanned invoices are rejected. The model could read them from the image, but nothing could
-  check what it read. Next: OCR to produce a checkable text layer; the rest of the pipeline stays.
-- **Scrambled text layers cost reviews**: in the Spanish utility bills the PDF text puts labels and amounts
-  in separate blocks, so the model's evidence often cannot be found verbatim and the invoice goes to
-  `REVIEW`. The answer is safe but not automated. Next: match evidence by position, not only by text.
-- **Heuristics are layout-bound**: they work on the layouts they were written for; the hybrid therefore
-  saves calls only on streams dominated by known templates.
-- **The prompt was tuned on the cheapest model**: variants were compared on Haiku and the winner applied to
-  Opus, to stay within the API budget.
-- **Coverage gaps**: no non-Latin label text that survives PDF extraction, no handwritten documents.
-- **Evaluation data is synthetic**: freely licensed real invoices do not exist. Next: a labelled sample of
-  real customer documents under a data processing agreement, with double labelling.
-- **Confidence thresholds are not calibrated**: next, fit them against labelled production data.
-- **Tax ids are checked for format, not validity**: next, checksum validation per country and a VIES lookup.
-- **One document type**: next, certificates and registration extracts with their own field schemas.
+1. **Re-run the model comparison with the final prompt.** It was tuned on the cheapest model; with it Haiku
+   extracts 99% of dev fields, so Haiku at a fifth of the cost may now be the better trade.
+2. **Match evidence by position, not only by text.** The Spanish utility bills print labels and amounts in
+   separate blocks, so correct answers cannot be verified and go to `REVIEW`.
+3. **OCR for scanned invoices,** producing a text layer the same checks can use.
+4. **Calibrate confidence and validate tax ids** (checksums per country, VIES) on labelled customer data.
+
+Known limits: no non-Latin label text that survives PDF extraction, no handwriting, one document type, and
+synthetic evaluation data (freely licensed real invoices do not exist).
 
 ## Testing
 
@@ -364,25 +295,28 @@ inference.
 pytest -q
 ```
 
-No test can reach the real API: a fixture removes the key, and LLM behaviour — timeouts, rate limits,
-malformed or truncated JSON, refusals, hallucinated values, fallback — is driven through a fake transport.
-Rules, normalisation, the heuristic, the hybrid cascade, the HTTP API (JSON and multipart, errors, OpenAPI)
-and the evaluation metrics each have their own test file.
+259 tests. No test can reach the real API: a fixture removes the key, and every LLM failure mode —
+timeouts, rate limits, malformed or truncated JSON, refusals, hallucinated values — is driven through a fake
+transport. Rules, normalisation, the heuristic, the hybrid, the HTTP API (JSON and multipart, errors,
+OpenAPI) and the evaluation metrics each have their own tests.
 
 ## AI usage
 
-How AI assistants were used, what was rejected and why, and the extraction prompt: [AI_USAGE.md](AI_USAGE.md).
+Which AI tools did what, the decisions the author took and why, what was rejected, and the extraction
+prompt: [AI_USAGE.md](AI_USAGE.md).
 
 ## Data attribution
 
-Public evaluation invoices: Kozłowski, M.; Weichbroth, P. (2021), *Samples of electronic invoices*, Mendeley
-Data, V2, doi:10.17632/tnj49gpmtz.2, licensed under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); labels derived from
-[katanaml-org/invoices-donut-data-v1](https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1)
-(MIT). Details and changes: `evals/external/mendeley/LICENSE-DATA.txt`.
+Evaluation invoices, each with its licence and changes in `evals/external/<source>/LICENSE-DATA.txt`, and a
+rebuild script in `evals/sources/`:
 
-Also used, each with its own `LICENSE-DATA.txt` under `evals/external/`:
+- Kozłowski, M.; Weichbroth, P. (2021), *Samples of electronic invoices*, Mendeley Data, V2,
+  doi:10.17632/tnj49gpmtz.2, CC BY 4.0; labels derived from
+  [katanaml-org/invoices-donut-data-v1](https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1)
+  (MIT).
 - IDSEM, *Invoices Database of the Spanish Electricity Market* (Zenodo 6373179), CC BY 4.0.
 - Mustang project test invoices (github.com/ZUGFeRD/mustangproject), Apache-2.0.
 - Synthetic Shopify Invoice Test Pack by Salorworks (github.com/SalorWorks/shopify-invoice-test-pack),
   CC BY 4.0.
+- GOBL and gobl.html examples by Invopop (github.com/invopop/gobl), Apache-2.0, rendered to PDF by this
+  project.

@@ -282,6 +282,20 @@ def main(argv: list[str] | None = None) -> int:
         render(s, show_failures=args.show_test_failures or "@dev/" in s.name) for s in summaries
     )
     report = render_comparison(summaries) + "\n" + report
+    missing = [
+        s
+        for s in summaries
+        if s.fallbacks and s.name.endswith("/all") and not s.name.startswith("heuristic")
+    ]
+    if missing:
+        notice = "\n".join(
+            f"> **WARNING — {s.name}:** {s.fallbacks} of {s.cases} invoices have no recorded response "
+            "for this model and prompt and were answered by the heuristic fallback. This row is not "
+            "the model's result; record it with `--record --max-calls N` or pick a recorded "
+            "configuration (see README, Evaluation)."
+            for s in missing
+        )
+        report = notice + "\n\n" + report
     print(report)
 
     RESULTS_DIR.mkdir(exist_ok=True)

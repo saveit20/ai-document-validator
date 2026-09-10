@@ -8,7 +8,7 @@ the LLM only **proposes** values. Normalisation, confidence, rules and the verdi
 code that checks every proposed value against the document's own text. Each decision below says what
 problem it solves, what we chose, what that costs, what we rejected, and what evidence would change our
 mind. Every number comes from [evaluation.md](evaluation.md) or from the results files under
-`evals/results/`. "(was D#)" maps an entry to the previous version of this file. Start with the table;
+`evals/results/`. Start with the table;
 read a section only when you want to challenge the decision it covers.
 
 | # | Decision | Chosen | Main alternative rejected | Evidence |
@@ -62,7 +62,7 @@ read a section only when you want to challenge the decision it covers.
 - **Revisit if:** a wrong `PASS`/`FAIL` caused by the LLM shows up in evaluation. That would mean the
   checks are too permissive.
 
-### A2 — Two-level LLM boundary: transport, then typed layer (was D6)
+### A2 — Two-level LLM boundary: transport, then typed layer
 
 - **Problem:** the failure modes (timeout, rate limit, invalid JSON, refusal) have to be testable without
   calling the API.
@@ -76,7 +76,7 @@ read a section only when you want to challenge the decision it covers.
 - **Revisit if:** we move to a provider whose SDK exposes raw text as easily. The boundary would still
   hold.
 
-### A3 — If the LLM fails, the heuristic answers (was D10)
+### A3 — If the LLM fails, the heuristic answers
 
 - **Problem:** what to return when the LLM times out, errors after retries, refuses or returns invalid
   output.
@@ -89,7 +89,7 @@ read a section only when you want to challenge the decision it covers.
 - **Revisit if:** fallback verdicts turn out wrong more often than reviewers accept. One option is then to
   force `REVIEW` for fallback cases on layouts the heuristic has never seen.
 
-### A4 — Scope: one document type, ten fields, the brief's stack (was D1, D2, D13)
+### A4 — Scope: one document type, ten fields, the brief's stack
 
 - **Problem:** the brief lets us choose the document type, lists six fields as a minimum, and prefers
   Python 3.12 / FastAPI / Pydantic / pytest.
@@ -104,7 +104,7 @@ read a section only when you want to challenge the decision it covers.
   depth).
 - **Revisit if:** a second document type is actually needed.
 
-### A5 — One URL per operation, JSON or multipart by `Content-Type` (was D7)
+### A5 — One URL per operation, JSON or multipart by `Content-Type`
 
 - **Problem:** the brief accepts either multipart or JSON with base64/text.
 - **Decision:** `POST /v1/validate` and `POST /v1/extract` accept both, and both bodies are declared in
@@ -127,7 +127,7 @@ read a section only when you want to challenge the decision it covers.
 
 ## (b) Extraction and the LLM
 
-### B1 — Anthropic, with recorded responses as the offline path (was D5)
+### B1 — Anthropic, with recorded responses as the offline path
 
 - **Problem:** the brief requires a path with no paid credentials, and also asks what was *measured*.
 - **Decision:** Anthropic. Each real call is recorded once, keyed by a hash of model, prompt version,
@@ -139,7 +139,7 @@ read a section only when you want to challenge the decision it covers.
   the brief's list.
 - **Revisit if:** a different provider is required. Only the transport would change.
 
-### B2 — Structured output via JSON schema (was D6)
+### B2 — Structured output via JSON schema
 
 - **Problem:** free-text model output would need fragile parsing.
 - **Decision:** `messages.create` with `output_config.format` (JSON schema). Each field is one nullable
@@ -166,7 +166,7 @@ read a section only when you want to challenge the decision it covers.
 - **Revisit if:** cost per document matters more than verdict agreement on a stream of clean, known
   layouts, or the ~57%+ premium grows on the chosen model.
 
-### B4 — Prompt: chosen by a controlled comparison on dev (was D14)
+### B4 — Prompt: chosen by a controlled comparison on dev
 
 - **Problem:** a prompt changed one fix at a time never shows which instruction helps and which hurts, and
   tuning a prompt on the data it is scored on inflates the score.
@@ -203,14 +203,15 @@ read a section only when you want to challenge the decision it covers.
 
   Haiku is 11 verdict points behind and Sonnet 17, both outside the margin. Sonnet does not beat Haiku here.
   Because no model produced a wrong `PASS`/`FAIL`, what a cheaper model costs is extra manual reviews, not
-  wrong decisions ([evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5)).
+  wrong decisions ([evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5)). Replayed with
+  today's code the numbers move by a point or two and the choice is the same.
   On the test split, run once with prompt v4b, Opus 5 scored 98% of fields and 95% of verdicts at $0.034 per
   invoice, with no wrong `PASS`/`FAIL` ([evaluation §6](evaluation.md#6-final-results-on-the-test-split)).
 - **Rejected:** choosing by price alone; choosing after the fact.
 - **Revisit if:** the price of a manual review is known. Haiku at ~1/4.5 of the cost with more `REVIEW`s
   could then be the right trade.
 
-### B6 — No server-side model fallback, `effort: low`, no sampling parameters (was D12)
+### B6 — No server-side model fallback, `effort: low`, no sampling parameters
 
 - **Problem:** the API can reroute refused requests to another model, and determinism is usually sought
   through `temperature=0`.
@@ -223,19 +224,19 @@ read a section only when you want to challenge the decision it covers.
 - **Rejected:** server-side fallback (silently changes the model and the reported cost).
 - **Revisit if:** refusals become frequent in production.
 
-### B7 — Prompt caching on the system prompt (was D17)
+### B7 — Prompt caching on the system prompt
 
 - **Problem:** the instructions are identical on every call; only the document changes.
 - **Decision:** the system prompt is sent with `cache_control: ephemeral`. Cost estimates price cache
   reads at 0.1× and writes at 1.25× input, based on the API's `usage`.
-- **Why:** measured, Opus 5 and Sonnet 5 each read ~2,240 cached tokens on 66 of 67 calls, about 22% saved
-  on each (~$0.010 per invoice on Opus, ~$0.004 on Sonnet). Haiku 4.5 needs a 4,096-token prefix: 0 hits in
-  181 calls, as documented.
+- **Why:** measured over all recorded calls, Opus 5 read the cached instructions on 157 of 160 calls (~24%
+  cheaper per invoice) and Sonnet 5 on 66 of 67 (~22%). Haiku 4.5 needs a 4,096-token prefix: 0 hits in 434
+  calls, as documented.
 - **Rejected:** padding the prompt to reach Haiku's minimum (pays for tokens in order to save tokens); the
   Batch API on the synchronous path (up to 24 h latency; suitable for bulk jobs).
 - **Revisit if:** we switch to Haiku, or the prompt grows past 4,096 tokens.
 
-### B8 — Hybrid: call the LLM only when the heuristic is unsure (was D11, D18)
+### B8 — Hybrid: call the LLM only when the heuristic is unsure
 
 - **Problem:** the brief asks "heuristic vs LLM vs hybrid". The hybrid only pays off if it skips the LLM
   on some documents.
@@ -275,7 +276,7 @@ read a section only when you want to challenge the decision it covers.
 
 ## (c) Trust and verification
 
-### C1 — Confidence from verifiable signals, in four levels (was D8)
+### C1 — Confidence from verifiable signals, in four levels
 
 - **Problem:** the brief asks for per-field confidence "with your own definition".
 - **Decision:** the same scoring applies to every extractor:
@@ -309,7 +310,7 @@ read a section only when you want to challenge the decision it covers.
 - **Revisit if:** unnecessary `REVIEW`s from evidence formatting (like `355.07` vs `355,07`) become a
   measurable share of reviews.
 
-### C3 — Numeric date order is decided per document (was D16)
+### C3 — Numeric date order is decided per document
 
 - **Problem:** `04/08/2026` is 4 August in Europe and 8 April in the US. The first design read every date
   day-first; every Mendeley invoice is from a US issuer and dates month-first.
@@ -349,8 +350,8 @@ read a section only when you want to challenge the decision it covers.
   It rises to 1.0 only when subtotal and total are both at 1.0 and subtotal + tax = total within 0.01. A
   value that is not a sum of printed lines stays ungrounded.
 - **Why:** every addend is printed and verifiable, and the cross-check proves the sum. Without that proof
-  the field stays in `REVIEW`. IDSEM is where the best model still fails (IDSEM verdicts: Opus 73%, Haiku
-  and Sonnet 27%).
+  the field stays in `REVIEW`. IDSEM is where the best model still fails (IDSEM dev verdicts with the earlier prompt: Opus 73%, Haiku 27%, Sonnet 33%;
+  Opus on test with the final prompt: 93%).
 - **Rejected:** rejecting every computed value (sends every multi-rate invoice to review); trusting any
   sum (easy to hit by coincidence).
 - **Revisit if:** the cross-check rejects correct sums often. With prompt v4b the tax total is right on
@@ -385,7 +386,7 @@ read a section only when you want to challenge the decision it covers.
 - **Rejected:** binary PASS/FAIL (hides uncertainty); `REVIEW` for any missing field (weakens FAIL).
 - **Revisit if:** operations says the `REVIEW` rate is too high. Calibrating C1 comes before loosening D1.
 
-### D2 — Rules as small classes behind a `Protocol` (was D9)
+### D2 — Rules as small classes behind a `Protocol`
 
 - **Problem:** the brief asks that new rules not require rewriting existing ones, without forcing patterns.
 - **Decision:** each rule has an `id` and `evaluate()`, returns `None` when it does not apply, and is
@@ -394,7 +395,7 @@ read a section only when you want to challenge the decision it covers.
 - **Rejected:** a decorator registry, a plugin loader, a rules DSL in the config.
 - **Revisit if:** rules must be configured per customer at runtime.
 
-### D3 — Three rules beyond the brief's four (was D13)
+### D3 — Three rules beyond the brief's four
 
 - **Problem:** the brief's example config has `required_fields`, but none of the four minimum rules uses
   it.
@@ -413,18 +414,18 @@ read a section only when you want to challenge the decision it covers.
 - **Decision:** `reference_date` in the request, defaulting to today. The limit is inclusive. A future
   invoice date is `FAIL`.
 - **Why:** the tests and the evaluation set would otherwise change results with the calendar. The
-  evaluation gives each case its own date and config (Mendeley invoices are from 2012–2021 and in USD).
+  evaluation gives each case its own date and config (Mendeley invoices are from 2011–2021 and in USD).
 - **Rejected:** always today.
 - **Revisit if:** no.
 
 ## (e) Evaluation and data
 
-### E1 — Six sources the author did not write; the author's invoices excluded (was D15)
+### E1 — Six sources the author did not write; the author's invoices excluded
 
 - **Problem:** the first 14 invoices were written by the heuristic's author. The heuristic scored 100% of
   fields on them and about half on invoices written by someone else.
 - **Decision:** metrics use only: Mendeley (72, CC BY 4.0, US single template), Mustang (6, German
-  ZUGFeRD), IDSEM (30, Spanish electricity bills), SalorWorks (10, Gulf, AED/KWD), GOBL (26, 13 countries,
+  ZUGFeRD), IDSEM (30, Spanish electricity bills), SalorWorks (10, Gulf, AED/KWD), GOBL (26, 14 countries,
   credit/corrective notes), and a held-out set (16 PDFs written by two isolated agents that never saw the
   code). The 14 author-written invoices are unit-test fixtures only. Every figure is reported per source.
 - **Why:** no single template can hide the hard layouts. Rejected sources and the reasons are in
@@ -488,7 +489,7 @@ read a section only when you want to challenge the decision it covers.
 - **Rejected:** relying on the operator.
 - **Revisit if:** no.
 
-### F4 — pip + `pyproject.toml`; Docker verified in CI (was D3, D4)
+### F4 — pip + `pyproject.toml`; Docker verified in CI
 
 - **Problem:** the development machine had no Docker, and shipping an untested Dockerfile is worse than
   shipping none.

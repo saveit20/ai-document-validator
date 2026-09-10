@@ -58,7 +58,7 @@ Full text in [docs/data.md, "How labels were made"](../../docs/data.md#how-label
 - **Raw data:** the 30.9 GB `idsem.zip` is never downloaded whole. Its central directory (27 MB) is saved
   as `cdfull.bin`. `index` parses it and unwraps the 32-bit local-header offsets, which wrap past 4 GB
   because the archive is not zip64. `fetch` then range-reads 5 bills (PDF + JSON) per training template,
-  chosen with the fixed seed: 7.4 MB, capped at 45 MB.
+  chosen with the fixed seed: 6.3 MB transferred (7.4 MB of PDFs once decompressed), capped at 45 MB.
 - **Commands:**
 
   ```
