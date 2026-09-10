@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Clay-Koch\",\"evidence\":\"Seller:   Client:\\n\\nClay-Koch\"},\"invoice_number\":{\"value\":\"12681565\",\"evidence\":\"Invoice no: 12681565\"},\"invoice_date\":{\"value\":\"2015-07-09\",\"evidence\":\"Date of issue:   09/07/2015\"},\"total_amount\":{\"value\":\"4391.10\",\"evidence\":\"Total   $ 3 991,91   $ 399,19   $ 4 391,10\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"Total   $ 3 991,91\"},\"tax_id\":{\"value\":\"915-72-3800\",\"evidence\":\"Tax Id: 915-72-3800\"},\"subtotal_amount\":{\"value\":\"3991.91\",\"evidence\":\"Total   $ 3 991,91   $ 399,19   $ 4 391,10\"},\"tax_amount\":{\"value\":\"399.19\",\"evidence\":\"Total   $ 3 991,91   $ 399,19   $ 4 391,10\"},\"customer_name\":{\"value\":\"Thompson-Baker\",\"evidence\":\"Seller:   Client:\\n\\nClay-Koch   Thompson-Baker\"},\"customer_tax_id\":{\"value\":\"971-96-6933\",\"evidence\":\"Tax Id: 971-96-6933\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2367,
+  "output_tokens": 310,
+  "latency_ms": 9276,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

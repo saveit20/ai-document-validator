@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Cruz-Carter\",\"evidence\":\"Seller:   Client:\\n\\nCruz-Carter\"},\"invoice_number\":{\"value\":\"35593328\",\"evidence\":\"Invoice no: 35593328\"},\"invoice_date\":{\"value\":\"2011-08-06\",\"evidence\":\"Date of issue:   06/08/2011\"},\"total_amount\":{\"value\":\"3004.96\",\"evidence\":\"Total   $ 2 731,78   $ 273,18   $ 3 004,96\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"Total   $ 2 731,78   $ 273,18   $ 3 004,96\"},\"tax_id\":{\"value\":\"938-91-6436\",\"evidence\":\"Tax Id: 938-91-6436\"},\"subtotal_amount\":{\"value\":\"2731.78\",\"evidence\":\"Total   $ 2 731,78   $ 273,18   $ 3 004,96\"},\"tax_amount\":{\"value\":\"273.18\",\"evidence\":\"Total   $ 2 731,78   $ 273,18   $ 3 004,96\"},\"customer_name\":{\"value\":\"Alexander-Arias\",\"evidence\":\"Seller:   Client:\\n\\nCruz-Carter   Alexander-Arias\"},\"customer_tax_id\":{\"value\":\"942-92-5992\",\"evidence\":\"Tax Id: 942-92-5992\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2324,
+  "output_tokens": 330,
+  "latency_ms": 9137,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

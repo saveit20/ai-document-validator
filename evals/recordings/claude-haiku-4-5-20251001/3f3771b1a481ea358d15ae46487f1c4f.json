@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Freeman and Sons\", \"evidence\": \"Freeman and Sons\"}, \"invoice_number\": {\"value\": \"77833987\", \"evidence\": \"Invoice no: 77833987\"}, \"invoice_date\": {\"value\": \"2013-05-20\", \"evidence\": \"05/20/2013\"}, \"total_amount\": {\"value\": \"129.53\", \"evidence\": \"$ 129,53\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"$\"}, \"tax_id\": {\"value\": \"973-76-8676\", \"evidence\": \"Tax Id: 973-76-8676\"}, \"subtotal_amount\": {\"value\": \"117.75\", \"evidence\": \"$ 117,75\"}, \"tax_amount\": {\"value\": \"11.78\", \"evidence\": \"$ 11,78\"}, \"customer_name\": {\"value\": \"Houston Group\", \"evidence\": \"Houston Group\"}, \"customer_tax_id\": {\"value\": \"901-88-1175\", \"evidence\": \"Tax Id: 901-88-1175\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4369,
+  "output_tokens": 253,
+  "latency_ms": 8372,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Hopkins and Sons\", \"evidence\": \"Hopkins and Sons\"}, \"invoice_number\": {\"value\": \"13194726\", \"evidence\": \"Invoice no: 13194726\"}, \"invoice_date\": {\"value\": \"2021-05-29\", \"evidence\": \"Date of issue:   05/29/2021\"}, \"total_amount\": {\"value\": \"640.12\", \"evidence\": \"Total   $ 581,93   $ 58,19   $ 640,12\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"Total   $ 581,93   $ 58,19   $ 640,12\"}, \"tax_id\": {\"value\": \"952-73-7223\", \"evidence\": \"Tax Id: 952-73-7223\"}, \"subtotal_amount\": {\"value\": \"581.93\", \"evidence\": \"Total   $ 581,93   $ 58,19   $ 640,12\"}, \"tax_amount\": {\"value\": \"58.19\", \"evidence\": \"Total   $ 581,93   $ 58,19   $ 640,12\"}, \"customer_name\": {\"value\": \"Sims PLC\", \"evidence\": \"Sims PLC\"}, \"customer_tax_id\": {\"value\": \"995-88-9495\", \"evidence\": \"Tax Id: 995-88-9495\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2397,
+  "output_tokens": 325,
+  "latency_ms": 9300,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

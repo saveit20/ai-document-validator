@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Stone-Waller\",\"evidence\":\"Stone-Waller\"},\"invoice_number\":{\"value\":\"90508672\",\"evidence\":\"Invoice no: 90508672\"},\"invoice_date\":{\"value\":\"2020-04-16\",\"evidence\":\"Date of issue:   04/16/2020\"},\"total_amount\":{\"value\":\"7052.49\",\"evidence\":\"Total   $ 6 411,35   $ 641,14   $ 7 052,49\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"Total   $ 6 411,35   $ 641,14   $ 7 052,49\"},\"tax_id\":{\"value\":\"994-99-6683\",\"evidence\":\"Tax Id: 994-99-6683\"},\"subtotal_amount\":{\"value\":\"6411.35\",\"evidence\":\"Total   $ 6 411,35   $ 641,14   $ 7 052,49\"},\"tax_amount\":{\"value\":\"641.14\",\"evidence\":\"Total   $ 6 411,35   $ 641,14   $ 7 052,49\"},\"customer_name\":{\"value\":\"Shaw Group\",\"evidence\":\"Client:\\n\\nShaw Group\"},\"customer_tax_id\":{\"value\":\"914-79-8228\",\"evidence\":\"Tax Id: 914-79-8228\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2362,
+  "output_tokens": 308,
+  "latency_ms": 8809,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

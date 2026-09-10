@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Whitaker Ltd\", \"evidence\": \"Seller:   Client:\\n\\nWhitaker Ltd\"}, \"invoice_number\": {\"value\": \"23152691\", \"evidence\": \"Invoice no: 23152691\"}, \"invoice_date\": {\"value\": \"2015-08-01\", \"evidence\": \"Date of issue:   08/01/2015\"}, \"total_amount\": {\"value\": \"4783.70\", \"evidence\": \"Total   $ 4 348,82   $ 434,88   $ 4 783,70\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"Total   $ 4 348,82\"}, \"tax_id\": {\"value\": \"931-73-0965\", \"evidence\": \"Tax Id: 931-73-0965\"}, \"subtotal_amount\": {\"value\": \"4348.82\", \"evidence\": \"Total   $ 4 348,82   $ 434,88   $ 4 783,70\"}, \"tax_amount\": {\"value\": \"434.88\", \"evidence\": \"Total   $ 4 348,82   $ 434,88   $ 4 783,70\"}, \"customer_name\": {\"value\": \"Stout-Miller\", \"evidence\": \"Seller:   Client:\\n\\nWhitaker Ltd   Stout-Miller\"}, \"customer_tax_id\": {\"value\": \"938-72-5881\", \"evidence\": \"Tax Id: 938-72-5881\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2492,
+  "output_tokens": 354,
+  "latency_ms": 9972,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

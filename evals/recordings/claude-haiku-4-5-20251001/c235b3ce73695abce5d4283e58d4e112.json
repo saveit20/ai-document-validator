@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Spence-Castro\",\"evidence\":\"Seller:   Client:\\n\\nSpence-Castro\"},\"invoice_number\":{\"value\":\"69934544\",\"evidence\":\"Invoice no: 69934544\"},\"invoice_date\":{\"value\":\"2014-04-17\",\"evidence\":\"Date of issue:   04/17/2014\"},\"total_amount\":{\"value\":\"43.96\",\"evidence\":\"Total   $ 39,96   $ 4,00   $ 43,96\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"Total   $ 39,96   $ 4,00   $ 43,96\"},\"tax_id\":{\"value\":\"965-84-3671\",\"evidence\":\"Tax Id: 965-84-3671\"},\"subtotal_amount\":{\"value\":\"39.96\",\"evidence\":\"Total   $ 39,96   $ 4,00   $ 43,96\"},\"tax_amount\":{\"value\":\"4.00\",\"evidence\":\"Total   $ 39,96   $ 4,00   $ 43,96\"},\"customer_name\":{\"value\":\"Wolfe and Sons\",\"evidence\":\"Seller:   Client:\\n\\nSpence-Castro   Wolfe and Sons\"},\"customer_tax_id\":{\"value\":\"937-77-3183\",\"evidence\":\"Tax Id: 937-77-3183\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2173,
+  "output_tokens": 312,
+  "latency_ms": 8986,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

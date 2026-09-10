@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Kaufman, Cooper and Young\",\"evidence\":\"Seller:   Client:\\n\\nKaufman, Cooper and Young\"},\"invoice_number\":{\"value\":\"65321852\",\"evidence\":\"Invoice no: 65321852\"},\"invoice_date\":{\"value\":\"2021-11-04\",\"evidence\":\"Date of issue:   04/11/2021\"},\"total_amount\":{\"value\":\"214.24\",\"evidence\":\"Total   $ 194,76   $ 19,48   $ 214,24\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"Total   $ 194,76\"},\"tax_id\":{\"value\":\"930-79-7845\",\"evidence\":\"Tax Id: 930-79-7845\"},\"subtotal_amount\":{\"value\":\"194.76\",\"evidence\":\"Total   $ 194,76   $ 19,48   $ 214,24\"},\"tax_amount\":{\"value\":\"19.48\",\"evidence\":\"Total   $ 194,76   $ 19,48   $ 214,24\"},\"customer_name\":{\"value\":\"Wells-Carlson\",\"evidence\":\"Seller:   Client:\\n\\nKaufman, Cooper and Young   Wells-Carlson\"},\"customer_tax_id\":{\"value\":\"957-82-7504\",\"evidence\":\"Tax Id: 957-82-7504\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2321,
+  "output_tokens": 308,
+  "latency_ms": 2426,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

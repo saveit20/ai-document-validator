@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Smith, Johnson and Moore\", \"evidence\": \"Seller:   Client:\\n\\nSmith, Johnson and Moore\"}, \"invoice_number\": {\"value\": \"40949664\", \"evidence\": \"Invoice no: 40949664\"}, \"invoice_date\": {\"value\": \"2020-05-12\", \"evidence\": \"Date of issue:   05/12/2020\"}, \"total_amount\": {\"value\": \"421.25\", \"evidence\": \"Total   $ 382,95   $ 38,30   $ 421,25\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"Total   $ 382,95   $ 38,30   $ 421,25\"}, \"tax_id\": {\"value\": \"990-74-2646\", \"evidence\": \"Tax Id: 990-74-2646\"}, \"subtotal_amount\": {\"value\": \"382.95\", \"evidence\": \"Net worth   VAT   Gross worth\\n\\n   10%   382,95   38,30   421,25\"}, \"tax_amount\": {\"value\": \"38.30\", \"evidence\": \"10%   382,95   38,30   421,25\"}, \"customer_name\": {\"value\": \"Taylor PLC\", \"evidence\": \"Seller:   Client:\\n\\nSmith, Johnson and Moore   Taylor PLC\"}, \"customer_tax_id\": {\"value\": \"998-75-7020\", \"evidence\": \"Tax Id: 998-75-7020\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2469,
+  "output_tokens": 355,
+  "latency_ms": 10306,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

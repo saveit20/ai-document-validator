@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Garcia, Stewart and Payne\",\"evidence\":\"Seller:   Client:\\n\\nGarcia, Stewart and Payne\"},\"invoice_number\":{\"value\":\"34528548\",\"evidence\":\"Invoice no: 34528548\"},\"invoice_date\":{\"value\":\"2015-02-11\",\"evidence\":\"Date of issue:   11/02/2015\"},\"total_amount\":{\"value\":\"802.73\",\"evidence\":\"Total   $ 729,75   $ 72,98   $ 802,73\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"Total   $ 729,75\"},\"tax_id\":{\"value\":\"949-78-5411\",\"evidence\":\"Tax Id: 949-78-5411\"},\"subtotal_amount\":{\"value\":\"729.75\",\"evidence\":\"Total   $ 729,75   $ 72,98   $ 802,73\"},\"tax_amount\":{\"value\":\"72.98\",\"evidence\":\"Total   $ 729,75   $ 72,98   $ 802,73\"},\"customer_name\":{\"value\":\"Huerta Ltd\",\"evidence\":\"Seller:   Client:\\n\\nGarcia, Stewart and Payne   Huerta Ltd\"},\"customer_tax_id\":{\"value\":\"972-74-2815\",\"evidence\":\"Tax Id: 972-74-2815\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2222,
+  "output_tokens": 310,
+  "latency_ms": 8931,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

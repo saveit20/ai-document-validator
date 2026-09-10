@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Baird PLC\", \"evidence\": \"Seller:   Client:\\n\\nBaird PLC\"}, \"invoice_number\": {\"value\": \"97675851\", \"evidence\": \"Invoice no: 97675851\"}, \"invoice_date\": {\"value\": \"2016-05-25\", \"evidence\": \"Date of issue:   05/25/2016\"}, \"total_amount\": {\"value\": \"154.74\", \"evidence\": \"Total   $ 140,67   $ 14,07   $ 154,74\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"Total   $ 140,67   $ 14,07   $ 154,74\"}, \"tax_id\": {\"value\": \"927-99-1999\", \"evidence\": \"Tax Id: 927-99-1999\"}, \"subtotal_amount\": {\"value\": \"140.67\", \"evidence\": \"Total   $ 140,67   $ 14,07   $ 154,74\"}, \"tax_amount\": {\"value\": \"14.07\", \"evidence\": \"Total   $ 140,67   $ 14,07   $ 154,74\"}, \"customer_name\": {\"value\": \"Smith, Reynolds and Dunn\", \"evidence\": \"Seller:   Client:\\n\\nBaird PLC   Smith, Reynolds and Dunn\"}, \"customer_tax_id\": {\"value\": \"922-98-7164\", \"evidence\": \"Tax Id: 922-98-7164\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2399,
+  "output_tokens": 357,
+  "latency_ms": 10166,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Jones and Sons\",\"evidence\":\"Seller:   Client:\\n\\nJones and Sons\"},\"invoice_number\":{\"value\":\"12007995\",\"evidence\":\"Invoice no: 12007995\"},\"invoice_date\":{\"value\":\"2012-08-04\",\"evidence\":\"Date of issue:   04/08/2012\"},\"total_amount\":{\"value\":\"22.00\",\"evidence\":\"Total   $ 20,00   $ 2,00   $ 22,00\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"Total   $ 20,00   $ 2,00   $ 22,00\"},\"tax_id\":{\"value\":\"964-77-0583\",\"evidence\":\"Tax Id: 964-77-0583\"},\"subtotal_amount\":{\"value\":\"20.00\",\"evidence\":\"Total   $ 20,00   $ 2,00   $ 22,00\"},\"tax_amount\":{\"value\":\"2.00\",\"evidence\":\"Total   $ 20,00   $ 2,00   $ 22,00\"},\"customer_name\":{\"value\":\"Jenkins, Cobb and Woods\",\"evidence\":\"Seller:   Client:\\n\\nJones and Sons   Jenkins, Cobb and Woods\"},\"customer_tax_id\":{\"value\":\"951-94-9050\",\"evidence\":\"Tax Id: 951-94-9050\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2164,
+  "output_tokens": 314,
+  "latency_ms": 9260,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Potts, Reed and Miller\", \"evidence\": \"Seller:   Client:\\n\\nPotts, Reed and Miller\"}, \"invoice_number\": {\"value\": \"72455228\", \"evidence\": \"Invoice no: 72455228\"}, \"invoice_date\": {\"value\": \"2021-11-05\", \"evidence\": \"Date of issue:   05/11/2021\"}, \"total_amount\": {\"value\": \"2155.98\", \"evidence\": \"Total   $ 1 959,98   $ 196,00   $ 2 155,98\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"Total   $ 1 959,98   $ 196,00   $ 2 155,98\"}, \"tax_id\": {\"value\": \"913-82-5781\", \"evidence\": \"Tax Id: 913-82-5781\"}, \"subtotal_amount\": {\"value\": \"1959.98\", \"evidence\": \"Total   $ 1 959,98   $ 196,00   $ 2 155,98\"}, \"tax_amount\": {\"value\": \"196.00\", \"evidence\": \"Total   $ 1 959,98   $ 196,00   $ 2 155,98\"}, \"customer_name\": {\"value\": \"Brady LLC\", \"evidence\": \"Seller:   Client:\\n\\nPotts, Reed and Miller   Brady LLC\"}, \"customer_tax_id\": {\"value\": \"953-75-0545\", \"evidence\": \"Tax Id: 953-75-0545\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2436,
+  "output_tokens": 371,
+  "latency_ms": 10264,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

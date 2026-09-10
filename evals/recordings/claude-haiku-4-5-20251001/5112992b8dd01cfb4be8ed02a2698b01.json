@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Rohstoff AG Salzgitter\",\"evidence\":\"Name:   Rohstoff AG Salzgitter\"},\"invoice_number\":{\"value\":\"47110815\",\"evidence\":\"Nr. 47110815\"},\"invoice_date\":{\"value\":\"2025-12-01\",\"evidence\":\"vom   01.12.2025\"},\"total_amount\":{\"value\":\"1021.91\",\"evidence\":\"Bruttosumme   1.021,91\"},\"currency\":{\"value\":\"GBP\",\"evidence\":\"Währung:   GBP\"},\"tax_id\":{\"value\":\"DE123456788\",\"evidence\":\"USt.-Id.-Nr.:   DE123456788\"},\"subtotal_amount\":{\"value\":\"858.75\",\"evidence\":\"Rechnungssumme ohne USt.   858,75\"},\"tax_amount\":{\"value\":\"163.16\",\"evidence\":\"Steuerbetrag in GBP   163,16\"},\"customer_name\":{\"value\":\"Metallbau Leipzig GmbH & Co. KG\",\"evidence\":\"Name:   Metallbau Leipzig GmbH & Co. KG\"},\"customer_tax_id\":null}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 3494,
+  "output_tokens": 270,
+  "latency_ms": 8268,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

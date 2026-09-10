@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Martin-Butler\",\"evidence\":\"Seller:   Client:\\n\\nMartin-Butler\"},\"invoice_number\":{\"value\":\"42760323\",\"evidence\":\"Invoice no: 42760323\"},\"invoice_date\":{\"value\":\"2020-09-23\",\"evidence\":\"Date of issue:   09/23/2020\"},\"total_amount\":{\"value\":\"27862.96\",\"evidence\":\"Total   $ 25 329,96   $ 2 533,00   $ 27 862,96\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"Total   $ 25 329,96\"},\"tax_id\":{\"value\":\"965-86-2430\",\"evidence\":\"Tax Id: 965-86-2430\"},\"subtotal_amount\":{\"value\":\"25329.96\",\"evidence\":\"Total   $ 25 329,96   $ 2 533,00\"},\"tax_amount\":{\"value\":\"2533.00\",\"evidence\":\"Total   $ 25 329,96   $ 2 533,00   $ 27 862,96\"},\"customer_name\":{\"value\":\"Patterson, Garza and Adkins\",\"evidence\":\"Seller:   Client:\\n\\nMartin-Butler   Patterson, Garza and Adkins\"},\"customer_tax_id\":{\"value\":\"979-98-4396\",\"evidence\":\"Tax Id: 979-98-4396\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2389,
+  "output_tokens": 321,
+  "latency_ms": 9217,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

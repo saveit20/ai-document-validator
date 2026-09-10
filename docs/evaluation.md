@@ -150,3 +150,68 @@ The default model is **the cheapest one whose dev field exact match and dev verd
 cheaper model ties the most capable one, the cheaper model wins. The hybrid cascade is evaluated with the
 chosen model.
 
+## 8. How the document reaches the model
+
+The prompt is only half of what the model sees. The other half is the document itself, and the way it is
+turned into model input can lose information before the model reads a word. We measured it instead of
+assuming it.
+
+### What the pipeline does by default
+
+1. `pypdf` extracts the text layer of each page (`extract_text()`, "plain" mode). The text follows the
+   order in which the PDF draws its runs, not the visual layout.
+2. That text goes to the model inside `<document>` tags, after a cached system prompt.
+3. The model returns a value and an evidence string per field; the evidence must be found in the same
+   extracted text, so every answer is checked against what the document says.
+
+The model never sees the page. Two consequences were visible in dev:
+
+- **Columns come apart.** In the Mendeley template the totals table prints all labels, then all values:
+  `Net worth / VAT / Gross worth / 20,00 / 2,00 / 22,00`. In a two-column header, the seller and customer
+  blocks are interleaved line by line (`EMISOR CLIENTE` / `Hormigones… Northwind…`).
+- **A PDF without a text layer is rejected.** Five of the SalorWorks invoices (Arabic, bilingual, a poor
+  scan) are raster images; the pipeline answers `422 unreadable_document`.
+
+### Options
+
+| Mode | What the model receives | Cost per page (from the API docs) | What it can fix | Risk |
+|---|---|---|---|---|
+| A. Plain text (default) | pypdf plain text | text only (~0.3–1k tokens per invoice here) | — | layout lost |
+| B. Layout text | pypdf `extraction_mode="layout"`: runs placed by position, so columns printed side by side stay on one line; padding cut to 3 spaces | about 2× the characters of A | label/value pairing, two-column headers | wide tables wrap; more tokens |
+| C. PDF + text | the PDF as a `document` block (the API renders each page as an image and extracts its text) **plus** our text in `<document>` tags; evidence must still be copied from our text | 1,500–3,000 text tokens per page plus the page image (~1.5k visual tokens on Haiku 4.5; up to ~4.8k on Opus 5 / Sonnet 5, which read images at high resolution) | layout, visual cues (bold totals, stamps), and in principle scanned pages | several times the cost of A; evidence may be copied from the rendering and not match our text |
+
+Mode C keeps the verification honest: the model may *look* at the page, but it must *quote* our extracted
+text, so the same grounding check applies. Sending only the PDF would make the evidence unverifiable.
+
+### What we measured
+
+Same prompt (v3), same model (Haiku 4.5), same 47 dev invoices; only the input changes.
+
+| Mode | Field exact match | Invoice date | Verdict agreement | Cost / document | p95 latency |
+|---|---|---|---|---|---|
+| A. Plain text | 97% | 35/47 | 74% | $0.0038 | 8.8 s |
+| B. Layout text | 97% | 35/47 | 74% | $0.0040 | 10.3 s |
+| **C. PDF + plain text** | **100%** | **46/47** | **94%** | **$0.0060** | 9.6 s |
+
+- **Layout text changes nothing for the model.** Haiku already paired labels and values correctly from
+  plain text; its errors were month-first US dates, and layout text does not fix them.
+- **Seeing the page fixes the dates.** With the PDF attached, Haiku reads 46 of 47 dates correctly (35
+  before). We do not know exactly which visual cue helps; we only report that it does, on this data.
+- **The predicted risk showed up once.** In one invoice the model quoted `$ 355.07` from the rendering
+  instead of `$ 355,07` from our text, so the grounding check rejected a correct total and the verdict
+  became `REVIEW`. The check did its job; the cost is one unnecessary review.
+- **Remaining failures all end in `REVIEW`, none in a wrong `PASS`/`FAIL`:** one wrong date caught by the
+  date-convention check, one multi-VAT invoice where the model summed two tax lines that are not printed
+  as a total, and the evidence case above.
+- **Cost:** +57% per invoice on Haiku (image tokens), still under one cent. On Sonnet 5 and Opus 5 the page
+  image costs up to ~3× more tokens, so the premium is larger there; stage 3 measures it.
+- **Scanned PDFs.** Mode C could read image-only PDFs, but there would be no text to check the evidence
+  against, so every field would be unverified. The pipeline keeps rejecting PDFs without a text layer;
+  accepting them would need OCR to produce a checkable text, which is out of scope (see Limitations).
+
+**A pitfall found on the way.** With layout text the *heuristic* reaches 100% verdict agreement on
+Mendeley dev while its field accuracy drops from 52% to 40%. The layout fixes the date and the totals (label
+and value now share a line), but the heuristic takes the column header `Client` as the supplier name, and
+the "supplier present" rule is satisfied by any non-empty name. A verdict can be right for the wrong
+reason, which is why every report shows field accuracy next to verdict agreement.
+
