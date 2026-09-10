@@ -46,7 +46,7 @@ SOURCES = {
     "idsem": EVALS_DIR / "external" / "idsem",
     "salorworks": EVALS_DIR / "external" / "salorworks",
     "gobl": EVALS_DIR / "external" / "gobl",
-    "holdout": EVALS_DIR / "holdout",
+    "stress": EVALS_DIR / "holdout",
 }
 SPLITS_FILE = EVALS_DIR / "splits.json"
 RECORDINGS_DIR = EVALS_DIR / "recordings"

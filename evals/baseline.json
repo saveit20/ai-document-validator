@@ -7,7 +7,7 @@
     "verdict_agreement": 0.5,
     "field_exact_rate": 0.7166666666666667
   },
-  "heuristic@dev/holdout": {
+  "heuristic@dev/stress": {
     "verdict_agreement": 0.0,
     "field_exact_rate": 0.6625
   },
@@ -19,7 +19,7 @@
     "verdict_agreement": 0.5,
     "field_exact_rate": 0.7388888888888889
   },
-  "heuristic@test/holdout": {
+  "heuristic@test/stress": {
     "verdict_agreement": 0.25,
     "field_exact_rate": 0.775
   },
@@ -79,7 +79,7 @@
     "verdict_agreement": 0.7692307692307693,
     "field_exact_rate": 0.9461538461538461
   },
-  "llm:claude-opus-5+pdf@test/holdout": {
+  "llm:claude-opus-5+pdf@test/stress": {
     "verdict_agreement": 1.0,
     "field_exact_rate": 0.975
   },
@@ -107,7 +107,7 @@
     "verdict_agreement": 0.7692307692307693,
     "field_exact_rate": 0.9461538461538461
   },
-  "hybrid:claude-opus-5+pdf@test/holdout": {
+  "hybrid:claude-opus-5+pdf@test/stress": {
     "verdict_agreement": 1.0,
     "field_exact_rate": 0.9625
   }
