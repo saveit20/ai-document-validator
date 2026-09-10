@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"DD/MM/YYYY\",\"supplier_name\":{\"value\":\"Iberia Cerámica Técnica S.A.\",\"evidence\":\"Iberia Cerámica Técnica S.A.\"},\"invoice_number\":{\"value\":\"R-2026-0042\",\"evidence\":\"Nº rectificativa: R-2026-0042\"},\"invoice_date\":{\"value\":\"2026-06-10\",\"evidence\":\"Fecha de emisión: 10/06/2026\"},\"total_amount\":{\"value\":\"-242.00\",\"evidence\":\"Total factura -242,00 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Total factura -242,00 €\"},\"tax_id\":{\"value\":\"A-28123456\",\"evidence\":\"CIF: A-28123456\"},\"subtotal_amount\":{\"value\":\"-200.00\",\"evidence\":\"Base imponible -200,00 €\"},\"tax_amount\":{\"value\":\"-42.00\",\"evidence\":\"IVA 21% -42,00 €\"},\"customer_name\":{\"value\":\"Northwind Construction S.L.\",\"evidence\":\"Northwind Construction S.L.\"},\"customer_tax_id\":{\"value\":\"B12345678\",\"evidence\":\"CIF: B12345678\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2784,
+  "output_tokens": 411,
+  "latency_ms": 5843,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

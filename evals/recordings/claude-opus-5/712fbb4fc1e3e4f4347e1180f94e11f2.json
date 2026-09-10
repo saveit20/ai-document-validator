@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"DD/MM/YYYY\",\"supplier_name\":{\"value\":\"EMPRESA MUNICIPAL DE DISTRIBUCIÓ D'ENERGIA ELÈCTRICA D'ALMENAR, SLU\",\"evidence\":\"EMPRESA MUNICIPAL DE DISTRIBUCIÓ D'ENERGIA ELÈCTRICA D'ALMENAR, SLU\"},\"invoice_number\":{\"value\":\"QV1441783957\",\"evidence\":\"Nº factura: QV1441783957\"},\"invoice_date\":{\"value\":\"2007-10-28\",\"evidence\":\"Fecha emisión factura: 28 de octubre de 2007\"},\"total_amount\":{\"value\":\"103.08\",\"evidence\":\"TOTAL IMPORTE FACTURA 103,08 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"IMPORTE FACTURA: 103,08 €\"},\"tax_id\":{\"value\":\"B25470766\",\"evidence\":\"Cif: B25470766\"},\"subtotal_amount\":{\"value\":\"96.58\",\"evidence\":\"Importe total \\n  96,58 €\"},\"tax_amount\":{\"value\":\"6.50\",\"evidence\":\"IGIC reducido ( 6,5%) 6,5% s/ 95,07 \\nIGIC normal ( 21%) 21% s/ 1,51 \\n  96,58 € \\n6,18 € \\n0,32 €\"},\"customer_name\":{\"value\":\"MAGDA SÁENZ AGUIRRE\",\"evidence\":\"Titular del contrato: MAGDA SÁENZ AGUIRRE\"},\"customer_tax_id\":{\"value\":\"89062313B\",\"evidence\":\"NIF: 89062313B\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 16135,
+  "output_tokens": 595,
+  "latency_ms": 12831,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

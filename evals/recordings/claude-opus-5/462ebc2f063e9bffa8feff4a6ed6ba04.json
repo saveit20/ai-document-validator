@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"DD de mes de YYYY\",\"supplier_name\":{\"value\":\"ALILUZ MEDITERRANEA, S.L.\",\"evidence\":\"ALILUZ MEDITERRANEA, S.L.\"},\"invoice_number\":{\"value\":\"BF3448064242\",\"evidence\":\"Nº Factura: BF3448064242 emitida el 28 de octubre de 1996\"},\"invoice_date\":{\"value\":\"1996-10-28\",\"evidence\":\"Fecha emisión factura: 28 de octubre de 1996\"},\"total_amount\":{\"value\":\"168.79\",\"evidence\":\"TOTAL IMPORTE FACTURA 168,79 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"IMPORTE FACTURA: 168,79 €\"},\"tax_id\":{\"value\":\"B42504084\",\"evidence\":\"CIF B42504084\"},\"subtotal_amount\":{\"value\":\"166.73\",\"evidence\":\"IMPORTE TOTAL 166,73 €\"},\"tax_amount\":{\"value\":\"2.06\",\"evidence\":\"1% s/162,36 € 1,62 € \\n10% s/4,37 € 0,44 €\"},\"customer_name\":{\"value\":\"ERMEGOL RIVERA MEDRANO\",\"evidence\":\"Titular: ERMEGOL RIVERA MEDRANO\"},\"customer_tax_id\":{\"value\":\"10774591B\",\"evidence\":\"NIF: 10774591B\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 10868,
+  "output_tokens": 545,
+  "latency_ms": 10313,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

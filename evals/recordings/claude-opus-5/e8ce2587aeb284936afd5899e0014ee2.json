@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Nelson, Bird and Mendoza\",\"evidence\":\" Nelson, Bird and Mendoza\"},\"invoice_number\":{\"value\":\"54394190\",\"evidence\":\"Invoice no: 54394190\"},\"invoice_date\":{\"value\":\"2021-02-23\",\"evidence\":\"Date of issue:\\n02/23/2021\"},\"total_amount\":{\"value\":\"3695.93\",\"evidence\":\" Total\\n $ 3 359,94\\n $ 335,99\\n $ 3 695,93\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 3 695,93\"},\"tax_id\":{\"value\":\"976-76-5964\",\"evidence\":\"Tax Id: 976-76-5964\"},\"subtotal_amount\":{\"value\":\"3359.94\",\"evidence\":\"$ 3 359,94\"},\"tax_amount\":{\"value\":\"335.99\",\"evidence\":\"$ 335,99\"},\"customer_name\":{\"value\":\"Allen Inc\",\"evidence\":\" Allen Inc\"},\"customer_tax_id\":{\"value\":\"925-90-1124\",\"evidence\":\"Tax Id: 925-90-1124\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2726,
+  "output_tokens": 403,
+  "latency_ms": 7367,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

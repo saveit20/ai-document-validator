@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"GB\",\"date_format\":\"DD/MM/YYYY\",\"supplier_name\":{\"value\":\"Brightline Access Solutions Ltd\",\"evidence\":\"Brightline is a trading name of Brightline Access Solutions Ltd.\"},\"invoice_number\":{\"value\":\"INV-58213\",\"evidence\":\"Invoice No. INV-58213\"},\"invoice_date\":{\"value\":\"2026-06-14\",\"evidence\":\"Invoice date 14 June 2026\"},\"total_amount\":{\"value\":\"4600.80\",\"evidence\":\"Amount due £4,600.80\"},\"currency\":{\"value\":\"GBP\",\"evidence\":\"Amount due £4,600.80\"},\"tax_id\":{\"value\":\"GB 284 5512 90\",\"evidence\":\"VAT Reg. No. GB 284 5512 90.\"},\"subtotal_amount\":{\"value\":\"3834.00\",\"evidence\":\"Net amount £3,834.00\"},\"tax_amount\":{\"value\":\"766.80\",\"evidence\":\"VAT @ 20% £766.80\"},\"customer_name\":{\"value\":\"Northwind Construction S.L. (UK Branch)\",\"evidence\":\"Northwind Construction S.L. (UK Branch)\"},\"customer_tax_id\":{\"value\":\"ESB12345678\",\"evidence\":\"Customer VAT: ESB12345678\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2902,
+  "output_tokens": 438,
+  "latency_ms": 5874,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

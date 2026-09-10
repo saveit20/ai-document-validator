@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Lyons-Murphy\",\"evidence\":\" Lyons-Murphy\"},\"invoice_number\":{\"value\":\"56513760\",\"evidence\":\"Invoice no: 56513760\"},\"invoice_date\":{\"value\":\"2011-10-25\",\"evidence\":\"Date of issue:\\n10/25/2011\"},\"total_amount\":{\"value\":\"7110.40\",\"evidence\":\" Total\\n $ 6 464,00\\n $ 646,40\\n $ 7 110,40\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 7 110,40\"},\"tax_id\":{\"value\":\"975-78-1218\",\"evidence\":\"Tax Id: 975-78-1218\"},\"subtotal_amount\":{\"value\":\"6464.00\",\"evidence\":\"$ 6 464,00\"},\"tax_amount\":{\"value\":\"646.40\",\"evidence\":\"$ 646,40\"},\"customer_name\":{\"value\":\"Lawrence LLC\",\"evidence\":\" Lawrence LLC\"},\"customer_tax_id\":{\"value\":\"987-70-6179\",\"evidence\":\"Tax Id: 987-70-6179\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 3013,
+  "output_tokens": 397,
+  "latency_ms": 7197,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

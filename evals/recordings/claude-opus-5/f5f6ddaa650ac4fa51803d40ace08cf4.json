@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"DD de mes de YYYY\",\"supplier_name\":{\"value\":\"ELECTRA ALTO MIÑO COMERCIALIZADORA DE ENERGÍA, SLU\",\"evidence\":\"ELECTRA ALTO MIÑO COMERCIALIZADORA DE ENERGÍA, SLU  \\nCIF B36878510\"},\"invoice_number\":{\"value\":\"S7458780007\",\"evidence\":\"Nº Factura: S7458780007 emitida el 02 de marzo de 2018\"},\"invoice_date\":{\"value\":\"2018-03-02\",\"evidence\":\"Fecha emisión factura: 02 de marzo de 2018\"},\"total_amount\":{\"value\":\"198.51\",\"evidence\":\"TOTAL IMPORTE FACTURA 198,51 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"IMPORTE FACTURA: 198,51 €\"},\"tax_id\":{\"value\":\"B36878510\",\"evidence\":\"CIF B36878510\"},\"subtotal_amount\":{\"value\":\"185.52\",\"evidence\":\"IMPORTE TOTAL 185,52 €\"},\"tax_amount\":{\"value\":\"12.99\",\"evidence\":\"7% s/185,22 € 12,97 € \\n6,5% s/0,30 € 0,02 €\"},\"customer_name\":{\"value\":\"GLICERA ARJONA OLMEDO\",\"evidence\":\"Titular: GLICERA ARJONA OLMEDO\"},\"customer_tax_id\":{\"value\":\"25197694K\",\"evidence\":\"NIF: 25197694K\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 11210,
+  "output_tokens": 539,
+  "latency_ms": 8468,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

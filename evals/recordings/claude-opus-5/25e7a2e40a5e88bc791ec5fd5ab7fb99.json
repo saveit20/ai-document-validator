@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Bradley-Andrade\",\"evidence\":\" Bradley-Andrade\"},\"invoice_number\":{\"value\":\"97159829\",\"evidence\":\"Invoice no: 97159829\"},\"invoice_date\":{\"value\":\"2015-09-18\",\"evidence\":\"09/18/2015\"},\"total_amount\":{\"value\":\"978.12\",\"evidence\":\" Total\\n $ 889,20\\n $ 88,92\\n $ 978,12\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 978,12\"},\"tax_id\":{\"value\":\"985-73-8194\",\"evidence\":\"Tax Id: 985-73-8194\"},\"subtotal_amount\":{\"value\":\"889.20\",\"evidence\":\" $ 889,20\"},\"tax_amount\":{\"value\":\"88.92\",\"evidence\":\" $ 88,92\"},\"customer_name\":{\"value\":\"Castro PLC\",\"evidence\":\" Castro PLC\"},\"customer_tax_id\":{\"value\":\"994-72-1270\",\"evidence\":\"Tax Id: 994-72-1270\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2335,
+  "output_tokens": 375,
+  "latency_ms": 5831,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

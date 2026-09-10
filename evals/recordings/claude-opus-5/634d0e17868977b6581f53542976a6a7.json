@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Cooper Group\",\"evidence\":\"Cooper Group\"},\"invoice_number\":{\"value\":\"52093915\",\"evidence\":\"Invoice no: 52093915\"},\"invoice_date\":{\"value\":\"2017-08-29\",\"evidence\":\"08/29/2017\"},\"total_amount\":{\"value\":\"1722.39\",\"evidence\":\" Total\\n $ 1 565,81\\n $ 156,58\\n $ 1 722,39\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 1 722,39\"},\"tax_id\":{\"value\":\"955-78-7390\",\"evidence\":\"Tax Id: 955-78-7390\"},\"subtotal_amount\":{\"value\":\"1565.81\",\"evidence\":\"$ 1 565,81\"},\"tax_amount\":{\"value\":\"156.58\",\"evidence\":\"$ 156,58\"},\"customer_name\":{\"value\":\"West LLC\",\"evidence\":\"West LLC\"},\"customer_tax_id\":{\"value\":\"997-81-2291\",\"evidence\":\"Tax Id: 997-81-2291\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2833,
+  "output_tokens": 375,
+  "latency_ms": 6009,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

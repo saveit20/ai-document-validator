@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"IT\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"Negozio Roma S.r.l.\",\"evidence\":\"Supplier\\nNegozio Roma S.r.l.\"},\"invoice_number\":{\"value\":\"SAMPLE-002\",\"evidence\":\"SAMPLE-002\"},\"invoice_date\":{\"value\":\"2026-06-15\",\"evidence\":\"Issue date\\n2026-06-15\"},\"total_amount\":{\"value\":\"-100.00\",\"evidence\":\"Total to pay €100,00\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Euro (EUR)\"},\"tax_id\":{\"value\":\"(IT) 12345678903\",\"evidence\":\"P.IVA: (IT) 12345678903\"},\"subtotal_amount\":{\"value\":\"-81.97\",\"evidence\":\"VAT €81,97 22,0% €18,03\"},\"tax_amount\":{\"value\":\"-18.03\",\"evidence\":\"Included VAT €18,03\"},\"customer_name\":null,\"customer_tax_id\":null}",
+  "model": "claude-opus-5",
+  "input_tokens": 2220,
+  "output_tokens": 427,
+  "latency_ms": 5837,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

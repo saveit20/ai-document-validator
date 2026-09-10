@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Zuniga, Short and Jensen\",\"evidence\":\"Zuniga, Short and Jensen\"},\"invoice_number\":{\"value\":\"64281058\",\"evidence\":\"Invoice no: 64281058\"},\"invoice_date\":{\"value\":\"2019-11-08\",\"evidence\":\"Date of issue:\\n11/08/2019\"},\"total_amount\":{\"value\":\"15416.49\",\"evidence\":\"$ 15 416,49\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 14 014,99\"},\"tax_id\":{\"value\":\"984-91-8764\",\"evidence\":\"Tax Id: 984-91-8764\"},\"subtotal_amount\":{\"value\":\"14014.99\",\"evidence\":\"$ 14 014,99\"},\"tax_amount\":{\"value\":\"1401.50\",\"evidence\":\"$ 1 401,50\"},\"customer_name\":{\"value\":\"Wells Ltd\",\"evidence\":\"Wells Ltd\"},\"customer_tax_id\":{\"value\":\"951-97-2583\",\"evidence\":\"Tax Id: 951-97-2583\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 3270,
+  "output_tokens": 384,
+  "latency_ms": 6336,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

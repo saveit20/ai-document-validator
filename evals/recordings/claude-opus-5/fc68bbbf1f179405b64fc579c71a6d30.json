@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Gregory, Patterson and Fischer\",\"evidence\":\" Gregory, Patterson and Fischer\"},\"invoice_number\":{\"value\":\"12222347\",\"evidence\":\"Invoice no: 12222347\"},\"invoice_date\":{\"value\":\"2017-03-18\",\"evidence\":\"03/18/2017\"},\"total_amount\":{\"value\":\"136.13\",\"evidence\":\" Total\\n $ 123,75\\n $ 12,38\\n $ 136,13\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 136,13\"},\"tax_id\":{\"value\":\"958-94-6606\",\"evidence\":\"Tax Id: 958-94-6606\"},\"subtotal_amount\":{\"value\":\"123.75\",\"evidence\":\"$ 123,75\"},\"tax_amount\":{\"value\":\"12.38\",\"evidence\":\"$ 12,38\"},\"customer_name\":{\"value\":\"Wilson PLC\",\"evidence\":\" Wilson PLC\"},\"customer_tax_id\":{\"value\":\"928-91-2431\",\"evidence\":\"Tax Id: 928-91-2431\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2282,
+  "output_tokens": 387,
+  "latency_ms": 11213,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 2644
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Wilkerson Ltd\",\"evidence\":\" Wilkerson Ltd\"},\"invoice_number\":{\"value\":\"17619666\",\"evidence\":\"Invoice no: 17619666\"},\"invoice_date\":{\"value\":\"2020-03-09\",\"evidence\":\"03/09/2020\"},\"total_amount\":{\"value\":\"41419.40\",\"evidence\":\" $ 41 419,40\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 37 654,00\"},\"tax_id\":{\"value\":\"941-97-9699\",\"evidence\":\"Tax Id: 941-97-9699\"},\"subtotal_amount\":{\"value\":\"37654.00\",\"evidence\":\" $ 37 654,00\"},\"tax_amount\":{\"value\":\"3765.40\",\"evidence\":\" $ 3 765,40\"},\"customer_name\":{\"value\":\"English-Brown\",\"evidence\":\" English-Brown\"},\"customer_tax_id\":{\"value\":\"937-79-7558\",\"evidence\":\"Tax Id: 937-79-7558\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 3047,
+  "output_tokens": 366,
+  "latency_ms": 4967,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

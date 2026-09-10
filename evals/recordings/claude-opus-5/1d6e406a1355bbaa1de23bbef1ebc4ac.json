@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Moore Ltd\",\"evidence\":\" Moore Ltd\"},\"invoice_number\":{\"value\":\"26307902\",\"evidence\":\"Invoice no: 26307902\"},\"invoice_date\":{\"value\":\"2015-10-05\",\"evidence\":\"Date of issue:\\n10/05/2015\"},\"total_amount\":{\"value\":\"104.06\",\"evidence\":\" Total\\n $ 94,60\\n $ 9,46\\n $ 104,06\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 104,06\"},\"tax_id\":{\"value\":\"931-79-6223\",\"evidence\":\"Tax Id: 931-79-6223\"},\"subtotal_amount\":{\"value\":\"94.60\",\"evidence\":\" $ 94,60\"},\"tax_amount\":{\"value\":\"9.46\",\"evidence\":\" $ 9,46\"},\"customer_name\":{\"value\":\"Johnson, Harvey and Richardson\",\"evidence\":\" Johnson, Harvey and Richardson\"},\"customer_tax_id\":{\"value\":\"905-87-6840\",\"evidence\":\"Tax Id: 905-87-6840\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2415,
+  "output_tokens": 395,
+  "latency_ms": 6448,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

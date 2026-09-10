@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"PL\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"Provide One S.L.\",\"evidence\":\"Supplier\\nProvide One S.L.\"},\"invoice_number\":{\"value\":\"SAMPLE-001\",\"evidence\":\"SAMPLE-001\"},\"invoice_date\":{\"value\":\"2023-12-20\",\"evidence\":\"Issue date\\n2023-12-20\"},\"total_amount\":{\"value\":\"2152.70\",\"evidence\":\"Total to pay €2.152,70\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Euro (EUR)\"},\"tax_id\":{\"value\":\"DE111111125\",\"evidence\":\"Email: billing@example.com\\nUSt-IdNr.: DE111111125\"},\"subtotal_amount\":{\"value\":\"1810.00\",\"evidence\":\"Sum €1.810,00\"},\"tax_amount\":{\"value\":\"342.70\",\"evidence\":\"Tax €342,70\"},\"customer_name\":{\"value\":\"Sample Consumer\",\"evidence\":\"Customer\\nSample Consumer\"},\"customer_tax_id\":{\"value\":\"DE111111125\",\"evidence\":\"Calle Pradillo 43, Madrid, Madrid, 00-015 (Germany)\\nUSt-IdNr.: DE111111125\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2314,
+  "output_tokens": 434,
+  "latency_ms": 6353,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

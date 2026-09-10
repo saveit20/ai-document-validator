@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"SA\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"كريموس العربية للفعاليات الترفيهية\",\"evidence\":\"اﻟﺗرﻓﯾﮭﯾﺔ  ﻟﻠﻔﻌﺎﻟﯾﺎت  اﻟﻌرﺑﯾﺔ  ﻛرﯾﻣوس\"},\"invoice_number\":{\"value\":\"1765973\",\"evidence\":\"1765973\"},\"invoice_date\":{\"value\":\"2025-09-25\",\"evidence\":\"Issue date\\n2025-09-25\"},\"total_amount\":{\"value\":\"948.75\",\"evidence\":\"Total to pay 948.75س. ر\"},\"currency\":{\"value\":\"SAR\",\"evidence\":\"Saudi Riyal (SAR)\"},\"tax_id\":{\"value\":\"(SA) 311588107200003\",\"evidence\":\"TIN: (SA) 311588107200003\"},\"subtotal_amount\":{\"value\":\"825.00\",\"evidence\":\"Sum 825.00س. ر\"},\"tax_amount\":{\"value\":\"123.75\",\"evidence\":\"Tax 123.75س. ر\"},\"customer_name\":null,\"customer_tax_id\":null}",
+  "model": "claude-opus-5",
+  "input_tokens": 2419,
+  "output_tokens": 416,
+  "latency_ms": 6314,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

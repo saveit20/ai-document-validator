@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Baker, Michael and Martin\",\"evidence\":\"Seller:\\n Baker, Michael and Martin\"},\"invoice_number\":{\"value\":\"36279024\",\"evidence\":\"Invoice no: 36279024\"},\"invoice_date\":{\"value\":\"2014-08-18\",\"evidence\":\"Date of issue:\\n08/18/2014\"},\"total_amount\":{\"value\":\"1255.17\",\"evidence\":\"$ 1 255,17\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 1 141,06\"},\"tax_id\":{\"value\":\"986-85-0797\",\"evidence\":\"Tax Id: 986-85-0797\"},\"subtotal_amount\":{\"value\":\"1141.06\",\"evidence\":\"Total\\n $ 1 141,06\"},\"tax_amount\":{\"value\":\"114.11\",\"evidence\":\"$ 114,11\"},\"customer_name\":{\"value\":\"Werner-Castillo\",\"evidence\":\"Client:\\n Werner-Castillo\"},\"customer_tax_id\":{\"value\":\"990-96-7449\",\"evidence\":\"Tax Id: 990-96-7449\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 3042,
+  "output_tokens": 394,
+  "latency_ms": 5158,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

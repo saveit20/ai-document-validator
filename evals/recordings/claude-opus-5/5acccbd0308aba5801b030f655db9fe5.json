@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"AE\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"Fictional Gulf Foods LLC\",\"evidence\":\"Fictional Gulf Foods LLC\"},\"invoice_number\":{\"value\":\"INV-2026-005\",\"evidence\":\"Invoice: INV-2026-005\"},\"invoice_date\":{\"value\":\"2026-08-05\",\"evidence\":\"Date: 2026-08-05\"},\"total_amount\":{\"value\":\"1050.00\",\"evidence\":\"Total\\nAED 1050.00\"},\"currency\":{\"value\":\"AED\",\"evidence\":\"Currency: AED\"},\"tax_id\":null,\"subtotal_amount\":{\"value\":\"1000.00\",\"evidence\":\"Subtotal\\nAED 1000.00\"},\"tax_amount\":{\"value\":\"50.00\",\"evidence\":\"VAT 5%\\nAED 50.00\"},\"customer_name\":{\"value\":\"Example Grocery Trading LLC\",\"evidence\":\"Bill to: Example Grocery Trading LLC, Dubai\"},\"customer_tax_id\":{\"value\":\"100123456700003\",\"evidence\":\"Tax registration: 100123456700003\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2434,
+  "output_tokens": 455,
+  "latency_ms": 7862,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}

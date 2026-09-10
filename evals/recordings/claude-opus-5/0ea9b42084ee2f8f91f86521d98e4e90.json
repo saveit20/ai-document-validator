@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"DD de mes de YYYY\",\"supplier_name\":{\"value\":\"AB ENERGÍA 1903, S.L.\",\"evidence\":\"AB ENERGÍA 1903, S.L.\"},\"invoice_number\":{\"value\":\"DJ2610334385\",\"evidence\":\"Nº Factura: DJ2610334385 emitida el 30 de noviembre de 2015\"},\"invoice_date\":{\"value\":\"2015-11-30\",\"evidence\":\"Fecha emisión factura: 30 de noviembre de 2015\"},\"total_amount\":{\"value\":\"186.56\",\"evidence\":\"TOTAL IMPORTE FACTURA 186,56 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"IMPORTE FACTURA: 186,56 €\"},\"tax_id\":{\"value\":\"B22350466\",\"evidence\":\"CIF B22350466\"},\"subtotal_amount\":{\"value\":\"175.18\",\"evidence\":\"IMPORTE TOTAL 175,18 €\"},\"tax_amount\":{\"value\":\"11.38\",\"evidence\":\"6,5% s/174,38 € 11,33 € \\n6,5% s/0,80 € 0,05 €\"},\"customer_name\":{\"value\":\"Almendra Fernández Sánchez\",\"evidence\":\"Titular: Almendra Fernández Sánchez\"},\"customer_tax_id\":{\"value\":\"67575120Q\",\"evidence\":\"NIF: 67575120Q\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 10791,
+  "output_tokens": 488,
+  "latency_ms": 10274,
+  "cache_read_tokens": 2644,
+  "cache_write_tokens": 0
+}
