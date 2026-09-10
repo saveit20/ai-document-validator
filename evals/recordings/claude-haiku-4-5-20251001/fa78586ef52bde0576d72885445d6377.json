@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Crawford-Byrd\", \"evidence\": \"Seller:\\n Crawford-Byrd\"}, \"invoice_number\": {\"value\": \"76658127\", \"evidence\": \"Invoice no: 76658127\"}, \"invoice_date\": {\"value\": \"2011-10-23\", \"evidence\": \"Date of issue:\\n10/23/2011\"}, \"total_amount\": {\"value\": \"628.00\", \"evidence\": \"Total\\n $ 570,91\\n $ 57,09\\n $ 628,00\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"$\"}, \"tax_id\": {\"value\": \"922-97-5588\", \"evidence\": \"Tax Id: 922-97-5588\"}, \"subtotal_amount\": {\"value\": \"570.91\", \"evidence\": \"Net worth\\n VAT\\n Gross worth\\n 10%\\n 570,91\"}, \"tax_amount\": {\"value\": \"57.09\", \"evidence\": \"VAT\\n Gross worth\\n 10%\\n 570,91\\n 57,09\"}, \"customer_name\": {\"value\": \"Sherman PLC\", \"evidence\": \"Client:\\n Sherman PLC\"}, \"customer_tax_id\": {\"value\": \"973-85-9820\", \"evidence\": \"Tax Id: 973-85-9820\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2315,
+  "output_tokens": 324,
+  "latency_ms": 8360,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

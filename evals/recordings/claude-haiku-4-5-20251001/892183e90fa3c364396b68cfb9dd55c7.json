@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Smith-Cook\",\"evidence\":\"Seller:\\n Smith-Cook\"},\"invoice_number\":{\"value\":\"16662010\",\"evidence\":\"Invoice no: 16662010\"},\"invoice_date\":{\"value\":\"2016-08-28\",\"evidence\":\"Date of issue:\\n08/28/2016\"},\"total_amount\":{\"value\":\"2259.10\",\"evidence\":\"$ 2 259,10\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"959-84-2124\",\"evidence\":\"Tax Id: 959-84-2124\"},\"subtotal_amount\":{\"value\":\"2053.73\",\"evidence\":\"$ 2 053,73\"},\"tax_amount\":{\"value\":\"205.37\",\"evidence\":\"$ 205,37\"},\"customer_name\":{\"value\":\"Snyder-Johnson\",\"evidence\":\"Client:\\n Snyder-Johnson\"},\"customer_tax_id\":{\"value\":\"938-85-4960\",\"evidence\":\"Tax Id: 938-85-4960\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2531,
+  "output_tokens": 239,
+  "latency_ms": 7271,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

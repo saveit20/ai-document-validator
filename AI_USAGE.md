@@ -74,7 +74,9 @@ Extract these fields from the invoice inside the <document> tags:
 - supplier_name: legal name of the party that ISSUED the invoice (the seller). Never the customer
   ("Bill to", "Customer", "Cliente").
 - invoice_number: the issuer's identifier for this invoice, exactly as printed.
-- invoice_date: the date the invoice was issued, as YYYY-MM-DD. Not the due date.
+- invoice_date: the date the invoice was issued, as YYYY-MM-DD. Not the due date. Read numeric dates
+  such as 04/08/2026 in the issuer's convention: month-first for a US issuer, day-first for a European
+  one.
 - total_amount: the final amount payable, taxes included. Not the subtotal, net amount or tax amount. A
   plain decimal with "." as decimal separator and no thousands separator, e.g. "1234.56". Negative for
   credit notes.
@@ -86,7 +88,8 @@ Extract these fields from the invoice inside the <document> tags:
 - customer_tax_id: the customer's VAT or tax identifier as printed.
 
 For each field found, return its `value` and its `evidence`: the shortest exact substring of the document,
-copied character for character, that shows the value (usually the line it appears on).
+copied character for character, that shows the value (usually the line it appears on). Copy numbers
+exactly as printed, with their original separators: the evidence for "1234.56" may read "1.234,56".
 
 If a field is not in the document, return null for that field. Never infer, compute or guess a value that
 is not printed.

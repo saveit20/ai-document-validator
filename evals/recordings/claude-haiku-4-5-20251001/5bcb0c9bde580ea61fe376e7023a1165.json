@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Durand Équipements SAS\", \"evidence\": \"Durand Équipements SAS\\n14, rue des Artisans\"}, \"invoice_number\": {\"value\": \"F2026-0512\", \"evidence\": \"Facture n° : F2026-0512\"}, \"invoice_date\": {\"value\": \"2026-05-12\", \"evidence\": \"Date de facturation : 12/05/2026\"}, \"total_amount\": {\"value\": \"1234.56\", \"evidence\": \"Total TTC 1 234,56 €\"}, \"currency\": {\"value\": \"EUR\", \"evidence\": \"€\"}, \"tax_id\": {\"value\": \"FR 32 412 345 678\", \"evidence\": \"N° TVA intracommunautaire : FR 32 412 345 678\"}, \"subtotal_amount\": {\"value\": \"1028.80\", \"evidence\": \"Total HT 1 028,80 €\"}, \"tax_amount\": {\"value\": \"205.76\", \"evidence\": \"TVA 20 % 205,76 €\"}, \"customer_name\": {\"value\": \"Northwind Construction S.L.\", \"evidence\": \"FACTURÉ À\\nNorthwind Construction S.L.\"}, \"customer_tax_id\": {\"value\": \"ESB12345678\", \"evidence\": \"N° TVA : ESB12345678\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2496,
+  "output_tokens": 339,
+  "latency_ms": 4549,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

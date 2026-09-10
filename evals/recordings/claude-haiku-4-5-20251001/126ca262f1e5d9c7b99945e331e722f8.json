@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Cox, Bell and Rodriguez\",\"evidence\":\"Seller:\\n Cox, Bell and Rodriguez\"},\"invoice_number\":{\"value\":\"75299595\",\"evidence\":\"Invoice no: 75299595\"},\"invoice_date\":{\"value\":\"2011-03-06\",\"evidence\":\"Date of issue:\\n06/03/2011\"},\"total_amount\":{\"value\":\"272.65\",\"evidence\":\"$ 272.65\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"999-83-6062\",\"evidence\":\"Tax Id: 999-83-6062\"},\"subtotal_amount\":{\"value\":\"247.86\",\"evidence\":\"$ 247.86\"},\"tax_amount\":{\"value\":\"24.79\",\"evidence\":\"$ 24.79\"},\"customer_name\":{\"value\":\"Jackson Group\",\"evidence\":\"Client:\\n Jackson Group\"},\"customer_tax_id\":{\"value\":\"942-80-8954\",\"evidence\":\"Tax Id: 942-80-8954\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2269,
+  "output_tokens": 231,
+  "latency_ms": 1830,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

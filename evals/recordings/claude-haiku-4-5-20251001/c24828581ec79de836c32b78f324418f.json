@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Moore, Wells and Wilson\",\"evidence\":\"Seller:\\n Moore, Wells and Wilson\"},\"invoice_number\":{\"value\":\"37959814\",\"evidence\":\"Invoice no: 37959814\"},\"invoice_date\":{\"value\":\"2013-12-07\",\"evidence\":\"Date of issue:\\n07/12/2013\"},\"total_amount\":{\"value\":\"7285.98\",\"evidence\":\"$ 7 285,98\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"967-92-2894\",\"evidence\":\"Tax Id: 967-92-2894\"},\"subtotal_amount\":{\"value\":\"6623.62\",\"evidence\":\"$ 6 623,62\"},\"tax_amount\":{\"value\":\"662.36\",\"evidence\":\"$ 662,36\"},\"customer_name\":{\"value\":\"Hopkins-Moreno\",\"evidence\":\"Client:\\n Hopkins-Moreno\"},\"customer_tax_id\":{\"value\":\"970-94-8001\",\"evidence\":\"Tax Id: 970-94-8001\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2530,
+  "output_tokens": 243,
+  "latency_ms": 7494,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

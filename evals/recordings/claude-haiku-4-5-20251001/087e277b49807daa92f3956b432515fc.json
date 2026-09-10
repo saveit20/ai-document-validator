@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Lieferant GmbH\", \"evidence\": \"Name: Lieferant GmbH\"}, \"invoice_number\": {\"value\": \"471102\", \"evidence\": \"Handelsrechnung (380)   Nr. 471102\"}, \"invoice_date\": {\"value\": \"2018-06-05\", \"evidence\": \"Nr. 471102   vom   05.06.2018\"}, \"total_amount\": {\"value\": \"197.65\", \"evidence\": \"Bruttosumme 197,65\"}, \"currency\": {\"value\": \"EUR\", \"evidence\": \"Währung: EUR\"}, \"tax_id\": {\"value\": \"DE123456789\", \"evidence\": \"USt.-Id.-Nr.: DE123456789\"}, \"subtotal_amount\": {\"value\": \"177.49\", \"evidence\": \"Rechnungssumme ohne USt. 177,49\"}, \"tax_amount\": {\"value\": \"20.16\", \"evidence\": \"Steuerbetrag 20,16\"}, \"customer_name\": {\"value\": \"Kunden AG Mitte\", \"evidence\": \"Name: Kunden AG Mitte\"}, \"customer_tax_id\": null}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 3282,
+  "output_tokens": 288,
+  "latency_ms": 3102,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

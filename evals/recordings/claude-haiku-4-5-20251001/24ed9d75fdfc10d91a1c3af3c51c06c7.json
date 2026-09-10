@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Estrada and Sons\", \"evidence\": \"Seller:\\n Estrada and Sons\"}, \"invoice_number\": {\"value\": \"57338979\", \"evidence\": \"Invoice no: 57338979\"}, \"invoice_date\": {\"value\": \"2021-05-10\", \"evidence\": \"Date of issue:\\n05/10/2021\"}, \"total_amount\": {\"value\": \"15089.59\", \"evidence\": \"$ 15 089,59\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"$\"}, \"tax_id\": {\"value\": \"926-74-0874\", \"evidence\": \"Tax Id: 926-74-0874\"}, \"subtotal_amount\": {\"value\": \"13717.81\", \"evidence\": \"$ 13 717,81\"}, \"tax_amount\": {\"value\": \"1371.78\", \"evidence\": \"$ 1 371,78\"}, \"customer_name\": {\"value\": \"Santana-Sherman\", \"evidence\": \"Client:\\n Santana-Sherman\"}, \"customer_tax_id\": {\"value\": \"939-81-4695\", \"evidence\": \"Tax Id: 939-81-4695\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2270,
+  "output_tokens": 284,
+  "latency_ms": 7626,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

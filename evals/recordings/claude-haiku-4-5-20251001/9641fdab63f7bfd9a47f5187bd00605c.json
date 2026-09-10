@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Hayes-Mcdonald\", \"evidence\": \"Seller:\\n Hayes-Mcdonald\"}, \"invoice_number\": {\"value\": \"77404624\", \"evidence\": \"Invoice no: 77404624\"}, \"invoice_date\": {\"value\": \"2014-10-20\", \"evidence\": \"Date of issue:\\n10/20/2014\"}, \"total_amount\": {\"value\": \"9556.58\", \"evidence\": \"$ 9 556,58\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"$\"}, \"tax_id\": {\"value\": \"906-99-8086\", \"evidence\": \"Tax Id: 906-99-8086\"}, \"subtotal_amount\": {\"value\": \"8687.80\", \"evidence\": \"$ 8 687,80\"}, \"tax_amount\": {\"value\": \"868.78\", \"evidence\": \"$ 868,78\"}, \"customer_name\": {\"value\": \"Sheppard, Guerrero and Castillo\", \"evidence\": \"Client:\\n Sheppard, Guerrero and Castillo\"}, \"customer_tax_id\": {\"value\": \"960-84-4731\", \"evidence\": \"Tax Id: 960-84-4731\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2515,
+  "output_tokens": 297,
+  "latency_ms": 2328,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"Hernandez, Coleman and Alvarado\", \"evidence\": \"Seller:\\n Hernandez, Coleman and Alvarado\"}, \"invoice_number\": {\"value\": \"14878236\", \"evidence\": \"Invoice no: 14878236\"}, \"invoice_date\": {\"value\": \"2015-04-26\", \"evidence\": \"Date of issue:\\n04/26/2015\"}, \"total_amount\": {\"value\": \"568.49\", \"evidence\": \"Total\\n $ 516,81\\n $ 51,68\\n $ 568,49\"}, \"currency\": {\"value\": \"USD\", \"evidence\": \"$\"}, \"tax_id\": {\"value\": \"988-79-4495\", \"evidence\": \"Tax Id: 988-79-4495\"}, \"subtotal_amount\": {\"value\": \"516.81\", \"evidence\": \"Net worth\\n $ 516,81\"}, \"tax_amount\": {\"value\": \"51.68\", \"evidence\": \"VAT\\n $ 51,68\"}, \"customer_name\": {\"value\": \"Turner-Green\", \"evidence\": \"Client:\\n Turner-Green\"}, \"customer_tax_id\": {\"value\": \"950-70-5065\", \"evidence\": \"Tax Id: 950-70-5065\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2506,
+  "output_tokens": 306,
+  "latency_ms": 3705,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}
