@@ -77,22 +77,55 @@ That split is what makes timeouts, rate limits and malformed model output testab
 
 ## Quick start
 
-Requires Python 3.12+. No API key needed: LLM responses for the evaluation invoices are recorded in the
-repository and replayed.
+Requires Python 3.12+ (on Windows, use `py -3.12` instead of `python` if another version is the default).
+No API key needed: the service runs offline, and recorded LLM responses are replayed.
+
+**Git Bash, macOS or Linux**
 
 ```bash
 python -m venv .venv
-source .venv/Scripts/activate     # Windows (Git Bash); on macOS/Linux: source .venv/bin/activate
+source .venv/Scripts/activate     # macOS/Linux: source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env              # defaults run fully offline
+pytest -q
 uvicorn validator.api:create_app --factory --port 8000
-python -m evals.run --extractor heuristic   # the evaluation, offline (more commands below)
 ```
 
-OpenAPI schema at <http://localhost:8000/docs>. With Docker: `docker compose up --build` (built and
-health-checked in CI). Recorded Opus 5 responses with the final prompt exist for the 80 test invoices
-(dev holds the model and prompt comparisons); with `EXTRACTOR=llm` and no key, any other document falls
-back to the heuristic, and the response says so in `extractor_used` and `warnings`.
+**Windows PowerShell** (no activation needed; in PowerShell use `curl.exe`, not `curl`)
+
+```powershell
+python -m venv .venv
+.venv\Scripts\python -m pip install -e ".[dev]"
+Copy-Item .env.example .env
+.venv\Scripts\python -m pytest -q
+.venv\Scripts\python -m uvicorn validator.api:create_app --factory --port 8000
+```
+
+With Docker instead: `docker compose up --build` (built and health-checked in CI). The evaluation
+commands are [below](#evaluation).
+
+**Try it in two minutes.** Open <http://localhost:8000/docs>, open `POST /v1/validate`, press **Try it
+out**, then **Execute**: the ready-made example (a short invoice and the brief's config) returns `PASS` with
+every rule and every field. To upload a file, switch the body to `multipart/form-data` and pick any invoice
+in `tests/fixtures/` (with `reference_date` 2026-06-30) or under `evals/`.
+
+**The LLM path, still without a key.** Recorded Claude Opus 5 responses are replayed for the 80 test
+invoices. Start the service with `EXTRACTOR=llm` (Git Bash: `EXTRACTOR=llm uvicorn …`; PowerShell:
+`$env:EXTRACTOR="llm"` first), then upload for example `evals/external/mendeley/mdl_12222347.pdf` with
+`reference_date` 2017-04-17 and config `{"document_type":"SUPPLIER_INVOICE","max_age_days":90}`. The
+response carries `llm`: model, prompt version, latency, tokens, cost and `"recorded": true`. A document
+without a recording falls back to the heuristic, and the response says so in `extractor_used` and
+`warnings`.
+
+**With your own Anthropic API key** (live calls, about $0.03 per invoice with Opus 5), set these three
+lines in `.env` and restart the service; any PDF with a text layer, or any text file, then works, and each
+response shows `"recorded": false` with the real latency, tokens and cost:
+
+```text
+EXTRACTOR=llm
+LLM_TRANSPORT=live
+ANTHROPIC_API_KEY=<your key>
+```
 
 | Variable | Default | Meaning |
 |---|---|---|
