@@ -1,5 +1,8 @@
 """Extraction prompt and output schema. Bump PROMPT_VERSION on any change: it invalidates recordings."""
 
+from dataclasses import dataclass, field
+from typing import Any
+
 from validator.models import FIELD_NAMES
 
 PROMPT_VERSION = "2026-09-10.3"
@@ -67,3 +70,20 @@ OUTPUT_SCHEMA = {
     "required": list(FIELD_NAMES),
     "additionalProperties": False,
 }
+
+
+@dataclass(frozen=True)
+class PromptSpec:
+    """A complete prompt: instructions, output schema and the version that keys its recordings.
+
+    `preamble` names schema properties the model fills before the invoice fields (for example the
+    issuer's country); they steer the answer and are dropped before validation.
+    """
+
+    version: str
+    system: str
+    schema: dict[str, Any]
+    preamble: tuple[str, ...] = field(default=())
+
+
+DEFAULT_PROMPT = PromptSpec(PROMPT_VERSION, SYSTEM_PROMPT, OUTPUT_SCHEMA)

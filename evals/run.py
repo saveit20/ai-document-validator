@@ -24,6 +24,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from evals.metrics import CaseResult, Summary, render, render_comparison, summarise
+from evals.prompt_variants import VARIANTS
 from validator.config import DEFAULT_MODEL
 from validator.heuristic import HeuristicExtractor
 from validator.hybrid import HybridExtractor
@@ -164,7 +165,12 @@ class CallBudget:
 
 
 def build(
-    extractor: str, model: str, record: bool, llm_input: str = "text", max_calls: int = 0
+    extractor: str,
+    model: str,
+    record: bool,
+    llm_input: str = "text",
+    max_calls: int = 0,
+    prompt: str = "v3",
 ) -> tuple[str, Pipeline]:
     heuristic = HeuristicExtractor()
     if extractor == "heuristic":
@@ -177,8 +183,13 @@ def build(
         if max_calls <= 0:
             raise SystemExit("--record needs --max-calls N: an explicit cap on paid API calls")
         live = CallBudget(AnthropicTransport(api_key, timeout_s=90.0), max_calls)
-    llm = LLMExtractor(RecordedTransport(RECORDINGS_DIR, live=live), model, llm_input)  # type: ignore[arg-type]
-    suffix = "+pdf" if llm_input == "pdf" else ""
+    llm = LLMExtractor(
+        RecordedTransport(RECORDINGS_DIR, live=live),
+        model,
+        llm_input,  # type: ignore[arg-type]
+        prompt=VARIANTS[prompt],
+    )
+    suffix = ("+pdf" if llm_input == "pdf" else "") + ("" if prompt == "v3" else f"+{prompt}")
     if extractor == "llm":
         return f"llm:{model}{suffix}", Pipeline(llm, heuristic)
     return f"hybrid:{model}{suffix}", Pipeline(HybridExtractor(heuristic, llm), heuristic)
@@ -225,6 +236,9 @@ def main(argv: list[str] | None = None) -> int:
         "--max-calls", type=int, default=0, help="with --record: stop after this many paid calls"
     )
     parser.add_argument(
+        "--prompt", choices=tuple(VARIANTS), default="v3", help="prompt variant (llm and hybrid)"
+    )
+    parser.add_argument(
         "--pdf-text", choices=("plain", "layout"), default="plain", help="how PDF text is extracted"
     )
     parser.add_argument(
@@ -252,7 +266,7 @@ def main(argv: list[str] | None = None) -> int:
         configs = [(args.extractor, args.model)]
     splits = ["dev", "test"] if args.split == "both" else [args.split]
     pipelines = [
-        build(extractor, model, args.record, args.llm_input, args.max_calls)
+        build(extractor, model, args.record, args.llm_input, args.max_calls, args.prompt)
         for extractor, model in configs
     ]
     text_suffix = "+layout" if args.pdf_text == "layout" else ""

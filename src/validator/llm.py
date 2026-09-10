@@ -9,7 +9,7 @@ from validator.extraction import Candidate, ExtractorOutput
 from validator.ingest import Document
 from validator.models import FIELD_NAMES, LLMCallInfo
 from validator.pricing import estimate_cost_usd
-from validator.prompts import OUTPUT_SCHEMA, PROMPT_VERSION, SYSTEM_PROMPT, build_user_prompt
+from validator.prompts import DEFAULT_PROMPT, PromptSpec, build_user_prompt
 from validator.transport import LLMInvalidOutput, LLMRequest, LLMTransport
 
 
@@ -50,24 +50,35 @@ class LLMExtractor:
     """`input_mode='pdf'` also sends the original PDF, so the model sees the page layout; the
     evidence is still checked against the extracted text."""
 
-    def __init__(self, transport: LLMTransport, model: str, input_mode: LLMInput = "text") -> None:
+    def __init__(
+        self,
+        transport: LLMTransport,
+        model: str,
+        input_mode: LLMInput = "text",
+        prompt: PromptSpec = DEFAULT_PROMPT,
+    ) -> None:
         self._transport = transport
         self._model = model
         self._input_mode = input_mode
+        self._prompt = prompt
 
     def extract(self, document: Document) -> ExtractorOutput:
         pdf = document.data if self._input_mode == "pdf" else None
         request = LLMRequest(
             model=self._model,
-            system=SYSTEM_PROMPT,
+            system=self._prompt.system,
             user=build_user_prompt(document.text, with_pdf=pdf is not None),
-            schema=OUTPUT_SCHEMA,
-            prompt_version=PROMPT_VERSION,
+            schema=self._prompt.schema,
+            prompt_version=self._prompt.version,
             pdf=pdf,
         )
         response = self._transport.complete(request)
         try:
-            parsed = _InvoiceOut.model_validate(json.loads(response.text))
+            payload = json.loads(response.text)
+            if isinstance(payload, dict):
+                for name in self._prompt.preamble:
+                    payload.pop(name, None)
+            parsed = _InvoiceOut.model_validate(payload)
         except (json.JSONDecodeError, ValidationError) as exc:
             raise LLMInvalidOutput(
                 f"model output does not match the schema ({type(exc).__name__})"

@@ -1,3 +1,4 @@
+import json
 from dataclasses import replace
 from decimal import Decimal
 from types import SimpleNamespace
@@ -14,7 +15,7 @@ from validator.llm import LLMExtractor
 from validator.models import FIELD_NAMES
 from validator.pipeline import Pipeline
 from validator.pricing import estimate_cost_usd
-from validator.prompts import OUTPUT_SCHEMA, PROMPT_VERSION
+from validator.prompts import OUTPUT_SCHEMA, PROMPT_VERSION, PromptSpec
 from validator.transport import (
     AnthropicTransport,
     LLMInvalidOutput,
@@ -221,6 +222,19 @@ def _unions(node: object) -> int:
 def test_output_schema_respects_the_provider_union_limit() -> None:
     # Anthropic's structured outputs reject schemas with more than 16 union-typed parameters.
     assert _unions(OUTPUT_SCHEMA) <= 16
+
+
+def test_preamble_fields_steer_the_answer_and_are_dropped() -> None:
+    spec = PromptSpec("v-test", "s", OUTPUT_SCHEMA, preamble=("issuer_country",))
+    reply = json.dumps({"issuer_country": "GB", **json.loads(GOOD)})
+    output = LLMExtractor(FakeTransport(reply), "claude-opus-5", prompt=spec).extract(DOCUMENT)
+    assert output.candidates["total_amount"].raw == "1200.00"
+
+
+def test_unexpected_extra_keys_are_still_rejected() -> None:
+    reply = json.dumps({"issuer_country": "GB", **json.loads(GOOD)})
+    with pytest.raises(LLMInvalidOutput):
+        LLMExtractor(FakeTransport(reply), "claude-opus-5").extract(DOCUMENT)
 
 
 def test_null_field_means_not_found() -> None:
