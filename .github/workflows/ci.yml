@@ -16,6 +16,8 @@ jobs:
       - run: ruff check .
       - run: ruff format --check .
       - run: pytest -q
+      - name: Evaluation quality gate
+        run: python -m evals.run --extractor heuristic --check-baseline
 
   docker:
     runs-on: ubuntu-latest

@@ -1,0 +1,10 @@
+{
+  "heuristic@dev": {
+    "verdict_agreement": 1.0,
+    "field_exact_rate": 1.0
+  },
+  "heuristic@holdout": {
+    "verdict_agreement": 0.4375,
+    "field_exact_rate": 0.5375
+  }
+}
