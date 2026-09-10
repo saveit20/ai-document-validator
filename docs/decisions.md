@@ -180,11 +180,10 @@ read a section only when you want to challenge the decision it covers.
   worse (74/80); adding the two up-front properties to that same prompt (v4b) brought them to 80/80,
   more than cancelling the harm. A control without either reached 77/80; the properties were not tested
   without the sentence.
-  Verdict agreement stayed within one invoice across variants: the remaining `REVIEW`s come from text
+  Verdict agreement stayed within two invoices across variants: the remaining `REVIEW`s come from text
   layers the grounding check cannot read, which no prompt fixes
   ([evaluation §9](evaluation.md#9-prompt-variants)).
-- **Rejected:** keeping v3 untested; picking a variant by intuition; comparing on Opus (four times the
-  cost for the same comparison); instructions aimed at test categories (a draft that did so was reverted
+- **Rejected:** keeping v3 untested; picking a variant by intuition; comparing on Opus (about five times the cost for the same comparison); instructions aimed at test categories (a draft that did so was reverted
   before any model call).
 - **Revisit if:** the chosen model changes a lot. The comparison ran on Haiku and the winner was applied
   to Opus to stay within the API budget.

@@ -14,7 +14,7 @@ used local fallback fonts. The HTML content was not modified.
 Labels (expected fields) were taken from the GOBL JSON inputs in gobl.html/examples/<name>.json and
 checked against the text layer of the rendered PDF (pypdf); where the printed form differs, the printed
 form was used, and values not printed were set to null. config/reference_date/verdict are synthetic
-evaluation scenarios added by this project. Builder: build_gobl_cases.py.
+evaluation scenarios added by this project. Builder: evals/sources/gobl.py.
 
 NOTICE (invopop/gobl):
 GOBL (Go Business Language) (https://gobl.org)

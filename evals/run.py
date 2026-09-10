@@ -1,4 +1,4 @@
-"""Evaluation over two independent sources, split 50/50 into dev and test (see evals/splits.json).
+"""Evaluation over six independent sources, each split 50/50 into dev and test (see evals/splits.json).
 
   python -m evals.run --extractor heuristic
   python -m evals.run --extractor llm --model claude-sonnet-5            # replay recordings

@@ -203,7 +203,7 @@ failures stay hidden unless `--show-test-failures`).
 **The evaluation set** (the brief's "golden set") is 160 invoices from six sources the author did not write,
 chosen so that no single template dominates: a US invoice template, German e-invoices, Spanish electricity
 bills, Gulf invoices in AED and KWD, e-invoicing examples from 14 countries, and a "stress set" of 16
-deliberately messy European layouts written by Claude subagents that never saw the code. 18 countries, 12 currencies, 6 label languages, credit
+deliberately messy layouts, mostly European, written by Claude subagents that never saw the code. 21 countries, 12 currencies, 6 label languages, credit
 notes, multi-page and multi-rate invoices. Every label was checked against the printed PDF. Each source is
 split 50/50 into **dev** (failures inspected and fixed) and **test** (run once, at the end). The 14 invoices
 in `evals/golden/` were written by the author and serve only as unit-test fixtures.
@@ -257,7 +257,7 @@ evaluation — every model, prompt and input experiment, 661 recorded calls — 
 | Cost and tokens per invoice (`llm.estimated_cost_usd`, `input_tokens`, `output_tokens`) | spend drifts when documents grow or caching breaks |
 | A weekly sample of `PASS` invoices checked by a person | the only way to catch a wrong `PASS`, which the system cannot see |
 
-Every response and log line carries the model id and the prompt version, so a change can be tied to a
+Every LLM response, and its log line, carries the model id and the prompt version, so a change can be tied to a
 deploy; the CI quality gates block a regression before one.
 
 ## Key trade-offs

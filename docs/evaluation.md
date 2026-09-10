@@ -59,7 +59,7 @@ layout family. Two examples were left out: one names what looks like a real priv
 total that its data does not support.
 
 **Stress set** (`evals/holdout/`; the folder keeps its first name). 16 PDFs written by two Claude
-subagents that never saw the code, with deliberately messy, European layouts: two-column headers, legal name only in
+subagents that never saw the code, with deliberately messy layouts, mostly European: two-column headers, legal name only in
 the footer, totals on page two, label and value in separate table columns, several VAT rates, discounts,
 French / German / Italian labels, a US invoice, OCR-style noise, a credit note, a prepayment, a currency
 stated away from the totals. Each invoice is tagged with its difficulty.
@@ -185,7 +185,8 @@ contamination log).
 
 Per source, the template-specific version gained almost only on Mendeley (verdicts 50% → 100%), whose
 template is in both dev and test; on the stress set, the only source whose layouts never repeat
-between dev and test, it found more fields (64% → 78%) but its verdicts did not improve. Those two labels
+between dev and test, the general fixes alone lift fields from 64% to 78% and the template labels add nothing, and the verdicts
+did not improve with either. Those two labels
 are not standard accounting vocabulary; they are that template's wording. Keeping them would have turned
 the hybrid into a 33% saving on our data by learning the evaluation set, so they were removed: the
 service must work on invoices we have not seen. The measurement stays here because it shows exactly when
@@ -205,7 +206,7 @@ the test split is run **once**, at the end, with prompt and code frozen.
 | 0. Smoke | cheapest model on 3 dev invoices | 3 | first contact with the real API: schema accepted, parameters accepted, parsing works |
 | 1. Pilot | cheapest model on the dev invoices (44 at the time; dev grew to 80 as sources were added) | 44 | find prompt and normalisation failures cheaply |
 | 2. Refine | general fixes only; re-record just what changed | as needed | iterate until dev stops improving |
-| 3. Compare | the other two models on dev | 88 | decide which models go to test |
+| 3. Compare | the other two models on dev (67 invoices at the time) | 134 | decide which models go to test |
 | 4. Test | the chosen model and prompt on the 80 test invoices, once | 80 | the headline number |
 
 ### Model selection rule (fixed before seeing any result)
@@ -315,7 +316,8 @@ input changes. Numbers as measured then; replayed with today's code, mode C reac
   accepting them would need OCR to produce a checkable text, which is out of scope (see the README, "What we would do with another day").
 
 **A pitfall found on the way (heuristic).** With layout text the *heuristic* reaches 100% verdict agreement on
-Mendeley dev while its field accuracy drops from 52% to 40%. The layout fixes the date and the totals (label
+Mendeley dev while its field accuracy drops from 52% to 40% (the heuristic of that time; today's general
+heuristic reads 72% of Mendeley dev fields from plain text). The layout fixes the date and the totals (label
 and value now share a line), but the heuristic takes the column header `Client` as the supplier name, and
 the "supplier present" rule is satisfied by any non-empty name. A verdict can be right for the wrong
 reason, which is why every report shows field accuracy next to verdict agreement.
@@ -331,7 +333,7 @@ can be replayed with `python -m evals.run --extractor llm --model claude-haiku-4
 
 | Variant | What changes | Fields | Invoice dates | Tax total | Verdicts | Cost / doc |
 |---|---|---|---|---|---|---|
-| v3 | the prompt used until then | 97% | 79/80 | — | 82% | $0.0073 |
+| v3 | the prompt used until then | 97% | 79/80 | 75/80 | 82% | $0.0073 |
 | v4a | clearer field rules from dev errors: names without address, the taxable base defined, tax total summed from per-rate lines, credit notes negative, and "decide the issuer's country before reading a date" | 98% | 74/80 | 78/80 | 80% | $0.0074 |
 | v4b | v4a, and the schema asks for `issuer_country` and `date_format` **before** the fields | **99%** | **80/80** | 79/80 | 81% | $0.0076 |
 | v4c (control) | v4a with v3's date sentence and no preamble | 99% | 77/80 | 77/80 | 82% | $0.0074 |
@@ -352,8 +354,8 @@ What we learned:
 - **Making the model write its reasoning into the output fixes it.** v4b asks for the issuer's country and
   the date format as the first two properties of the JSON. Having committed to `MM/DD/YYYY` in writing, the
   model then read all 80 dates correctly. Those two properties are dropped before validation.
-- **Clearer field definitions help the fields that were ambiguous**: the tax total went from mostly wrong
-  (v3 told the model never to compute) to 79/80 once the finance rule was stated.
+- **Clearer field definitions help the fields that were ambiguous**: the tax total went from 75/80 (v3 told
+  the model never to compute) to 79/80 once the finance rule was stated.
 - **Verdicts barely move, and that is informative.** The remaining `REVIEW`s are the Spanish utility bills,
   whose scrambled text layer makes evidence unverifiable. No prompt fixes that; it is a limitation of the
   grounding check, and it fails safe.

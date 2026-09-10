@@ -188,7 +188,7 @@ def render(summary: Summary, show_failures: bool = True) -> str:
         lines += ["", "Failures:" if summary.failures else "Failures: none"]
         lines += [f"- {failure}" for failure in summary.failures]
     else:
-        lines += ["", f"Failures: {len(summary.failures)} (hidden for the held-out set)"]
+        lines += ["", f"Failures: {len(summary.failures)} (hidden for the test split)"]
     return "\n".join(lines) + "\n"
 
 
