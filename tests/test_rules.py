@@ -74,6 +74,11 @@ def test_missing_supplier_fails_both_presence_rules() -> None:
     assert result["required_fields_present"] is Status.FAIL
 
 
+@pytest.mark.parametrize("blank", ["", "   "])
+def test_blank_supplier_name_fails(blank: str) -> None:
+    assert statuses(make(supplier_name=fv(blank)))["supplier_name_present"] is Status.FAIL
+
+
 def test_low_confidence_field_is_review_not_fail() -> None:
     results = evaluate_rules(make(total_amount=fv(Decimal("1500"), 0.6)), CONFIG, EvalContext(REF))
     by_id = {r.id: r.status for r in results}

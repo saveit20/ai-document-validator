@@ -31,6 +31,8 @@ def _result(rule_id: str, status: Status, message: str) -> RuleResult:
 
 def _presence_problem(rule_id: str, name: str, field: FieldValue) -> RuleResult | None:
     """FAIL if the field is absent, REVIEW if it is doubtful, None if it is present and reliable."""
+    if isinstance(field.value, str) and not field.value.strip():
+        return _result(rule_id, Status.FAIL, f"{name} is empty")
     if field.value is None:
         if field.confidence == 0.0:
             return _result(rule_id, Status.FAIL, f"{name} not found in the document")
