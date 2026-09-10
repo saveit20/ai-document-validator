@@ -1,0 +1,40 @@
+{
+  "document": "gobl_fr_ctc_cn.pdf",
+  "source": "gobl",
+  "reference_date": "2024-07-20",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_fr",
+    "lang_en",
+    "currency_eur",
+    "credit_note",
+    "positive_amounts"
+  ],
+  "expected": {
+    "supplier_name": "Fournisseur Example SARL",
+    "invoice_number": "AV-2024-001",
+    "invoice_date": "2024-06-20",
+    "total_amount": "240.00",
+    "currency": "EUR",
+    "tax_id": "FR44732829320",
+    "subtotal_amount": "200.00",
+    "tax_amount": "40.00",
+    "customer_name": "Client Example SAS",
+    "customer_tax_id": "FR39356000000",
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example fr-ctc-credit-note (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

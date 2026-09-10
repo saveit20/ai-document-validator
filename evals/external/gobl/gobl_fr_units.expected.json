@@ -1,0 +1,38 @@
+{
+  "document": "gobl_fr_units.pdf",
+  "source": "gobl",
+  "reference_date": "2022-03-03",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_fr",
+    "lang_fr",
+    "currency_eur"
+  ],
+  "expected": {
+    "supplier_name": "Provide One SARL",
+    "invoice_number": "SAMPLE-002",
+    "invoice_date": "2022-02-01",
+    "total_amount": "5220.48",
+    "currency": "EUR",
+    "tax_id": "FR44732829320",
+    "subtotal_amount": "4350.40",
+    "tax_amount": "870.08",
+    "customer_name": "Sample Consumer",
+    "customer_tax_id": "FR39356000000",
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example fr-invoice-units.fr (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

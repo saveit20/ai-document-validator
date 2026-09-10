@@ -1,0 +1,41 @@
+{
+  "document": "gobl_es_reverse_charge.pdf",
+  "source": "gobl",
+  "reference_date": "2022-03-03",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_es",
+    "lang_en",
+    "currency_eur",
+    "reverse_charge",
+    "zero_tax",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Provide One S.L.",
+    "invoice_number": "SAMPLE-X-002",
+    "invoice_date": "2022-02-01",
+    "total_amount": "575.00",
+    "currency": "EUR",
+    "tax_id": "ESB98602642",
+    "subtotal_amount": "575.00",
+    "tax_amount": "0.00",
+    "customer_name": "Sample Consumer",
+    "customer_tax_id": "NL000099995B57",
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example invoice-es-reverse-charge (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

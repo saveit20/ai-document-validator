@@ -1,0 +1,39 @@
+{
+  "document": "gobl_sg.pdf",
+  "source": "gobl",
+  "reference_date": "2026-06-13",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "SGD"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_sg",
+    "lang_en",
+    "currency_sgd",
+    "gst"
+  ],
+  "expected": {
+    "supplier_name": "Defence Collective Singapore Ltd",
+    "invoice_number": "SGC-DCS-28",
+    "invoice_date": "2026-05-14",
+    "total_amount": "1526.00",
+    "currency": "SGD",
+    "tax_id": "199307558M",
+    "subtotal_amount": "1400.00",
+    "tax_amount": "126.00",
+    "customer_name": "Harbourfront Events Pte Ltd",
+    "customer_tax_id": "200312345A",
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example sg-invoice (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

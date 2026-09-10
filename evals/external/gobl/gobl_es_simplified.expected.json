@@ -1,0 +1,41 @@
+{
+  "document": "gobl_es_simplified.pdf",
+  "source": "gobl",
+  "reference_date": "2022-03-03",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_es",
+    "lang_en",
+    "currency_eur",
+    "simplified",
+    "no_customer",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Provide One S.L.",
+    "invoice_number": "SAMPLE-001",
+    "invoice_date": "2022-02-01",
+    "total_amount": "1972.30",
+    "currency": "EUR",
+    "tax_id": "B98602642",
+    "subtotal_amount": "1630.00",
+    "tax_amount": "342.30",
+    "customer_name": null,
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example es-verifactu-invoice-simplified (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

@@ -1,0 +1,41 @@
+{
+  "document": "gobl_sa_simplified.pdf",
+  "source": "gobl",
+  "reference_date": "2025-10-25",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "SAR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_sa",
+    "lang_en",
+    "currency_sar",
+    "simplified",
+    "arabic_script",
+    "no_customer"
+  ],
+  "expected": {
+    "supplier_name": null,
+    "invoice_number": "1765973",
+    "invoice_date": "2025-09-25",
+    "total_amount": "948.75",
+    "currency": "SAR",
+    "tax_id": "311588107200003",
+    "subtotal_amount": "825.00",
+    "tax_amount": "123.75",
+    "customer_name": null,
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example sa-invoice-simplified (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

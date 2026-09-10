@@ -1,0 +1,42 @@
+{
+  "document": "gobl_es_usd.pdf",
+  "source": "gobl",
+  "reference_date": "2024-09-06",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_es",
+    "lang_en",
+    "currency_usd",
+    "foreign_currency",
+    "exchange_rate_distractor",
+    "us_number_format",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Provide One S.L.",
+    "invoice_number": "EXPORT-001",
+    "invoice_date": "2024-05-09",
+    "total_amount": "3262.48",
+    "currency": "USD",
+    "tax_id": "B98602642",
+    "subtotal_amount": "2698.00",
+    "tax_amount": "564.48",
+    "customer_name": "Sample Consumer Inc.",
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example es-verifactu-invoice-usd (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

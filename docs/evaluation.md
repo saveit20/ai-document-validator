@@ -20,6 +20,7 @@ those 14 invoices are now used only as unit-test fixtures and appear in no metri
 | Mustang project test resources (`evals/external/mustang/`) | third party | Apache-2.0 | 6 | dev + test |
 | IDSEM, Spanish electricity bills (`evals/external/idsem/`) | third party (Scientific Data, 2022) | CC BY 4.0 | 30 (5 per template × 6) | dev + test |
 | SalorWorks invoice test pack (`evals/external/salorworks/`) | third party | CC BY 4.0 | 10 | dev + test |
+| GOBL example invoices (`evals/external/gobl/`) | third party (invopop), rendered to PDF by this project | Apache-2.0 | 26 | dev + test |
 | Held-out set (`evals/holdout/`) | two isolated agents that never saw the code | this project | 16 | dev + test |
 | Author-written invoices (`evals/golden/`) | the system's author | this project | 14 | unit tests only |
 
@@ -46,6 +47,15 @@ and never their sum, so `tax_amount` is expected to be null: the evaluation only
 a UAE seller, discounts, freight and duty, a two-page invoice. The pack also has five Arabic, bilingual or
 scanned invoices; they are raster images with no text layer, which this system rejects by design, so they
 are not in the metric set.
+
+**GOBL.** Example invoices from an open-source e-invoicing library, covering 13 countries (Spain, France,
+Poland, Germany, Italy, Portugal, Greece, Mexico, Colombia, Argentina, Saudi Arabia, Singapore, the US and
+Zimbabwe), 9 currencies, labels in English, Spanish, French and Polish, and credit notes, corrective and
+simplified invoices, reverse charge, tax-included prices and withholding. The library ships the rendered
+HTML of its examples; we printed it to PDF with a headless browser, so the PDFs have a real text layer and
+the structured JSON is the ground truth, checked against the printed text. It adds many locales but a single
+layout family. Two examples were left out: one names what looks like a real private person, and one prints a
+total that its data does not support.
 
 **Held-out set.** 16 PDFs with deliberately messy, European layouts: two-column headers, legal name only in
 the footer, totals on page two, label and value in separate table columns, several VAT rates, discounts,
@@ -85,10 +95,10 @@ Labels were not trusted blindly.
 `evals/splits.json` records the split: each source is shuffled with a fixed seed and cut in half (IDSEM per
 template, the held-out set per batch).
 
-| Split | Mendeley | Mustang | IDSEM | SalorWorks | Held-out | Total | Use |
-|---|---|---|---|---|---|---|---|
-| dev | 36 | 3 | 15 | 5 | 8 | 67 | failures inspected, bugs fixed |
-| test | 36 | 3 | 15 | 5 | 8 | 67 | aggregate metrics only; per-case failures hidden unless `--show-test-failures` |
+| Split | Mendeley | Mustang | IDSEM | SalorWorks | GOBL | Held-out | Total | Use |
+|---|---|---|---|---|---|---|---|---|
+| dev | 36 | 3 | 15 | 5 | 13 | 8 | 80 | failures inspected, bugs fixed |
+| test | 36 | 3 | 15 | 5 | 13 | 8 | 80 | aggregate metrics only; per-case failures hidden unless `--show-test-failures` |
 
 Rules we held ourselves to:
 

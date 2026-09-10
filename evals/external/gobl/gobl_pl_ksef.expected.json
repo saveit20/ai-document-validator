@@ -1,0 +1,40 @@
+{
+  "document": "gobl_pl_ksef.pdf",
+  "source": "gobl",
+  "reference_date": "2024-01-19",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "PLN"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_pl",
+    "lang_en",
+    "currency_pln",
+    "space_grouping",
+    "multi_vat"
+  ],
+  "expected": {
+    "supplier_name": "Provide One S.L.",
+    "invoice_number": "SAMPLE-001",
+    "invoice_date": "2023-12-20",
+    "total_amount": "2224.80",
+    "currency": "PLN",
+    "tax_id": "1234567788",
+    "subtotal_amount": "1810.00",
+    "tax_amount": "414.80",
+    "customer_name": "Sample Consumer",
+    "customer_tax_id": "1234567788",
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example pl-ksef-invoice (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

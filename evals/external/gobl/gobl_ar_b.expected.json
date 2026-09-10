@@ -1,0 +1,41 @@
+{
+  "document": "gobl_ar_b.pdf",
+  "source": "gobl",
+  "reference_date": "2025-02-14",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "ARS"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_ar",
+    "lang_en",
+    "currency_ars",
+    "prices_include_tax",
+    "charges",
+    "consumer_customer"
+  ],
+  "expected": {
+    "supplier_name": "Proveedor Ejemplo S.A.",
+    "invoice_number": "2-00000456",
+    "invoice_date": "2025-01-15",
+    "total_amount": "12644.50",
+    "currency": "ARS",
+    "tax_id": "30712345671",
+    "subtotal_amount": "10544.50",
+    "tax_amount": "2100.00",
+    "customer_name": "Juana Pérez",
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example ar-arca-invoice-b (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text. Flag: customer 'Juana Pérez, Calle Falsa 123' is an obvious placeholder person."
+}

@@ -1,0 +1,43 @@
+{
+  "document": "gobl_mx.pdf",
+  "source": "gobl",
+  "reference_date": "2024-05-25",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_mx",
+    "lang_en",
+    "currency_mxn",
+    "withholding",
+    "payable_differs",
+    "prepaid",
+    "multi_page",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "ESCUELA KEMPER URGATE",
+    "invoice_number": "LMC-0010",
+    "invoice_date": "2024-04-25",
+    "total_amount": "358.85",
+    "currency": "MXN",
+    "tax_id": "EKU9003173C9",
+    "subtotal_amount": "310.80",
+    "tax_amount": "48.05",
+    "customer_name": "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+    "customer_tax_id": "URE180429TM6",
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example mx-sat-invoice (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

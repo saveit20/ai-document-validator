@@ -1,0 +1,42 @@
+{
+  "document": "gobl_co.pdf",
+  "source": "gobl",
+  "reference_date": "2026-07-23",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "COP"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_co",
+    "lang_en",
+    "currency_cop",
+    "tech_provider_header",
+    "large_amounts",
+    "multi_page",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Cyberdyne Sistemas SAS",
+    "invoice_number": "SETT-1041282",
+    "invoice_date": "2026-03-25",
+    "total_amount": "104606950.00",
+    "currency": "COP",
+    "tax_id": "9015852843",
+    "subtotal_amount": "87905000.00",
+    "tax_amount": "16701950.00",
+    "customer_name": "Atlas Organization",
+    "customer_tax_id": "9015852843",
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example co-dian-invoice (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text. Flag: header prints real software provider 'EMPRESA DE DIVULGACIONES Y ASESORIAS ECA SAS'; contact 'Diego Lopez' is a placeholder."
+}

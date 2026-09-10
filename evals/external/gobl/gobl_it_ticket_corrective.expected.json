@@ -1,0 +1,41 @@
+{
+  "document": "gobl_it_ticket_corrective.pdf",
+  "source": "gobl",
+  "reference_date": "2026-07-15",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_it",
+    "lang_en",
+    "currency_eur",
+    "corrective",
+    "prices_include_tax",
+    "no_customer"
+  ],
+  "expected": {
+    "supplier_name": "Negozio Roma S.r.l.",
+    "invoice_number": "SAMPLE-002",
+    "invoice_date": "2026-06-15",
+    "total_amount": "100.00",
+    "currency": "EUR",
+    "tax_id": "12345678903",
+    "subtotal_amount": "81.97",
+    "tax_amount": "18.03",
+    "customer_name": null,
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example it-ticket-corrective-invoice (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

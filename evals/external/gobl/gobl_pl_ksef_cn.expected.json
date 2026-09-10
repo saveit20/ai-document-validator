@@ -1,0 +1,42 @@
+{
+  "document": "gobl_pl_ksef_cn.pdf",
+  "source": "gobl",
+  "reference_date": "2024-05-20",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_pl",
+    "lang_pl",
+    "currency_pln",
+    "credit_note",
+    "negative_amounts",
+    "corrective",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Provide One S.L.",
+    "invoice_number": "KOR-SAMPLE-002",
+    "invoice_date": "2024-04-20",
+    "total_amount": "-221.40",
+    "currency": "PLN",
+    "tax_id": "1234567788",
+    "subtotal_amount": "-180.00",
+    "tax_amount": "-41.40",
+    "customer_name": "Sample Consumer",
+    "customer_tax_id": "1234567788",
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example pl-ksef-credit-note.adjustment.pl (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

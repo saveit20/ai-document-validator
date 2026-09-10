@@ -1,0 +1,40 @@
+{
+  "document": "gobl_sg_unregistered.pdf",
+  "source": "gobl",
+  "reference_date": "2026-09-11",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "SGD"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_sg",
+    "lang_en",
+    "currency_sgd",
+    "no_tax",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Kampong Crafts LLP",
+    "invoice_number": "KC-55",
+    "invoice_date": "2026-05-14",
+    "total_amount": "180.00",
+    "currency": "SGD",
+    "tax_id": null,
+    "subtotal_amount": "180.00",
+    "tax_amount": null,
+    "customer_name": "Harbourfront Events Pte Ltd",
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example sg-invoice-not-registered (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

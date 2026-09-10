@@ -31,7 +31,12 @@ from validator.ingest import document_from_bytes
 from validator.llm import LLMExtractor
 from validator.models import FIELD_NAMES, RuleConfig
 from validator.pipeline import Pipeline
-from validator.transport import AnthropicTransport, RecordedTransport
+from validator.transport import (
+    AnthropicTransport,
+    LLMRequest,
+    LLMResponse,
+    RecordedTransport,
+)
 
 EVALS_DIR = Path(__file__).resolve().parent
 SOURCES = {
@@ -39,6 +44,7 @@ SOURCES = {
     "mustang": EVALS_DIR / "external" / "mustang",
     "idsem": EVALS_DIR / "external" / "idsem",
     "salorworks": EVALS_DIR / "external" / "salorworks",
+    "gobl": EVALS_DIR / "external" / "gobl",
     "holdout": EVALS_DIR / "holdout",
 }
 SPLITS_FILE = EVALS_DIR / "splits.json"
@@ -142,8 +148,23 @@ def summaries_by_source(name: str, cases: list[Case], results: list[CaseResult])
     return summaries
 
 
+class CallBudget:
+    """Wraps the live transport and stops the run once `limit` paid calls have been made."""
+
+    def __init__(self, live: AnthropicTransport, limit: int) -> None:
+        self._live = live
+        self.limit = limit
+        self.calls = 0
+
+    def complete(self, request: LLMRequest) -> LLMResponse:
+        if self.calls >= self.limit:
+            raise SystemExit(f"stopped: the call budget of {self.limit} paid calls is spent")
+        self.calls += 1
+        return self._live.complete(request)
+
+
 def build(
-    extractor: str, model: str, record: bool, llm_input: str = "text"
+    extractor: str, model: str, record: bool, llm_input: str = "text", max_calls: int = 0
 ) -> tuple[str, Pipeline]:
     heuristic = HeuristicExtractor()
     if extractor == "heuristic":
@@ -153,7 +174,9 @@ def build(
         api_key = os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
             raise SystemExit("--record needs ANTHROPIC_API_KEY in the environment or in .env")
-        live = AnthropicTransport(api_key, timeout_s=90.0)
+        if max_calls <= 0:
+            raise SystemExit("--record needs --max-calls N: an explicit cap on paid API calls")
+        live = CallBudget(AnthropicTransport(api_key, timeout_s=90.0), max_calls)
     llm = LLMExtractor(RecordedTransport(RECORDINGS_DIR, live=live), model, llm_input)  # type: ignore[arg-type]
     suffix = "+pdf" if llm_input == "pdf" else ""
     if extractor == "llm":
@@ -199,6 +222,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--split", choices=("dev", "test", "both"), default="both")
     parser.add_argument("--record", action="store_true", help="call the API for missing recordings")
     parser.add_argument(
+        "--max-calls", type=int, default=0, help="with --record: stop after this many paid calls"
+    )
+    parser.add_argument(
         "--pdf-text", choices=("plain", "layout"), default="plain", help="how PDF text is extracted"
     )
     parser.add_argument(
@@ -226,7 +252,8 @@ def main(argv: list[str] | None = None) -> int:
         configs = [(args.extractor, args.model)]
     splits = ["dev", "test"] if args.split == "both" else [args.split]
     pipelines = [
-        build(extractor, model, args.record, args.llm_input) for extractor, model in configs
+        build(extractor, model, args.record, args.llm_input, args.max_calls)
+        for extractor, model in configs
     ]
     text_suffix = "+layout" if args.pdf_text == "layout" else ""
 

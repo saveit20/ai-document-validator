@@ -213,6 +213,29 @@ def test_evidence_with_a_line_missing_from_the_document_is_not_grounded() -> Non
 
 
 @pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("901.585.284-3", "9015852843"),  # CO NIT
+        ("30-71234567-9", "30712345679"),  # AR CUIT
+        ("EKU9003173C9", "EKU9003173C9"),  # MX RFC
+        ("201912345K", "201912345K"),  # SG UEN
+        ("526-000-12-46", "5260001246"),  # PL NIP
+        ("RSSGNN60R30H501U", "RSSGNN60R30H501U"),  # IT codice fiscale
+        ("(ES) B98602642", "B98602642"),  # country printed apart, in parentheses
+        ("(EL) 177472438", "177472438"),
+        ("(CO) 901.585.284-3", "9015852843"),
+    ],
+)
+def test_tax_ids_from_outside_the_eu(raw: str, expected: str) -> None:
+    assert n.normalize_tax_id(raw) == expected
+
+
+@pytest.mark.parametrize("raw", ["Invoice", "20% 200.00", "12345", "ABCDEFGHIJ1"])
+def test_words_and_short_numbers_are_not_tax_ids(raw: str) -> None:
+    assert n.normalize_tax_id(raw) is None
+
+
+@pytest.mark.parametrize(
     ("text", "decimals"), [("Total KWD 46.500", 3), ("Total 46.500 BHD", 3), ("Total EUR 1.500", 2)]
 )
 def test_documents_in_three_decimal_currencies_are_detected(text: str, decimals: int) -> None:

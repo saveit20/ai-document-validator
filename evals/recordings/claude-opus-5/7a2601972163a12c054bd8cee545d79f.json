@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"ESCUELA KEMPER URGATE\",\"evidence\":\"Supplier\\nESCUELA KEMPER URGATE\"},\"invoice_number\":{\"value\":\"TEST-00001\",\"evidence\":\"TEST-00001\"},\"invoice_date\":{\"value\":\"2023-07-10\",\"evidence\":\"2023-07-10 · 12:00\"},\"total_amount\":{\"value\":\"43.96\",\"evidence\":\"Total to pay $43.96\"},\"currency\":{\"value\":\"MXN\",\"evidence\":\"Mexican Peso (MXN)\"},\"tax_id\":{\"value\":\"EKU9003173C9\",\"evidence\":\"RFC: (MX) EKU9003173C9\"},\"subtotal_amount\":{\"value\":\"37.90\",\"evidence\":\"Sum $37.90\"},\"tax_amount\":{\"value\":\"6.06\",\"evidence\":\"Tax $6.06\"},\"customer_name\":{\"value\":\"UNIVERSIDAD ROBOTICA ESPAÑOLA\",\"evidence\":\"Customer\\nUNIVERSIDAD ROBOTICA ESPAÑOLA\"},\"customer_tax_id\":{\"value\":\"URE180429TM6\",\"evidence\":\"RFC: (MX) URE180429TM6\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2404,
+  "output_tokens": 417,
+  "latency_ms": 4934,
+  "cache_read_tokens": 2277,
+  "cache_write_tokens": 0
+}

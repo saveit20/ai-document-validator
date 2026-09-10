@@ -1,0 +1,42 @@
+{
+  "document": "gobl_es_ticketbai_cn.pdf",
+  "source": "gobl",
+  "reference_date": "2022-03-03",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_es",
+    "lang_es",
+    "currency_eur",
+    "credit_note",
+    "negative_amounts",
+    "multi_vat",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Provide One S.L.",
+    "invoice_number": "FR-012",
+    "invoice_date": "2022-02-01",
+    "total_amount": "-1970.20",
+    "currency": "EUR",
+    "tax_id": "B98602642",
+    "subtotal_amount": "-1630.00",
+    "tax_amount": "-340.20",
+    "customer_name": "Sample Customer",
+    "customer_tax_id": "54387763P",
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example es-ticketbai-credit-note.adjustment.es (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

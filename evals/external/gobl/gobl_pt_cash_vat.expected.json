@@ -1,0 +1,40 @@
+{
+  "document": "gobl_pt_cash_vat.pdf",
+  "source": "gobl",
+  "reference_date": "2024-07-18",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_pt",
+    "lang_en",
+    "currency_eur",
+    "space_in_invoice_number",
+    "currency_symbol_after"
+  ],
+  "expected": {
+    "supplier_name": "Innovatech Lda",
+    "invoice_number": "FT IXTEST-01/28",
+    "invoice_date": "2024-06-18",
+    "total_amount": "123.00",
+    "currency": "EUR",
+    "tax_id": "770013813",
+    "subtotal_amount": "100.00",
+    "tax_amount": "23.00",
+    "customer_name": "Gusto Unipessoal Lda",
+    "customer_tax_id": "514329874",
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example pt-at-invoice-cash-vat (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

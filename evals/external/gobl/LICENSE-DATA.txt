@@ -1,0 +1,56 @@
+GOBL-derived evaluation cases (gobl_*.pdf, gobl_*.expected.json)
+
+Sources:
+  https://github.com/invopop/gobl       commit 4a2e3ac623edfd0a93c898c2d48201f92243e083
+  https://github.com/invopop/gobl.html  commit 86aca060dc870045ef8e92a5aa04661b78c5b2ba
+Both repositories are licensed under the Apache License, Version 2.0
+(https://www.apache.org/licenses/LICENSE-2.0).
+
+The PDFs were rendered by this project from the example HTML committed in
+gobl.html/examples/out/ (with gobl.html/assets/styles and assets/scripts next to them), printed with
+Microsoft Edge headless (--print-to-pdf, no header/footer). Web fonts were not downloaded; the browser
+used local fallback fonts. The HTML content was not modified.
+
+Labels (expected fields) were taken from the GOBL JSON inputs in gobl.html/examples/<name>.json and
+checked against the text layer of the rendered PDF (pypdf); where the printed form differs, the printed
+form was used, and values not printed were set to null. config/reference_date/verdict are synthetic
+evaluation scenarios added by this project. Builder: build_gobl_cases.py.
+
+NOTICE (invopop/gobl):
+GOBL (Go Business Language) (https://gobl.org)
+Copyright 2021-2022 Invopop Ltd.
+
+This product includes software developed by Invopop Ltd. (UK)
+(https://invopop.com).
+
+This product also includes the following third party components:
+
+- Go JSON Schema Reflection (https://github.com/alecthomas/jsonschema)
+  The MIT License
+  Copyright (C) 2014 Alec Thomas
+
+- ozzo-validation (https://github.com/go-ozzo/ozzo-validation)
+  The MIT License
+  Copyright (c) 2016, Qiang Xue
+
+- Google UUID (https://github.com/google/uuid)
+  BSD 3-Clause "New" or "Revised" License
+  Copyright (c) 2009,2014 Google Inc. All rights reserved.
+
+- Google Cloud Go (https://github.com/googleapis/google-cloud-go)
+  Apache Licnese 2.0
+  Copyright (c) 2014 Google LLC
+
+- Go JOSE (https://github.com/go-jose/go-jose)
+  Apache Licnese 2.0
+  Copyright 2014 Square Inc.
+
+- Testify (https://github.com/stretchr/testify)
+  The MIT License
+  Copyright (c) 2012-2020 Mat Ryer, Tyler Bunnell and contributors.
+
+- Go Cryptography (golang.org/x/crypto)
+  License: https://github.com/golang/go/blob/master/LICENSE
+  Copyright (c) 2009 The Go Authors. All rights reserved.
+
+invopop/gobl.html ships no NOTICE file.

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Innovatech Lda\",\"evidence\":\"Supplier\\nInnovatech Lda\"},\"invoice_number\":{\"value\":\"FT IXTEST-01/28\",\"evidence\":\"FT IXTEST-01/28\"},\"invoice_date\":{\"value\":\"2024-06-18\",\"evidence\":\"Issue date\\n2024-06-18\"},\"total_amount\":{\"value\":\"123.00\",\"evidence\":\"Total to pay 123,00 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Euro (EUR)\"},\"tax_id\":{\"value\":\"(PT) 770013813\",\"evidence\":\"NIF: (PT) 770013813\"},\"subtotal_amount\":{\"value\":\"100.00\",\"evidence\":\"Sum 100,00 €\"},\"tax_amount\":{\"value\":\"23.00\",\"evidence\":\"Tax 23,00 €\"},\"customer_name\":{\"value\":\"Gusto Unipessoal Lda\",\"evidence\":\"Customer\\nGusto Unipessoal Lda\"},\"customer_tax_id\":{\"value\":\"(PT) 514329874\",\"evidence\":\"NIF: (PT) 514329874\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2424,
+  "output_tokens": 383,
+  "latency_ms": 4704,
+  "cache_read_tokens": 2277,
+  "cache_write_tokens": 0
+}

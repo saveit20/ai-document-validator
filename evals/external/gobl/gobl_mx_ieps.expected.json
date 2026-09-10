@@ -1,0 +1,39 @@
+{
+  "document": "gobl_mx_ieps.pdf",
+  "source": "gobl",
+  "reference_date": "2023-08-09",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "MXN"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_mx",
+    "lang_en",
+    "currency_mxn",
+    "excise_tax"
+  ],
+  "expected": {
+    "supplier_name": "ESCUELA KEMPER URGATE",
+    "invoice_number": "TEST-00001",
+    "invoice_date": "2023-07-10",
+    "total_amount": "43.96",
+    "currency": "MXN",
+    "tax_id": "EKU9003173C9",
+    "subtotal_amount": "37.90",
+    "tax_amount": "6.06",
+    "customer_name": "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+    "customer_tax_id": "URE180429TM6",
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example mx-sat-invoice-ieps (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

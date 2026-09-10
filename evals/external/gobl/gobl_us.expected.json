@@ -1,0 +1,39 @@
+{
+  "document": "gobl_us.pdf",
+  "source": "gobl",
+  "reference_date": "2024-06-07",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_us",
+    "lang_en",
+    "currency_usd",
+    "no_tax"
+  ],
+  "expected": {
+    "supplier_name": "Invopop Inc.",
+    "invoice_number": "FAKE-0001",
+    "invoice_date": "2024-05-08",
+    "total_amount": "4800.00",
+    "currency": "USD",
+    "tax_id": null,
+    "subtotal_amount": "4800.00",
+    "tax_amount": null,
+    "customer_name": "Customer Random Inc.",
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example us-invoice (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text. Flag: supplier Invopop Inc. is a real company (GOBL maintainer)."
+}

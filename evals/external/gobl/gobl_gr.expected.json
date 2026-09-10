@@ -1,0 +1,39 @@
+{
+  "document": "gobl_gr.pdf",
+  "source": "gobl",
+  "reference_date": "2024-08-11",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_el",
+    "lang_en",
+    "currency_eur",
+    "greek_script"
+  ],
+  "expected": {
+    "supplier_name": "Ελληνικά Τρόφιμα Α.Ε.",
+    "invoice_number": "GRT-082",
+    "invoice_date": "2024-07-12",
+    "total_amount": "111.60",
+    "currency": "EUR",
+    "tax_id": "177472438",
+    "subtotal_amount": "90.00",
+    "tax_amount": "21.60",
+    "customer_name": "Αιγαίο Λιανική Α.Ε.",
+    "customer_tax_id": "841442160",
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example gr-mydata-invoice (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text. Flag: footer prints real e-invoicing provider 'ΙΛΥΔΑ ΠΛΗΡΟΦΟΡΙΚΗ Α.Ε.'."
+}

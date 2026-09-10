@@ -1,0 +1,41 @@
+{
+  "document": "gobl_it_hotel.pdf",
+  "source": "gobl",
+  "reference_date": "2023-09-18",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_it",
+    "lang_en",
+    "currency_eur",
+    "prices_include_tax",
+    "fiscal_code_as_customer_id",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Hotel California",
+    "invoice_number": "SAMPLE-002",
+    "invoice_date": "2023-05-21",
+    "total_amount": "126.00",
+    "currency": "EUR",
+    "tax_id": "12345678903",
+    "subtotal_amount": "114.64",
+    "tax_amount": "11.36",
+    "customer_name": "Mela S.r.l.",
+    "customer_tax_id": "RSSGNN60R30H501U",
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example it-sdi-invoice-hotel-b2c (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text. Flag: customer fiscal code RSSGNN60R30H501U is the textbook 'Rossi Giovanni' example."
+}

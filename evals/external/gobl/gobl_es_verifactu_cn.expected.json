@@ -1,0 +1,42 @@
+{
+  "document": "gobl_es_verifactu_cn.pdf",
+  "source": "gobl",
+  "reference_date": "2025-06-28",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_es",
+    "lang_es",
+    "currency_eur",
+    "credit_note",
+    "negative_amounts",
+    "wrapped_invoice_number",
+    "real_company_invopop"
+  ],
+  "expected": {
+    "supplier_name": "Invopop S.L.",
+    "invoice_number": "CN-0131232328387092873491782093478910237840917283904710923874",
+    "invoice_date": "2025-05-29",
+    "total_amount": "-2178.00",
+    "currency": "EUR",
+    "tax_id": "B85905495",
+    "subtotal_amount": "-1800.00",
+    "tax_amount": "-378.00",
+    "customer_name": "Sample Consumer",
+    "customer_tax_id": "B63272603",
+    "verdict": "FAIL"
+  },
+  "notes": "invopop/gobl.html example es-verifactu-credit-note.adjustment.es (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text. Flag: supplier Invopop S.L. is a real company (GOBL maintainer)."
+}

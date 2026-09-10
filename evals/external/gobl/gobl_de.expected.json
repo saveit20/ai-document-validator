@@ -1,0 +1,39 @@
+{
+  "document": "gobl_de.pdf",
+  "source": "gobl",
+  "reference_date": "2024-01-19",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "gobl_sample",
+    "country_de",
+    "lang_en",
+    "currency_eur",
+    "multi_vat"
+  ],
+  "expected": {
+    "supplier_name": "Provide One S.L.",
+    "invoice_number": "SAMPLE-001",
+    "invoice_date": "2023-12-20",
+    "total_amount": "2152.70",
+    "currency": "EUR",
+    "tax_id": "DE111111125",
+    "subtotal_amount": "1810.00",
+    "tax_amount": "342.70",
+    "customer_name": "Sample Consumer",
+    "customer_tax_id": "DE111111125",
+    "verdict": "PASS"
+  },
+  "notes": "invopop/gobl.html example de-invoice (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+}

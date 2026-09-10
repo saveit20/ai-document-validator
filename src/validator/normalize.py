@@ -311,7 +311,9 @@ def normalize_tax_id(raw: str | None) -> str | None:
     """Canonical tax id (upper case, no spaces, dots or hyphens) if it looks like one."""
     if not raw:
         return None
-    compact = re.sub(r"[\s.\-]", "", raw.upper())
+    # A country printed apart from the number, as in "(ES) B98602642", is a label, not part of the id.
+    raw = re.sub(r"^\s*\([A-Z]{2}\)\s*", "", raw.upper())
+    compact = re.sub(r"[\s.\-]", "", raw)
     match = re.match(r"[A-Z0-9]+", compact)
     if not match:
         return None
@@ -319,6 +321,10 @@ def normalize_tax_id(raw: str | None) -> str | None:
     if candidate[:2] in _VAT_PREFIXES and 8 <= len(candidate) - 2 <= 12:
         return candidate
     if _SPANISH_ID.match(candidate) or re.fullmatch(r"\d{9}", candidate):
+        return candidate
+    # Other national formats (CUIT, NIT, RFC, UEN, NIP, codice fiscale...): an identifier-like token
+    # of 8-20 characters with at least five digits. A plain word or a short number never qualifies.
+    if 8 <= len(candidate) <= 20 and sum(ch.isdigit() for ch in candidate) >= 5:
         return candidate
     return None
 
