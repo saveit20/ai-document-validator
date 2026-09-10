@@ -1,0 +1,44 @@
+{
+  "document": "idsem_t3_1535.pdf",
+  "source": "idsem",
+  "reference_date": "2008-02-04",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "idsem_template3",
+    "utility_bill",
+    "spanish",
+    "synthetic_data",
+    "spanish_number_format",
+    "multi_page",
+    "multi_vat",
+    "electricity_tax",
+    "igic_not_iva",
+    "placeholder_amounts"
+  ],
+  "expected": {
+    "supplier_name": "GEO ALTERNATIVA S.L.",
+    "invoice_number": "LF9786832414",
+    "invoice_date": "2008-01-05",
+    "total_amount": "248.46",
+    "currency": "EUR",
+    "tax_id": "B87382644",
+    "subtotal_amount": "236.62",
+    "tax_amount": null,
+    "customer_name": "EUFEMIA GÓMEZ URIBE",
+    "customer_tax_id": "91488257F",
+    "verdict": "PASS"
+  },
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template3/Invoice1535.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+}

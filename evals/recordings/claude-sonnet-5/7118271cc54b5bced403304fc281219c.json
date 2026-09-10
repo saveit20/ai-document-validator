@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Gonzales-Faulkner\",\"evidence\":\"Gonzales-Faulkner\"},\"invoice_number\":{\"value\":\"61874671\",\"evidence\":\"Invoice no: 61874671\"},\"invoice_date\":{\"value\":\"2018-07-26\",\"evidence\":\"07/26/2018\"},\"total_amount\":{\"value\":\"312.93\",\"evidence\":\"$ 312,93\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 284,48\"},\"tax_id\":{\"value\":\"992-82-8738\",\"evidence\":\"Tax Id: 992-82-8738\"},\"subtotal_amount\":{\"value\":\"284.48\",\"evidence\":\"$ 284,48\"},\"tax_amount\":{\"value\":\"28.45\",\"evidence\":\"$ 28,45\"},\"customer_name\":{\"value\":\"Garcia-Jones\",\"evidence\":\"Garcia-Jones\"},\"customer_tax_id\":{\"value\":\"918-90-3872\",\"evidence\":\"Tax Id: 918-90-3872\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2530,
+  "output_tokens": 338,
+  "latency_ms": 3805,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

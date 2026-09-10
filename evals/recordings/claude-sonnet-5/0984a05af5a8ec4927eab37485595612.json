@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Baird PLC\",\"evidence\":\"Baird PLC\"},\"invoice_number\":{\"value\":\"97675851\",\"evidence\":\"Invoice no: 97675851\"},\"invoice_date\":{\"value\":\"2016-05-25\",\"evidence\":\"05/25/2016\"},\"total_amount\":{\"value\":\"154.74\",\"evidence\":\"$ 154,74\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 140,67\"},\"tax_id\":{\"value\":\"927-99-1999\",\"evidence\":\"Tax Id: 927-99-1999\"},\"subtotal_amount\":{\"value\":\"140.67\",\"evidence\":\"$ 140,67\"},\"tax_amount\":{\"value\":\"14.07\",\"evidence\":\"$ 14,07\"},\"customer_name\":{\"value\":\"Smith, Reynolds and Dunn\",\"evidence\":\"Smith, Reynolds and Dunn\"},\"customer_tax_id\":{\"value\":\"922-98-7164\",\"evidence\":\"Tax Id: 922-98-7164\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2891,
+  "output_tokens": 340,
+  "latency_ms": 3912,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

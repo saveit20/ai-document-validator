@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"CORPOLUX, S.L.\",\"evidence\":\"CORPOLUX, S.L .\"},\"invoice_number\":{\"value\":\"IE2906178042\",\"evidence\":\"Nº factura: IE2906178042\"},\"invoice_date\":{\"value\":\"1990-04-22\",\"evidence\":\"Fecha emisión factura: 22/04/1990\"},\"total_amount\":{\"value\":\"160.60\",\"evidence\":\"TOTAL IMPORTE FACTURA 160,60 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"160,60 €\"},\"tax_id\":{\"value\":\"B54691589\",\"evidence\":\"CIF B54691589.\"},\"subtotal_amount\":{\"value\":\"152.91\",\"evidence\":\"Importe total 152,91 €\"},\"tax_amount\":{\"value\":\"7.69\",\"evidence\":\"IGIC reducido ( 5%) 7,61 € ... IGIC normal ( 10%) 0,08 €\"},\"customer_name\":{\"value\":\"BENITO INFANTE HERNÁNDEZ\",\"evidence\":\"BENITO INFANTE HERNÁNDEZ\"},\"customer_tax_id\":{\"value\":\"41240209J\",\"evidence\":\"NIF: 41240209J\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 11217,
+  "output_tokens": 417,
+  "latency_ms": 6054,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

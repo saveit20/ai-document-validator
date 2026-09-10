@@ -1,10 +1,12 @@
 {
   "seed": 20260910,
-  "method": "each source (Mendeley, Mustang, holdout batch A, holdout batch B) shuffled with the seed and split in half",
+  "method": "each source shuffled with the seed and split in half; IDSEM per template (3/2 alternating), held-out per batch",
   "sources": {
     "mendeley": "evals/external/mendeley",
     "holdout": "evals/holdout",
-    "mustang": "evals/external/mustang"
+    "mustang": "evals/external/mustang",
+    "idsem": "evals/external/idsem",
+    "salorworks": "evals/external/salorworks"
   },
   "dev": [
     "hA_01_two_column_header",
@@ -15,6 +17,21 @@
     "hB_03_fattura_it",
     "hB_05_ocr_noise",
     "hB_08_currency_far",
+    "idsem_t1_0970",
+    "idsem_t1_2077",
+    "idsem_t1_2997",
+    "idsem_t2_0123",
+    "idsem_t2_0752",
+    "idsem_t3_1431",
+    "idsem_t3_1535",
+    "idsem_t3_3261",
+    "idsem_t4_0755",
+    "idsem_t4_4239",
+    "idsem_t5_1158",
+    "idsem_t5_1816",
+    "idsem_t5_2254",
+    "idsem_t6_1739",
+    "idsem_t6_4037",
     "mdl_12007995",
     "mdl_12681565",
     "mdl_13194726",
@@ -53,7 +70,12 @@
     "mdl_97675851",
     "mst_fremdwaehrung",
     "mst_kraxi",
-    "mst_teilrechnung"
+    "mst_teilrechnung",
+    "slw_case_pack",
+    "slw_freight_duty",
+    "slw_kuwait_kwd",
+    "slw_multipage",
+    "slw_simple_english"
   ],
   "test": [
     "hA_02_supplier_in_footer",
@@ -64,6 +86,21 @@
     "hB_04_us_invoice",
     "hB_06_credit_note",
     "hB_07_prepayment",
+    "idsem_t1_0639",
+    "idsem_t1_1342",
+    "idsem_t2_2083",
+    "idsem_t2_2824",
+    "idsem_t2_4645",
+    "idsem_t3_1059",
+    "idsem_t3_4414",
+    "idsem_t4_2064",
+    "idsem_t4_2987",
+    "idsem_t4_3990",
+    "idsem_t5_0944",
+    "idsem_t5_4784",
+    "idsem_t6_2884",
+    "idsem_t6_3581",
+    "idsem_t6_4502",
     "mdl_12222347",
     "mdl_16220332",
     "mdl_17619666",
@@ -102,6 +139,11 @@
     "mdl_97511742",
     "mst_alphabet_leasing",
     "mst_gnuaccounting_505",
-    "mst_weclapp"
+    "mst_weclapp",
+    "slw_free_of_charge",
+    "slw_invoice_discount",
+    "slw_line_discount",
+    "slw_uae_vat",
+    "slw_usd_for_aed"
   ]
 }

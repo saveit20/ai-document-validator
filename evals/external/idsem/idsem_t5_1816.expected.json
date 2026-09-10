@@ -1,0 +1,46 @@
+{
+  "document": "idsem_t5_1816.pdf",
+  "source": "idsem",
+  "reference_date": "1990-09-29",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "idsem_template5",
+    "utility_bill",
+    "spanish",
+    "synthetic_data",
+    "spanish_number_format",
+    "multi_page",
+    "textual_spanish_date",
+    "multi_vat",
+    "electricity_tax",
+    "iva",
+    "placeholder_amounts",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "ENERGY TRADER SOLUTIONS, S.L.",
+    "invoice_number": "F8867153778",
+    "invoice_date": "1990-08-30",
+    "total_amount": "19.04",
+    "currency": "EUR",
+    "tax_id": "B54744073",
+    "subtotal_amount": "18.42",
+    "tax_amount": null,
+    "customer_name": "PERSEO VENTURA IVAÑEZ",
+    "customer_tax_id": "47564174J",
+    "verdict": "FAIL"
+  },
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template5/Invoice1816.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Campbell, Mathis and Johnson\",\"evidence\":\"Campbell, Mathis and Johnson\"},\"invoice_number\":{\"value\":\"32131502\",\"evidence\":\"Invoice no: 32131502\"},\"invoice_date\":{\"value\":\"2019-02-26\",\"evidence\":\"02/26/2019\"},\"total_amount\":{\"value\":\"6640.07\",\"evidence\":\"$ 6 640,07\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 6 036,43\"},\"tax_id\":{\"value\":\"909-79-0983\",\"evidence\":\"Tax Id: 909-79-0983\"},\"subtotal_amount\":{\"value\":\"6036.43\",\"evidence\":\"$ 6 036,43\"},\"tax_amount\":{\"value\":\"603.64\",\"evidence\":\"$ 603,64\"},\"customer_name\":{\"value\":\"Jimenez, Smith and Lee\",\"evidence\":\"Jimenez, Smith and Lee\"},\"customer_tax_id\":{\"value\":\"958-90-4314\",\"evidence\":\"Tax Id: 958-90-4314\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2982,
+  "output_tokens": 362,
+  "latency_ms": 4774,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

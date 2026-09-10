@@ -1,0 +1,44 @@
+{
+  "document": "idsem_t6_4502.pdf",
+  "source": "idsem",
+  "reference_date": "2007-04-01",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "idsem_template6",
+    "utility_bill",
+    "spanish",
+    "synthetic_data",
+    "spanish_number_format",
+    "multi_page",
+    "multi_vat",
+    "electricity_tax",
+    "igic_not_iva",
+    "placeholder_amounts"
+  ],
+  "expected": {
+    "supplier_name": "EKILUZ ENERGÍA COMERCIALIZADORA, S.L.",
+    "invoice_number": "S6911709280",
+    "invoice_date": "2007-03-02",
+    "total_amount": "88.31",
+    "currency": "EUR",
+    "tax_id": "B75229369",
+    "subtotal_amount": "72.99",
+    "tax_amount": null,
+    "customer_name": "LESBIA VILLALLOVOS NAVARO",
+    "customer_tax_id": "58850040D",
+    "verdict": "PASS"
+  },
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template6/Invoice4502.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+}

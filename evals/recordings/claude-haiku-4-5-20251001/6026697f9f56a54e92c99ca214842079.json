@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Fictional Kuwait Dry Goods WLL\",\"evidence\":\"Fictional Kuwait Dry Goods WLL\"},\"invoice_number\":{\"value\":\"INV-2026-007\",\"evidence\":\"Invoice: INV-2026-007\"},\"invoice_date\":{\"value\":\"2026-08-07\",\"evidence\":\"Date: 2026-08-07\"},\"total_amount\":{\"value\":\"46.500\",\"evidence\":\"Total\\n\\tKWD 46.500\"},\"currency\":{\"value\":\"KWD\",\"evidence\":\"Currency: KWD\"},\"tax_id\":null,\"subtotal_amount\":{\"value\":\"46.500\",\"evidence\":\"Subtotal\\n\\tKWD 46.500\"},\"tax_amount\":null,\"customer_name\":{\"value\":\"Example Kuwait Grocery Co.\",\"evidence\":\"Bill to: Example Kuwait Grocery Co., Kuwait City\"},\"customer_tax_id\":null}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 2132,
+  "output_tokens": 213,
+  "latency_ms": 1901,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

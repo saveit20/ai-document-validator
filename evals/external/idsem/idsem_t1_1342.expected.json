@@ -1,0 +1,46 @@
+{
+  "document": "idsem_t1_1342.pdf",
+  "source": "idsem",
+  "reference_date": "2007-11-27",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "idsem_template1",
+    "utility_bill",
+    "spanish",
+    "synthetic_data",
+    "spanish_number_format",
+    "multi_page",
+    "textual_spanish_date",
+    "multi_vat",
+    "electricity_tax",
+    "igic_not_iva",
+    "placeholder_amounts",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "EMPRESA MUNICIPAL DE DISTRIBUCIÓ D'ENERGIA ELÈCTRICA D'ALMENAR, SLU",
+    "invoice_number": "QV1441783957",
+    "invoice_date": "2007-10-28",
+    "total_amount": "103.08",
+    "currency": "EUR",
+    "tax_id": "B25470766",
+    "subtotal_amount": "96.58",
+    "tax_amount": null,
+    "customer_name": "MAGDA SÁENZ AGUIRRE",
+    "customer_tax_id": "89062313B",
+    "verdict": "FAIL"
+  },
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template1/Invoice1342.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+}

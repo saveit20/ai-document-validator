@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Smith-Cook\",\"evidence\":\" Smith-Cook\"},\"invoice_number\":{\"value\":\"16662010\",\"evidence\":\"Invoice no: 16662010\"},\"invoice_date\":{\"value\":\"2016-08-28\",\"evidence\":\"08/28/2016\"},\"total_amount\":{\"value\":\"2259.10\",\"evidence\":\" Total\\n $ 2 053,73\\n $ 205,37\\n $ 2 259,10\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 2 259,10\"},\"tax_id\":{\"value\":\"959-84-2124\",\"evidence\":\"Tax Id: 959-84-2124\"},\"subtotal_amount\":{\"value\":\"2053.73\",\"evidence\":\"$ 2 053,73\"},\"tax_amount\":{\"value\":\"205.37\",\"evidence\":\"$ 205,37\"},\"customer_name\":{\"value\":\"Snyder-Johnson\",\"evidence\":\" Snyder-Johnson\"},\"customer_tax_id\":{\"value\":\"938-85-4960\",\"evidence\":\"Tax Id: 938-85-4960\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 3145,
+  "output_tokens": 362,
+  "latency_ms": 5652,
+  "cache_read_tokens": 2277,
+  "cache_write_tokens": 0
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"HELIOSFERA SL\",\"evidence\":\"HELIOSFERA SL\"},\"invoice_number\":{\"value\":\"UM3647500741\",\"evidence\":\"Nº factura: UM3647500741\"},\"invoice_date\":{\"value\":\"1999-10-21\",\"evidence\":\"Fecha emisión factura: 21 de octubre de 1999\"},\"total_amount\":{\"value\":\"97.20\",\"evidence\":\"TOTAL IMPORTE FACTURA 97,20 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"IMPORTE FACTURA: 97,20 €\"},\"tax_id\":{\"value\":\"B76741016\",\"evidence\":\"Cif: B76741016\"},\"subtotal_amount\":{\"value\":\"78.48\",\"evidence\":\"Subtotal 78,48 €\"},\"tax_amount\":{\"value\":\"12.52\",\"evidence\":\"IGIC reducido ( 15%) 12,37 € IGIC normal ( 7%) 0,15 €\"},\"customer_name\":{\"value\":\"Reginaldo Olivares Fernández\",\"evidence\":\"Reginaldo Olivares Fernández\"},\"customer_tax_id\":{\"value\":\"35598818Q\",\"evidence\":\"NIF: 35598818Q\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 15793,
+  "output_tokens": 296,
+  "latency_ms": 10369,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Velasquez, Ward and Ballard\",\"evidence\":\" Velasquez, Ward and Ballard\"},\"invoice_number\":{\"value\":\"71748307\",\"evidence\":\"Invoice no: 71748307\"},\"invoice_date\":{\"value\":\"2011-12-24\",\"evidence\":\"12/24/2011\"},\"total_amount\":{\"value\":\"1576.90\",\"evidence\":\" $ 1 576,90\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 1 433,55\"},\"tax_id\":{\"value\":\"950-74-4484\",\"evidence\":\"Tax Id: 950-74-4484\"},\"subtotal_amount\":{\"value\":\"1433.55\",\"evidence\":\" $ 1 433,55\"},\"tax_amount\":{\"value\":\"143.35\",\"evidence\":\" $ 143,35\"},\"customer_name\":{\"value\":\"Lewis Group\",\"evidence\":\" Lewis Group\"},\"customer_tax_id\":{\"value\":\"996-86-8087\",\"evidence\":\"Tax Id: 996-86-8087\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2841,
+  "output_tokens": 348,
+  "latency_ms": 5592,
+  "cache_read_tokens": 2277,
+  "cache_write_tokens": 0
+}

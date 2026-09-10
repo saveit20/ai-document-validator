@@ -1,0 +1,45 @@
+{
+  "document": "idsem_t6_3581.pdf",
+  "source": "idsem",
+  "reference_date": "1999-04-17",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "idsem_template6",
+    "utility_bill",
+    "spanish",
+    "synthetic_data",
+    "spanish_number_format",
+    "multi_page",
+    "multi_vat",
+    "electricity_tax",
+    "igic_not_iva",
+    "placeholder_amounts",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "HIDROELECTRICA DE SILLEDA SL",
+    "invoice_number": "Z8558836765",
+    "invoice_date": "1998-12-18",
+    "total_amount": "275.30",
+    "currency": "EUR",
+    "tax_id": "B81997439",
+    "subtotal_amount": "239.49",
+    "tax_amount": null,
+    "customer_name": "Pedro Molleda Borges",
+    "customer_tax_id": "20104779L",
+    "verdict": "FAIL"
+  },
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template6/Invoice3581.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Hormigones y Áridos del Sur S.L.\",\"evidence\":\"Hormigones y Áridos del Sur S.L.\"},\"invoice_number\":{\"value\":\"FV-2026/0417\",\"evidence\":\"FACTURA Nº Factura: FV-2026/0417\"},\"invoice_date\":{\"value\":\"2026-05-12\",\"evidence\":\"Fecha de emisión: 12/05/2026\"},\"total_amount\":{\"value\":\"5902.74\",\"evidence\":\"TOTAL FACTURA 5.902,74 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"5.902,74 €\"},\"tax_id\":{\"value\":\"B-41234567\",\"evidence\":\"CIF: B-41234567\"},\"subtotal_amount\":{\"value\":\"4878.30\",\"evidence\":\"Base imponible 4.878,30 €\"},\"tax_amount\":{\"value\":\"1024.44\",\"evidence\":\"IVA 21% 1.024,44 €\"},\"customer_name\":{\"value\":\"Northwind Construction S.L.\",\"evidence\":\"Northwind Construction S.L.\"},\"customer_tax_id\":{\"value\":\"ESB12345678\",\"evidence\":\"NIF: ESB12345678\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2815,
+  "output_tokens": 405,
+  "latency_ms": 4345,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"ENERGIAS DE BENASQUE S.L\",\"evidence\":\"ENERGIAS DE BENASQUE S.L\"},\"invoice_number\":{\"value\":\"L1362494263\",\"evidence\":\"Nº factura: L1362494263\"},\"invoice_date\":{\"value\":\"1993-09-01\",\"evidence\":\"Fecha de emisión: 01.09.1993\"},\"total_amount\":{\"value\":\"53.31\",\"evidence\":\"53,31 € Total a pagar\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"53,31 €\"},\"tax_id\":{\"value\":\"B22215487\",\"evidence\":\"inscripción 94. CIF \\nB22215487.\"},\"subtotal_amount\":{\"value\":\"43.49\",\"evidence\":\"Subtotal\"},\"tax_amount\":null,\"customer_name\":{\"value\":\"ELÍAS PADILLA MARTÍNEZ\",\"evidence\":\"Nombre: ELÍAS PADILLA MARTÍNEZ\"},\"customer_tax_id\":{\"value\":\"45976943N\",\"evidence\":\"NIF: 45976943N\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 10377,
+  "output_tokens": 373,
+  "latency_ms": 6780,
+  "cache_read_tokens": 2277,
+  "cache_write_tokens": 0
+}

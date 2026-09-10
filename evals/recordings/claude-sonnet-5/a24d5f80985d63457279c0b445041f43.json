@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Harlow & Finch Ltd\",\"evidence\":\"Harlow & Finch Ltd\"},\"invoice_number\":{\"value\":\"HF-26-00731\",\"evidence\":\"lnvoice N0. HF-26-00731\"},\"invoice_date\":{\"value\":\"2026-05-22\",\"evidence\":\"Dat e: 22/05/2026\"},\"total_amount\":{\"value\":\"1025.40\",\"evidence\":\"T0TAL £1,025.40\"},\"currency\":{\"value\":\"GBP\",\"evidence\":\"£1,025.40\"},\"tax_id\":{\"value\":\"GB 294 7731 08\",\"evidence\":\"VAT Reg N0: GB 294 7731 08\"},\"subtotal_amount\":{\"value\":\"854.50\",\"evidence\":\"Sub t0tal £854.50\"},\"tax_amount\":{\"value\":\"170.90\",\"evidence\":\"VAT @ 20% £170.90\"},\"customer_name\":{\"value\":\"Northwind Construction S.L.\",\"evidence\":\"Northwind Construction S.L.\"},\"customer_tax_id\":null}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2799,
+  "output_tokens": 355,
+  "latency_ms": 4273,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

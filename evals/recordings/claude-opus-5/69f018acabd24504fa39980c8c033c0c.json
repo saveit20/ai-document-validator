@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"UNNA GREENENERGY SERVICES, S.L.\",\"evidence\":\"UNNA GREENENERGY SERVICES, S.L.\"},\"invoice_number\":{\"value\":\"DS5484079346\",\"evidence\":\"Nº factura: DS5484079346\"},\"invoice_date\":{\"value\":\"1995-03-29\",\"evidence\":\"Fecha emisión factura: 29 de marzo de 1995\"},\"total_amount\":{\"value\":\"134.01\",\"evidence\":\"TOTAL IMPORTE FACTURA 134,01 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"IMPORTE FACTURA: 134,01 €\"},\"tax_id\":{\"value\":\"B42753376\",\"evidence\":\"Cif: B42753376\"},\"subtotal_amount\":{\"value\":\"111.06\",\"evidence\":\"Importe total\"},\"tax_amount\":{\"value\":\"22.76\",\"evidence\":\"IGIC reducido ( 21%) 21% s/ 108,38\"},\"customer_name\":{\"value\":\"MIRINDA CEVALLOS LÁNDEZ\",\"evidence\":\"MIRINDA CEVALLOS LÁNDEZ\"},\"customer_tax_id\":{\"value\":\"14052840R\",\"evidence\":\"NIF: 14052840R\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 16269,
+  "output_tokens": 434,
+  "latency_ms": 8623,
+  "cache_read_tokens": 2277,
+  "cache_write_tokens": 0
+}

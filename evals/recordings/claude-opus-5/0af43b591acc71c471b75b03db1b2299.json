@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Shepard PLC\",\"evidence\":\" Shepard PLC\"},\"invoice_number\":{\"value\":\"30885203\",\"evidence\":\"Invoice no: 30885203\"},\"invoice_date\":{\"value\":\"2020-03-28\",\"evidence\":\"03/28/2020\"},\"total_amount\":{\"value\":\"355.07\",\"evidence\":\" Total\\n $ 322,79\\n $ 32,28\\n $ 355,07\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 355,07\"},\"tax_id\":{\"value\":\"929-84-1184\",\"evidence\":\"Tax Id: 929-84-1184\"},\"subtotal_amount\":{\"value\":\"322.79\",\"evidence\":\" $ 322,79\"},\"tax_amount\":{\"value\":\"32.28\",\"evidence\":\" $ 32,28\"},\"customer_name\":{\"value\":\"Mays and Sons\",\"evidence\":\" Mays and Sons\"},\"customer_tax_id\":{\"value\":\"937-72-6142\",\"evidence\":\"Tax Id: 937-72-6142\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 2956,
+  "output_tokens": 348,
+  "latency_ms": 4997,
+  "cache_read_tokens": 2277,
+  "cache_write_tokens": 0
+}

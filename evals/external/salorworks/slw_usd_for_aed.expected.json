@@ -1,0 +1,41 @@
+{
+  "document": "slw_usd_for_aed.pdf",
+  "source": "salorworks",
+  "reference_date": "2026-12-06",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "synthetic_gulf_invoice",
+    "foreign_currency",
+    "freight",
+    "no_tax_line",
+    "amounts_not_additive",
+    "usd",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Fictional Atlantic Imports Inc.",
+    "invoice_number": "INV-2026-008",
+    "invoice_date": "2026-08-08",
+    "total_amount": "172.00",
+    "currency": "USD",
+    "tax_id": null,
+    "subtotal_amount": "160.00",
+    "tax_amount": null,
+    "customer_name": "Example Grocery Trading LLC",
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "SalorWorks Synthetic Shopify Invoice Test Pack v1.0.0, fixture 08-usd-for-aed (CC BY 4.0, (c) 2026 Salorworks, github.com/SalorWorks/shopify-invoice-test-pack @ bb2e531); fictional supplier and amounts. Label from the fixture's expected.json, verified against the pypdf text layer; set to null because not printed: tax_amount (0.00 in expected.json)."
+}

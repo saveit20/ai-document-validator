@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Moore, Gallagher and Villanueva\",\"evidence\":\"Moore, Gallagher and Villanueva\"},\"invoice_number\":{\"value\":\"25687531\",\"evidence\":\"Invoice no: 25687531\"},\"invoice_date\":{\"value\":\"2012-10-01\",\"evidence\":\"01/10/2012\"},\"total_amount\":{\"value\":\"1237.50\",\"evidence\":\"$ 1 237,50\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 1 237,50\"},\"tax_id\":{\"value\":\"966-84-2459\",\"evidence\":\"Tax Id: 966-84-2459\"},\"subtotal_amount\":{\"value\":\"1125.00\",\"evidence\":\"$ 1 125,00\"},\"tax_amount\":{\"value\":\"112.50\",\"evidence\":\"$ 112,50\"},\"customer_name\":{\"value\":\"Jones, Andrade and Roth\",\"evidence\":\"Jones, Andrade and Roth\"},\"customer_tax_id\":{\"value\":\"942-92-0994\",\"evidence\":\"Tax Id: 942-92-0994\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2493,
+  "output_tokens": 362,
+  "latency_ms": 4227,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

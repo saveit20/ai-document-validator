@@ -1,0 +1,41 @@
+{
+  "document": "slw_invoice_discount.pdf",
+  "source": "salorworks",
+  "reference_date": "2026-09-09",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "synthetic_gulf_invoice",
+    "discount",
+    "invoice_discount",
+    "trn_tax_id",
+    "amounts_not_additive",
+    "aed",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Fictional Gulf Foods LLC",
+    "invoice_number": "INV-2026-010",
+    "invoice_date": "2026-08-10",
+    "total_amount": "689.85",
+    "currency": "AED",
+    "tax_id": "100123456700003",
+    "subtotal_amount": "730.00",
+    "tax_amount": "32.85",
+    "customer_name": "Example Grocery Trading LLC",
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "SalorWorks Synthetic Shopify Invoice Test Pack v1.0.0, fixture 10-invoice-discount (CC BY 4.0, (c) 2026 Salorworks, github.com/SalorWorks/shopify-invoice-test-pack @ bb2e531); fictional supplier and amounts. Label from the fixture's expected.json, verified against the pypdf text layer."
+}

@@ -18,6 +18,8 @@ those 14 invoices are now used only as unit-test fixtures and appear in no metri
 |---|---|---|---|---|
 | Mendeley *Samples of electronic invoices* (Kozłowski & Weichbroth, 2021) | third party | CC BY 4.0 | 72 | dev + test |
 | Mustang project test resources (`evals/external/mustang/`) | third party | Apache-2.0 | 6 | dev + test |
+| IDSEM, Spanish electricity bills (`evals/external/idsem/`) | third party (Scientific Data, 2022) | CC BY 4.0 | 30 (5 per template × 6) | dev + test |
+| SalorWorks invoice test pack (`evals/external/salorworks/`) | third party | CC BY 4.0 | 10 | dev + test |
 | Held-out set (`evals/holdout/`) | two isolated agents that never saw the code | this project | 16 | dev + test |
 | Author-written invoices (`evals/golden/`) | the system's author | this project | 14 | unit tests only |
 
@@ -33,6 +35,17 @@ also prints its tax in EUR. Labels come from the EN 16931 XML embedded in each P
 the printed text; where they disagree, the printed document wins (one total printed as 963,12 against 963.11
 in the XML; tax ids present in the XML but not printed were set to null). Near-duplicates and PDFs without
 embedded data were left out.
+
+**IDSEM.** Synthetic Spanish household electricity bills from a 75,000-bill research dataset: six
+utility-style templates, 2–4 pages each, dates written out in Spanish or as dd.mm.yyyy, IVA or IGIC
+(Canary Islands) tax, placeholder amounts such as `X,XX €` in the detail pages. Five bills per template were
+read out of the 30.9 GB archive with HTTP range requests (6.3 MB transferred). The bills print two VAT lines
+and never their sum, so `tax_amount` is expected to be null: the evaluation only expects what is printed.
+
+**SalorWorks.** Fictional e-commerce invoices from the Gulf: AED, KWD with three decimals, a USD invoice for
+a UAE seller, discounts, freight and duty, a two-page invoice. The pack also has five Arabic, bilingual or
+scanned invoices; they are raster images with no text layer, which this system rejects by design, so they
+are not in the metric set.
 
 **Held-out set.** 16 PDFs with deliberately messy, European layouts: two-column headers, legal name only in
 the footer, totals on page two, label and value in separate table columns, several VAT rates, discounts,
@@ -69,13 +82,13 @@ Labels were not trusted blindly.
 
 ## 4. Split and protocol
 
-`evals/splits.json` records the split: each source (Mendeley, Mustang, held-out batch A, held-out batch B) is
-shuffled with a fixed seed and cut in half.
+`evals/splits.json` records the split: each source is shuffled with a fixed seed and cut in half (IDSEM per
+template, the held-out set per batch).
 
-| Split | Mendeley | Mustang | Held-out | Total | Use |
-|---|---|---|---|---|---|
-| dev | 36 | 3 | 8 | 47 | failures inspected, bugs fixed |
-| test | 36 | 3 | 8 | 47 | aggregate metrics only; per-case failures hidden unless `--show-test-failures` |
+| Split | Mendeley | Mustang | IDSEM | SalorWorks | Held-out | Total | Use |
+|---|---|---|---|---|---|---|---|
+| dev | 36 | 3 | 15 | 5 | 8 | 67 | failures inspected, bugs fixed |
+| test | 36 | 3 | 15 | 5 | 8 | 67 | aggregate metrics only; per-case failures hidden unless `--show-test-failures` |
 
 Rules we held ourselves to:
 

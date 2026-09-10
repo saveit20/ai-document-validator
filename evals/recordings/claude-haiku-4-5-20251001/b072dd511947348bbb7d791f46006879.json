@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"AUSTRALIS TECHNOLOGIES DESARROLLOS, S.L.\",\"evidence\":\"AUSTRALIS TECHNOLOGIES DESARROLLOS, S.L.\"},\"invoice_number\":{\"value\":\"B1266871667\",\"evidence\":\"Nº factura: B1266871667\"},\"invoice_date\":{\"value\":\"2000-12-05\",\"evidence\":\"Fecha emisión factura: 05 de diciembre de 2000\"},\"total_amount\":{\"value\":\"216.89\",\"evidence\":\"TOTAL IMPORTE FACTURA 216,89 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"IMPORTE FACTURA: 216,89 €\"},\"tax_id\":{\"value\":\"B19561000\",\"evidence\":\"Cif: B19561000\"},\"subtotal_amount\":{\"value\":\"202.68\",\"evidence\":\"Importe total 202,68 €\"},\"tax_amount\":{\"value\":\"14.21\",\"evidence\":\"IGIC reducido ( 7%) 14,18 € IGIC normal ( 21%) 0,03 €\"},\"customer_name\":{\"value\":\"Olaya Galindo Juárez\",\"evidence\":\"Olaya Galindo Juárez\"},\"customer_tax_id\":{\"value\":\"25497388W\",\"evidence\":\"NIF: 25497388W\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 15751,
+  "output_tokens": 310,
+  "latency_ms": 10565,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

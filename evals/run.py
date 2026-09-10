@@ -37,6 +37,8 @@ EVALS_DIR = Path(__file__).resolve().parent
 SOURCES = {
     "mendeley": EVALS_DIR / "external" / "mendeley",
     "mustang": EVALS_DIR / "external" / "mustang",
+    "idsem": EVALS_DIR / "external" / "idsem",
+    "salorworks": EVALS_DIR / "external" / "salorworks",
     "holdout": EVALS_DIR / "holdout",
 }
 SPLITS_FILE = EVALS_DIR / "splits.json"

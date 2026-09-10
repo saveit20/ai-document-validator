@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Kabel & Leitung Wien GmbH\",\"evidence\":\"Kabel & Leitung Wien GmbH\"},\"invoice_number\":{\"value\":\"2026-4471\",\"evidence\":\"Rechnungsnummer 2026-4471\"},\"invoice_date\":{\"value\":\"2026-06-17\",\"evidence\":\"Rechnungsdatum 17.06.2026\"},\"total_amount\":{\"value\":\"5513.38\",\"evidence\":\"Gesamtbetrag / Total EUR 5.513,38\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Gesamtbetrag / Total EUR 5.513,38\"},\"tax_id\":{\"value\":\"ATU63456789\",\"evidence\":\"UID-Nr. ATU63456789\"},\"subtotal_amount\":{\"value\":\"4594.48\",\"evidence\":\"Netto / Taxable base 4.594,48\"},\"tax_amount\":{\"value\":\"918.90\",\"evidence\":\"USt. 20 % / VAT 918,90\"},\"customer_name\":{\"value\":\"Northwind Logistics S.L.\",\"evidence\":\"Northwind Logistics S.L.\"},\"customer_tax_id\":{\"value\":\"ESB87654321\",\"evidence\":\"UID Empfänger: ESB87654321\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2849,
+  "output_tokens": 424,
+  "latency_ms": 4280,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

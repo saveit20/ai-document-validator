@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"EMPRESA MUNICIPAL DE DISTRIBUCIÓ D'ENERGIA ELÈCTRICA DE PONTS, SL\",\"evidence\":\"EMPRESA MUNICIPAL DE DISTRIBUCIÓ D'ENERGIA ELÈCTRICA \\nDE PONTS, SL\"},\"invoice_number\":{\"value\":\"LR7793962288\",\"evidence\":\"Nº factura LR7793962288\"},\"invoice_date\":{\"value\":\"2006-01-02\",\"evidence\":\"Fecha factura 02 de enero de 2006\"},\"total_amount\":{\"value\":\"37.51\",\"evidence\":\"TOTAL IMPORTE FACTURA 37,51\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"IMPORTE FACTURA 37,51 €\"},\"tax_id\":{\"value\":\"B25428905\",\"evidence\":\"CIF B25428905\"},\"subtotal_amount\":{\"value\":\"31.53\",\"evidence\":\"IMPORTE TOTAL \\n31,53\"},\"tax_amount\":{\"value\":\"5.98\",\"evidence\":\"IVA \\n5,70 \\n0,28\"},\"customer_name\":{\"value\":\"Valeriano Castañeda Sandoval\",\"evidence\":\"DATOS DEL CLIENTE \\nValeriano Castañeda Sandoval\"},\"customer_tax_id\":{\"value\":\"15817555H\",\"evidence\":\"NIF 15817555H\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 8560,
+  "output_tokens": 497,
+  "latency_ms": 5022,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

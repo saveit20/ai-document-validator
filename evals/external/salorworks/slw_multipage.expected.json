@@ -1,0 +1,38 @@
+{
+  "document": "slw_multipage.pdf",
+  "source": "salorworks",
+  "reference_date": "2026-09-01",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "AED"
+    ]
+  },
+  "difficulty": [
+    "synthetic_gulf_invoice",
+    "multi_page",
+    "repeated_header",
+    "aed"
+  ],
+  "expected": {
+    "supplier_name": "Fictional Gulf Foods LLC",
+    "invoice_number": "INV-2026-002",
+    "invoice_date": "2026-08-02",
+    "total_amount": "420.00",
+    "currency": "AED",
+    "tax_id": null,
+    "subtotal_amount": "400.00",
+    "tax_amount": "20.00",
+    "customer_name": "Example Grocery Trading LLC",
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "SalorWorks Synthetic Shopify Invoice Test Pack v1.0.0, fixture 02-multipage (CC BY 4.0, (c) 2026 Salorworks, github.com/SalorWorks/shopify-invoice-test-pack @ bb2e531); fictional supplier and amounts. Label from the fixture's expected.json, verified against the pypdf text layer."
+}

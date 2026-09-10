@@ -1,7 +1,7 @@
 {
   "heuristic@dev/all": {
-    "verdict_agreement": 0.46808510638297873,
-    "field_exact_rate": 0.49148936170212765
+    "verdict_agreement": 0.40298507462686567,
+    "field_exact_rate": 0.4835820895522388
   },
   "heuristic@dev/mendeley": {
     "verdict_agreement": 0.5,
@@ -12,8 +12,8 @@
     "field_exact_rate": 0.4625
   },
   "heuristic@test/all": {
-    "verdict_agreement": 0.48936170212765956,
-    "field_exact_rate": 0.551063829787234
+    "verdict_agreement": 0.5373134328358209,
+    "field_exact_rate": 0.5238805970149254
   },
   "heuristic@test/mendeley": {
     "verdict_agreement": 0.5,
@@ -30,5 +30,21 @@
   "heuristic@test/mustang": {
     "verdict_agreement": 0.3333333333333333,
     "field_exact_rate": 0.4666666666666667
+  },
+  "heuristic@dev/idsem": {
+    "verdict_agreement": 0.26666666666666666,
+    "field_exact_rate": 0.43333333333333335
+  },
+  "heuristic@dev/salorworks": {
+    "verdict_agreement": 0.2,
+    "field_exact_rate": 0.56
+  },
+  "heuristic@test/idsem": {
+    "verdict_agreement": 0.6666666666666666,
+    "field_exact_rate": 0.43333333333333335
+  },
+  "heuristic@test/salorworks": {
+    "verdict_agreement": 0.6,
+    "field_exact_rate": 0.54
   }
 }

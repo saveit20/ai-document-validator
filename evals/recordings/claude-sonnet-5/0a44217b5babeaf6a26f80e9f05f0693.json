@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Kraxi GmbH\",\"evidence\":\"Kraxi GmbH\"},\"invoice_number\":{\"value\":\"2014-03\",\"evidence\":\"Rechnungsnummer: 2014-03\"},\"invoice_date\":{\"value\":\"2014-07-11\",\"evidence\":\"Liefer- und Rechnungsdatum: 11. Juli 2014\"},\"total_amount\":{\"value\":\"1005.55\",\"evidence\":\"Rechnungssumme brutto 1.005,55\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Beträge in EUR\"},\"tax_id\":{\"value\":\"DE123456789\",\"evidence\":\"DE123456789\"},\"subtotal_amount\":{\"value\":\"845.00\",\"evidence\":\"Rechnungssumme netto 845,00\"},\"tax_amount\":{\"value\":\"160.55\",\"evidence\":\"zuzüglich 19% MwSt. 160,55\"},\"customer_name\":{\"value\":\"Papierflieger-Vertriebs-GmbH\",\"evidence\":\"Papierflieger-Vertriebs-GmbH\"},\"customer_tax_id\":null}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2901,
+  "output_tokens": 374,
+  "latency_ms": 5746,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

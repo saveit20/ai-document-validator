@@ -1,0 +1,13 @@
+Source: https://github.com/SalorWorks/shopify-invoice-test-pack (commit bb2e531cfa504e6f7200243620121c523f9f7622)
+Synthetic Shopify Invoice Test Pack v1.0.0 by Salorworks. PDFs copied unchanged and renamed slw_*.pdf;
+expected.json labels re-mapped to this project's schema.
+
+Copyright 2026 Salorworks
+
+This work is licensed under Creative Commons Attribution 4.0 International.
+
+SPDX-License-Identifier: CC-BY-4.0
+https://creativecommons.org/licenses/by/4.0/
+
+You are free to share and adapt the fixtures, including in commercial
+tests and benchmarks, provided you give appropriate credit.

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Clay-Koch\",\"evidence\":\"Clay-Koch\"},\"invoice_number\":{\"value\":\"12681565\",\"evidence\":\"Invoice no: 12681565\"},\"invoice_date\":{\"value\":\"2015-07-09\",\"evidence\":\"09/07/2015\"},\"total_amount\":{\"value\":\"4391.10\",\"evidence\":\"$ 4 391,10\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 3 991,91\"},\"tax_id\":{\"value\":\"915-72-3800\",\"evidence\":\"Tax Id: 915-72-3800\"},\"subtotal_amount\":{\"value\":\"3991.91\",\"evidence\":\"$ 3 991,91\"},\"tax_amount\":{\"value\":\"399.19\",\"evidence\":\"$ 399,19\"},\"customer_name\":{\"value\":\"Thompson-Baker\",\"evidence\":\"Thompson-Baker\"},\"customer_tax_id\":{\"value\":\"971-96-6933\",\"evidence\":\"Tax Id: 971-96-6933\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2838,
+  "output_tokens": 338,
+  "latency_ms": 5391,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}

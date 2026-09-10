@@ -1,0 +1,44 @@
+{
+  "document": "idsem_t4_3990.pdf",
+  "source": "idsem",
+  "reference_date": "1997-04-29",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "idsem_template4",
+    "utility_bill",
+    "spanish",
+    "synthetic_data",
+    "spanish_number_format",
+    "multi_page",
+    "multi_vat",
+    "electricity_tax",
+    "igic_not_iva",
+    "placeholder_amounts"
+  ],
+  "expected": {
+    "supplier_name": "SUMINISTROS LYG MURCIA, S.L.",
+    "invoice_number": "IR3460842616",
+    "invoice_date": "1997-03-30",
+    "total_amount": "93.81",
+    "currency": "EUR",
+    "tax_id": "B73935645",
+    "subtotal_amount": "92.83",
+    "tax_amount": null,
+    "customer_name": "ALBINO MOLLEDA QUIROGA",
+    "customer_tax_id": "82792376N",
+    "verdict": "PASS"
+  },
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template4/Invoice3990.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+}

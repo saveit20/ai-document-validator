@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"GEO ALTERNATIVA S.L.\",\"evidence\":\"GEO ALTERNATIVA S.L. \\n Fecha de emisión: 05.01.2008\"},\"invoice_number\":{\"value\":\"LF9786832414\",\"evidence\":\"Nº factura: LF9786832414\"},\"invoice_date\":{\"value\":\"2008-01-05\",\"evidence\":\"Fecha de emisión: 05.01.2008\"},\"total_amount\":{\"value\":\"248.46\",\"evidence\":\"248,46 € Total a pagar\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"248,46 € Total a pagar\"},\"tax_id\":{\"value\":\"B87382644\",\"evidence\":\"CIF B87382644\"},\"subtotal_amount\":{\"value\":\"236.62\",\"evidence\":\"236,62 €\"},\"tax_amount\":null,\"customer_name\":{\"value\":\"EUFEMIA GÓMEZ URIBE\",\"evidence\":\"Nombre: EUFEMIA GÓMEZ URIBE\"},\"customer_tax_id\":{\"value\":\"91488257F\",\"evidence\":\"NIF: 91488257F\"}}",
+  "model": "claude-opus-5",
+  "input_tokens": 10308,
+  "output_tokens": 382,
+  "latency_ms": 8723,
+  "cache_read_tokens": 2277,
+  "cache_write_tokens": 0
+}

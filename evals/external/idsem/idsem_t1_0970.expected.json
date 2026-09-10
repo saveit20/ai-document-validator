@@ -1,0 +1,46 @@
+{
+  "document": "idsem_t1_0970.pdf",
+  "source": "idsem",
+  "reference_date": "2001-04-04",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "idsem_template1",
+    "utility_bill",
+    "spanish",
+    "synthetic_data",
+    "spanish_number_format",
+    "multi_page",
+    "textual_spanish_date",
+    "multi_vat",
+    "electricity_tax",
+    "igic_not_iva",
+    "placeholder_amounts",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "AUSTRALIS TECHNOLOGIES DESARROLLOS, S.L.",
+    "invoice_number": "B1266871667",
+    "invoice_date": "2000-12-05",
+    "total_amount": "216.89",
+    "currency": "EUR",
+    "tax_id": "B19561000",
+    "subtotal_amount": "202.68",
+    "tax_amount": null,
+    "customer_name": "Olaya Galindo Juárez",
+    "customer_tax_id": "25497388W",
+    "verdict": "FAIL"
+  },
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template1/Invoice0970.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+}

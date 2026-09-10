@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Kaufman, Cooper and Young\",\"evidence\":\"Kaufman, Cooper and Young\"},\"invoice_number\":{\"value\":\"65321852\",\"evidence\":\"Invoice no: 65321852\"},\"invoice_date\":{\"value\":\"2021-04-11\",\"evidence\":\"04/11/2021\"},\"total_amount\":{\"value\":\"214.24\",\"evidence\":\"$ 214,24\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 194,76\"},\"tax_id\":{\"value\":\"930-79-7845\",\"evidence\":\"Tax Id: 930-79-7845\"},\"subtotal_amount\":{\"value\":\"194.76\",\"evidence\":\"$ 194,76\"},\"tax_amount\":{\"value\":\"19.48\",\"evidence\":\"$ 19,48\"},\"customer_name\":{\"value\":\"Wells-Carlson\",\"evidence\":\"Wells-Carlson\"},\"customer_tax_id\":{\"value\":\"957-82-7504\",\"evidence\":\"Tax Id: 957-82-7504\"}}",
+  "model": "claude-sonnet-5",
+  "input_tokens": 2721,
+  "output_tokens": 376,
+  "latency_ms": 4454,
+  "cache_read_tokens": 2278,
+  "cache_write_tokens": 0
+}
