@@ -92,31 +92,35 @@ really are: per-customer configuration for known suppliers, the case the hybrid 
 **The principle.** The metric is part of the product. A number learnt from the evaluation data is worse
 than no number, because someone will deploy on it.
 
-### Example 3 — Spend only where it measures something
+### Example 3 — Extract what the finance team books, not only what is printed
 
-**What the assistant proposed.** With the first prompt in place, record the larger models (Sonnet 5 and
-Opus 5) on the evaluation set straight away, and choose a model from the results.
+**What the assistant proposed.** When the labels met two awkward cases, it chose the option that was
+simplest to implement and to verify: "only what is printed". A credit note keeps the positive amounts it
+prints, and a multi-rate invoice that prints one tax line per rate, never their sum, has no tax total.
+The prompt told the model never to compute anything.
 
-**The author's objection.** The author stopped every further paid run until the prompts had been
-compared. The prompt had changed one fix at a time and had never been compared side by side. A model
-comparison run with an untested prompt measures the prompt's weaknesses as much as the models, at the
-price of the most expensive model. And the budget was fixed: every call had to earn its cost.
+**The author's objection.** The service exists for a finance team, and neither answer is one they can
+use. A credit note booked as a positive amount turns a refund into a charge. An invoice with no tax total
+cannot be reconciled or declared, and multi-rate invoices are routine in Europe. "Easy to verify" had
+been put ahead of "correct for the user". The author asked what a finance team would actually book, and
+made that the labelling policy for every source.
 
-**What we did.** First, four prompt variants were compared on the cheapest model (Haiku 4.5) on dev. The
-winner, v4b, makes the model write down the issuer's country and date format before the fields. It read
-all 80 dev dates correctly (79 before) and raised field accuracy from 97% to 99%. The comparison also
-showed that no prompt moves the remaining `REVIEW`s, which come from a grounding limit on one source, so
-no money went into chasing them. Second, the model rule was written before stage 3: the cheapest model
-within 3 points of the best on dev. Third, the cost was enforced in code: the evaluation runner refuses to
-call the API without an explicit `--max-calls` cap.
+**What we did.** The accounting rules were adopted without giving up verification:
 
-**Result.** The rule picked Opus 5. The trade-off was then priced in the terms a finance team uses:
-against Haiku, Opus costs about $26 more per 1,000 invoices and saves about 90 manual reviews, so it pays
-for itself once a review costs more than about $0.30 ([decisions.md](docs/decisions.md) B5). Every model,
-prompt and input experiment together cost about $9.20.
+- A credit note is recognised by an unambiguous title in several languages, and its total, subtotal and
+  tax are booked negative. Corrective invoices are excluded on purpose, because they can increase the
+  original as well as reduce it.
+- A tax total may be the sum of the printed per-rate lines. Every addend must be printed and quoted as
+  evidence, and the sum is only fully trusted when subtotal + tax = total. Otherwise the field goes to
+  `REVIEW`.
+- The labels of all six sources were rebuilt under the same policy, and the prompt states it.
 
-**The principle.** Fix the cheap variable before paying to measure the expensive one. Fix the decision
-rule before the data arrives. Express a model trade-off in the business's cost, not in accuracy points.
+**Result.** With the rule stated in the prompt, the tax total is right on 79 of 80 dev invoices (75
+before, when the model was told never to compute). A credit note now fails `total_amount_positive`, which
+is the rule working as written ([decisions.md](docs/decisions.md) C4, C5).
+
+**The principle.** Define "correct" from the user's side, then find a way to verify it. Do not narrow the
+problem to what is convenient to check.
 
 ### Other rejections and corrections, in short
 
@@ -127,7 +131,7 @@ rule before the data arrives. Express a model trade-off in the business's cost, 
 | Treat the six fields in the brief as a closed set | Claude | Corrected by the author: the brief says "minimum"; four fields were added, only where they enable a rule (decisions A4) |
 | An evaluation set of clean invoices written by the extractor's author | Claude | Rejected by the author as circular and unrealistic; replaced by independent sources (decisions E1, [docs/evaluation.md](docs/evaluation.md)) |
 | A prompt with five instructions that each matched a difficulty category of the stress set | Claude | Flagged and reverted before any model call: it would have tuned the prompt to the test; later prompt changes were general and chosen on dev ([evaluation §9](docs/evaluation.md#9-prompt-variants)) |
-| Label "only what is printed" (no summed tax total, credit notes with their printed sign) | Claude, as the simpler option | Rejected by the author: it is not what a finance team books; both rules were implemented and still verified against the document (decisions C4, C5) |
+| Record the larger models straight away with the first prompt, and pick one from the results | Claude | Stopped by the author: four prompt variants were compared first on the cheapest model (v4b chosen: fields 97% → 99%, all 80 dev dates correct); every paid run needs an explicit `--max-calls` cap; the whole evaluation cost about $9.20 ([evaluation §9](docs/evaluation.md#9-prompt-variants)) |
 | Transcribing the brief by reading the rendered PDF | Claude | The transcript wrongly reported a truncated config example; the author caught it; the brief was re-extracted and diffed word by word |
 | Drop optional items (Dockerfile, CI, multipart) to save time | Claude | Rejected by the author; the Dockerfile is verified in CI because no local Docker was available (decisions F4) |
 
