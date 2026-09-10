@@ -46,6 +46,12 @@ _SUBTOTAL = re.compile(
 )
 _TAX_AMOUNT = re.compile(r"\b(vat|iva|igic|tax)\b.*(%|@)", re.I)
 _WITHHOLDING = re.compile(r"\b(retenci[óo]n|irpf|withholding)\b", re.I)
+_SECTION_START = re.compile(
+    r"\b(invoice|factura|date|fecha|total|subtotal|description|qty|quantity|concepto|importe"
+    r"|amount)\b",
+    re.I,
+)
+_CUSTOMER_BLOCK_MAX_LINES = 4
 
 Line = tuple[int, str]
 
@@ -78,16 +84,21 @@ class HeuristicExtractor:
 
 
 def _customer_lines(lines: list[Line]) -> set[int]:
-    """Indexes of the customer block: from a 'Bill to'-style label to the next blank line."""
+    """Indexes of the customer block: a 'Bill to'-style label and the few lines after it.
+
+    The block ends at a blank line, at a line that opens another section, or after
+    _CUSTOMER_BLOCK_MAX_LINES lines, because text extracted from PDFs usually loses blank lines.
+    """
     indexes: set[int] = set()
-    inside = False
+    remaining = 0
     for index, (_, line) in enumerate(lines):
         if _BILL_TO.match(line):
-            inside = True
-        elif not line:
-            inside = False
-        if inside:
+            remaining = _CUSTOMER_BLOCK_MAX_LINES
+        elif not line or _SECTION_START.search(line) or _SUPPLIER_LABEL.match(line):
+            remaining = 0
+        if remaining:
             indexes.add(index)
+            remaining -= 1
     return indexes
 
 

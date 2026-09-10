@@ -25,6 +25,17 @@ def test_ignores_customer_block_for_supplier_and_tax_id() -> None:
     assert extraction.customer_tax_id.value == "ESB12345678"
 
 
+def test_customer_block_ends_without_blank_lines_as_in_pdf_text() -> None:
+    text = (
+        "Bill to:\nNorthwind Construction S.L.\nVAT: ESB12345678\n"
+        "Subtotal 100.00\nVAT 21% 21.00\nTotal due: 121.00 EUR\n"
+    )
+    extraction = extract(text)
+    assert extraction.customer_tax_id.value == "ESB12345678"
+    assert extraction.total_amount.value == Decimal("121.00")
+    assert extraction.tax_amount.value == Decimal("21.00")
+
+
 def test_prefers_issue_date_over_due_date() -> None:
     extraction = extract("Due date: 2026-07-31\nInvoice date: 2026-06-01\n")
     assert extraction.invoice_date.value == date(2026, 6, 1)
