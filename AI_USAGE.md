@@ -36,28 +36,94 @@ what the assistant had produced; each one is a decision with a reason, not a pre
 
 ## 2. Suggestions we rejected, and why
 
-**Example 1 — the SDK's recommended structured-output helper.** The Anthropic API guidance recommends
-`client.messages.parse()`, which validates the model's JSON into a Pydantic object inside the SDK. We use
-`messages.create()` with `output_config.format` and validate ourselves. `parse()` merges transport and
-validation into one step, and then a test double of the client can only return valid objects: there is no
-way to test what the system does when the model returns truncated JSON, a missing field or a wrong type,
-nor to record and replay raw responses. The two-level boundary (raw-text transport + typed layer) exists
-precisely so those failure modes can be tested. See [docs/decisions.md](docs/decisions.md) A2.
+The three corrections below shaped the project most. In each, the assistant's proposal was reasonable and
+would have produced a working service; the author saw that it optimised the wrong thing.
 
-**Example 2 — heuristic rules that learnt our own data.** To make the free extractor better, the assistant
-added the labels of the templates it failed on. Two of them, `Net worth` and `Gross worth`, lifted the
-heuristic from 55% to 78% of verdicts on the test split and let the hybrid skip the LLM on 45% of invoices,
-cutting its cost by a third. The author rejected them: they are one template's wording, not accounting
-vocabulary, and that template appears in both halves of the evaluation data, so the gain was learnt from the
-data used to score it. The labels were removed and the measurement kept, because it shows exactly when the
-hybrid pays: once rules exist for a customer's frequent suppliers ([decisions.md](docs/decisions.md) B9).
+### Example 1 — The model's input is part of the system, not only the prompt
 
-Other rejections and corrections, in short:
+**What the assistant proposed.** The pipeline extracted the PDF's text layer and sent that text to the
+model. Every improvement it suggested was a change to the prompt.
+
+**The author's objection.** The author asked a different question: *how does the document actually reach
+the model, and what is lost on the way?* Text extraction follows the order in which the PDF draws its
+characters, not the page. Columns come apart (a totals table becomes all its labels, then all its values),
+two-column headers interleave the seller and the customer, and nothing tells the model which country's
+date convention applies. A prompt cannot recover information that was removed before the model reads a
+word. The assistant had shown the same failure itself when it read the brief from a rendered PDF.
+
+**What we did.** A controlled experiment instead of an opinion: same model, same prompt, same 47 dev
+invoices, only the input changing. Three options: plain text, layout-preserving text, and the PDF itself
+plus our text. The third keeps the checks honest. The model may *look* at the page but must *quote* our
+extracted text, so every value is still verified against the document.
+
+**Result.** Layout text changed nothing (74% of verdicts). Sending the page raised verdict agreement from
+74% to 94% and invoice dates from 35/47 to 46/47, for +57% cost (still under one cent on Haiku). It became
+the service default ([evaluation §8](docs/evaluation.md#8-how-the-document-reaches-the-model)).
+
+**The principle.** In an LLM system, representation comes before prompt wording. Measure what the model
+receives before tuning what you tell it.
+
+### Example 2 — An evaluation that cannot flatter us
+
+**What the assistant proposed.** A golden set of clean invoices, written by the same assistant that wrote
+the extractor. Later, to improve the free heuristic, it added the exact labels of the invoices it failed
+on.
+
+**The author's objection.** Both make the numbers look better without making the system better. Invoices
+written by the extractor's author test what the author already expected: the heuristic scored 100% on
+them and about half on anyone else's. Labels copied from failing invoices are memory, not skill, when the
+same template sits in both halves of the evaluation. The author also set the standard for the data:
+public, redistributable, reproducible, and deliberately diverse in sources, languages, currencies and
+layouts, because a real customer's suppliers are not one template.
+
+**What we did.** The author's invoices were dropped from every metric and kept only as unit-test
+fixtures. They were replaced by six independent sources (21 countries, 12 currencies), each rebuilt by a
+script, with every label checked against the printed page (4 of 76 published labels were wrong and
+excluded). A dev/test split was frozen, and the test half was run once with the code frozen. The
+template-specific heuristic rules were measured, then removed. They lifted test verdicts from 55% to 78%
+and let the hybrid skip the LLM on 45% of invoices, but the gain came almost entirely from the one template
+present in both halves.
+
+**Result.** The published figures describe invoices the system has not been tuned on (Opus 5 on test: 98%
+of fields, 95% of verdicts, no wrong `PASS` or `FAIL`), and the removed rules are documented as what they
+really are: per-customer configuration for known suppliers, the case the hybrid is built for
+([decisions.md](docs/decisions.md) E1, B9).
+
+**The principle.** The metric is part of the product. A number learnt from the evaluation data is worse
+than no number, because someone will deploy on it.
+
+### Example 3 — Spend only where it measures something
+
+**What the assistant proposed.** With the first prompt in place, record the larger models (Sonnet 5 and
+Opus 5) on the evaluation set straight away, and choose a model from the results.
+
+**The author's objection.** The author stopped every further paid run until the prompts had been
+compared. The prompt had changed one fix at a time and had never been compared side by side. A model
+comparison run with an untested prompt measures the prompt's weaknesses as much as the models, at the
+price of the most expensive model. And the budget was fixed: every call had to earn its cost.
+
+**What we did.** First, four prompt variants were compared on the cheapest model (Haiku 4.5) on dev. The
+winner, v4b, makes the model write down the issuer's country and date format before the fields. It read
+all 80 dev dates correctly (79 before) and raised field accuracy from 97% to 99%. The comparison also
+showed that no prompt moves the remaining `REVIEW`s, which come from a grounding limit on one source, so
+no money went into chasing them. Second, the model rule was written before stage 3: the cheapest model
+within 3 points of the best on dev. Third, the cost was enforced in code: the evaluation runner refuses to
+call the API without an explicit `--max-calls` cap.
+
+**Result.** The rule picked Opus 5. The trade-off was then priced in the terms a finance team uses:
+against Haiku, Opus costs about $26 more per 1,000 invoices and saves about 90 manual reviews, so it pays
+for itself once a review costs more than about $0.30 ([decisions.md](docs/decisions.md) B5). Every model,
+prompt and input experiment together cost about $9.20.
+
+**The principle.** Fix the cheap variable before paying to measure the expensive one. Fix the decision
+rule before the data arrives. Express a model trade-off in the business's cost, not in accuracy points.
+
+### Other rejections and corrections, in short
 
 | Suggestion | Source | Outcome |
 |---|---|---|
+| Use the SDK's `messages.parse()`, which returns validated objects directly | API guidance, and Claude's first design | Rejected after Codex's review: a test double of such a client can only return valid objects, so truncated JSON, missing fields or wrong types could never be tested. We use a raw-text transport plus our own typed validation (decisions A2) |
 | Enable the API's server-side model fallback by default | API guidance | Rejected: it silently switches models and would corrupt the per-model comparison and cost figures (decisions B6) |
-| A single LLM boundary that returns validated objects | Claude's first design | Rejected after Codex's review: it cannot simulate corrupt model output (decisions A2) |
 | Treat the six fields in the brief as a closed set | Claude | Corrected by the author: the brief says "minimum"; four fields were added, only where they enable a rule (decisions A4) |
 | An evaluation set of clean invoices written by the extractor's author | Claude | Rejected by the author as circular and unrealistic; replaced by independent sources (decisions E1, [docs/evaluation.md](docs/evaluation.md)) |
 | A prompt with five instructions that each matched a difficulty category of the stress set | Claude | Flagged and reverted before any model call: it would have tuned the prompt to the test; later prompt changes were general and chosen on dev ([evaluation §9](docs/evaluation.md#9-prompt-variants)) |
