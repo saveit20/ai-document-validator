@@ -50,6 +50,7 @@ def test_valid_output_becomes_confident_fields_with_metadata() -> None:
     assert all(extraction.field(name).confidence == 1.0 for name in FIELD_NAMES)
     assert output.used == "llm"
     assert output.llm.input_tokens == 100
+    assert output.llm.prompt_version == PROMPT_VERSION
     assert output.llm.estimated_cost_usd == pytest.approx((100 * 5 + 50 * 25) / 1_000_000)
 
 

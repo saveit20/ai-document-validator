@@ -190,6 +190,7 @@ def _log_run(document: Document, run: ExtractionRun) -> None:
         extra={
             "extractor_used": run.extractor_used,
             "model": run.llm.model if run.llm else None,
+            "prompt_version": run.llm.prompt_version if run.llm else None,
             "llm_latency_ms": run.llm.latency_ms if run.llm else None,
             "input_tokens": run.llm.input_tokens if run.llm else None,
             "output_tokens": run.llm.output_tokens if run.llm else None,

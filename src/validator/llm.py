@@ -97,5 +97,6 @@ class LLMExtractor:
                 cache_write_tokens=response.cache_write_tokens,
             ),
             recorded=response.recorded,
+            prompt_version=self._prompt.version,
         )
         return ExtractorOutput(candidates=candidates, used="llm", llm=info)

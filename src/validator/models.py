@@ -116,6 +116,7 @@ class LLMCallInfo(BaseModel):
     output_tokens: int
     estimated_cost_usd: float | None
     recorded: bool = False
+    prompt_version: str | None = None
 
 
 class ExtractionResponse(BaseModel):
