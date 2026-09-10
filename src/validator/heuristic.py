@@ -145,7 +145,7 @@ def _invoice_date(lines: list[Line]) -> Candidate:
             tier = "generic"
         else:
             tier = "none"
-        tiers[tier].extend((matched, line, page) for _, matched in dates)
+        tiers[tier].extend((matched, line, page) for _, matched, _ in dates)
     for tier in ("specific", "generic", "none"):
         if tiers[tier]:
             return _pick(tiers[tier], ambiguous=tier == "none")
