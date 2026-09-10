@@ -226,8 +226,9 @@ The brief leaves these open; each is documented with its alternatives in [docs/d
 
 ## Data handling
 
-The invoice text is sent to the LLM provider only in `llm` and `hybrid` modes, and only the text: the
-extraction needs it. Logs record the request id, latency, extractor, model, token counts, verdict, and the
+The document is sent to the LLM provider only in `llm` and `hybrid` modes: by default the PDF itself plus
+its extracted text, because seeing the page measurably improves extraction; `LLM_INPUT=text` sends only the
+text. Logs record the request id, latency, extractor, model, token counts, verdict, and the
 document's length and a hash — never its content. No keys in the repository; `.env` is ignored. In
 production: a data processing agreement with the provider, zero-retention where available, and EU
 inference.
@@ -267,3 +268,9 @@ Data, V2, doi:10.17632/tnj49gpmtz.2, licensed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); labels derived from
 [katanaml-org/invoices-donut-data-v1](https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1)
 (MIT). Details and changes: `evals/external/mendeley/LICENSE-DATA.txt`.
+
+Also used, each with its own `LICENSE-DATA.txt` under `evals/external/`:
+- IDSEM, *Invoices Database of the Spanish Electricity Market* (Zenodo 6373179), CC BY 4.0.
+- Mustang project test invoices (github.com/ZUGFeRD/mustangproject), Apache-2.0.
+- Synthetic Shopify Invoice Test Pack by Salorworks (github.com/SalorWorks/shopify-invoice-test-pack),
+  CC BY 4.0.

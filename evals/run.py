@@ -202,7 +202,10 @@ def main(argv: list[str] | None = None) -> int:
         "--pdf-text", choices=("plain", "layout"), default="plain", help="how PDF text is extracted"
     )
     parser.add_argument(
-        "--llm-input", choices=("text", "pdf"), default="text", help="also send the PDF itself"
+        "--llm-input",
+        choices=("text", "pdf"),
+        default="pdf",
+        help="pdf (default, as in the service) also sends the PDF itself; text sends only the text",
     )
     parser.add_argument("--all", action="store_true", help="heuristic, every model, and hybrid")
     parser.add_argument(
