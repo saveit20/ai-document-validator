@@ -7,10 +7,12 @@ from datetime import date
 from validator.config import Settings
 from validator.extraction import Extractor, build_extraction
 from validator.heuristic import HeuristicExtractor
+from validator.hybrid import HybridExtractor
 from validator.ingest import Document
+from validator.llm import LLMExtractor
 from validator.models import Extraction, LLMCallInfo, RuleConfig, RuleResult, Status
 from validator.rules import EvalContext, evaluate_rules, overall_status
-from validator.transport import LLMError
+from validator.transport import AnthropicTransport, LLMError, LLMTransport, RecordedTransport
 
 logger = logging.getLogger(__name__)
 
@@ -70,4 +72,13 @@ class Pipeline:
 
 def build_pipeline(settings: Settings) -> Pipeline:
     heuristic = HeuristicExtractor()
-    return Pipeline(heuristic, fallback=heuristic)
+    if settings.extractor == "heuristic":
+        return Pipeline(heuristic, fallback=heuristic)
+    transport: LLMTransport
+    if settings.llm_transport == "replay":
+        transport = RecordedTransport(settings.recordings_dir)
+    else:
+        transport = AnthropicTransport(settings.anthropic_api_key or "", settings.llm_timeout_s)
+    llm = LLMExtractor(transport, settings.llm_model)
+    extractor = llm if settings.extractor == "llm" else HybridExtractor(heuristic, llm)
+    return Pipeline(extractor, fallback=heuristic)
