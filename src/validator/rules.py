@@ -111,11 +111,12 @@ class CurrencyAllowed:
             return None
         field = extraction.currency
         if field.value is None:
-            return _result(
-                self.id,
-                Status.REVIEW,
-                "currency not stated in the document; cannot check it against allowed_currencies",
+            message = (
+                "currency found but not recognised; check it manually"
+                if field.confidence > 0.0
+                else "currency not stated in the document; cannot check it against allowed_currencies"
             )
+            return _result(self.id, Status.REVIEW, message)
         if field.confidence < 1.0:
             return _result(
                 self.id,

@@ -22,7 +22,7 @@ those 14 invoices are now used only as unit-test fixtures and appear in no metri
 | SalorWorks invoice test pack (`evals/external/salorworks/`) | third party | CC BY 4.0 | 10 | dev + test |
 | GOBL example invoices (`evals/external/gobl/`) | third party (invopop), rendered to PDF by this project | Apache-2.0 | 26 | dev + test |
 | Stress set (`evals/holdout/`) | two isolated agents that never saw the code | this project | 16 | dev + test |
-| Author-written invoices (`evals/golden/`) | the system's author | this project | 14 | unit tests only |
+| Author-written invoices (`tests/fixtures/`) | the system's author | this project | 14 | unit tests only |
 
 **Mendeley.** Programmatically generated, single template, US style (month-first dates, `$`, US tax ids,
 company names without a legal form). PDFs with a real text layer. Labels come from
@@ -126,6 +126,7 @@ Rules we held ourselves to:
 | Prompt v3 | Two general instructions: copy numbers in the evidence with their original separators (the model rewrote `$ 802,73` as `$ 802.73`, which the check rightly rejected), and read numeric dates in the issuer's convention | Recordings invalidated and re-recorded on dev |
 | Missing-field rule | After an independent review, a required field that was not extracted became `REVIEW` instead of `FAIL`: an extractor that finds nothing has not proved the document lacks the field (decisions D1). A change of definition, applied to every configuration and not tuned to any case; the two labels whose supplier is genuinely missing moved from `FAIL` to `REVIEW` by the same rule | All figures re-replayed: Opus on test 95% → 96%; the heuristic stays at 55% but its 26 wrong `FAIL`s became `REVIEW`s; CI baselines updated with this reason |
 | Supplier/customer role check | A second independent review showed that a model quoting the customer as the supplier passed grounding. A supplier name or tax id quoted from a customer block, or equal to the customer's, now gets confidence 0.6 (decisions C2). A general rule, not tuned to any case; labels unchanged | Opus on test 96% → 95% and on dev 90% → 89%: GOBL samples print one demo tax id for both parties, which the check now sends to review. The customer-label part flagged no evaluation invoice |
+| Whole-value grounding and a two-way role check | A third independent review showed that a fragment of the evidence (`2026` inside `DH/2026/0419`, a tax id cut short) counted as grounded. Identifiers must now appear whole and names on word boundaries; customer fields quoted from a supplier block are doubted too (decisions C2). The first version wrongly doubted names with commas and numbers glued to a word by the text layer; both were fixed as general rules, with unit tests | Every figure unchanged (Opus on test 95%, dev 89%; heuristic 55%); no evaluation invoice is flagged as a fragment |
 
 ## 5. Metrics
 

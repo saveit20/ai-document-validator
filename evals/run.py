@@ -7,7 +7,7 @@
   python -m evals.run --split test --show-test-failures                  # only once development is frozen
 
 Every report is broken down by source, so the single-template Mendeley set cannot hide how the
-layout-rich stress-set invoices behave. The invoices written by the system's author (evals/golden) are
+layout-rich stress-set invoices behave. The invoices written by the system's author (tests/fixtures) are
 circular and are used only as unit-test fixtures, never here.
 """
 

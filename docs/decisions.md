@@ -346,7 +346,15 @@ read a section only when you want to challenge the decision it covers.
   equal to the customer's name or tax id, gets confidence 0.6 and its rule returns `REVIEW`. On the
   evaluation data the customer-label part flagged nothing; the equality part flagged GOBL samples that
   print one demo tax id for both parties, which cost one test verdict (96% → 95%). In a real invoice a shared
-  tax id is itself a reason to look.
+  tax id is itself a reason to look. The check runs both ways: a customer's name or tax id quoted from the
+  supplier's block ("From", "Seller"…) is doubted as well.
+- **Whole values.** A third independent review showed that "contains the value" was too loose: `2026`
+  quoted from `DH/2026/0419`, or a tax id cut short, counted as grounded. Identifiers must now appear whole —
+  not glued to further id characters, though a neighbouring word is allowed because text layers glue words
+  (`Credit noteAV-2024-001`) — and names must match on word boundaries. A value found only as a fragment is
+  grounded but doubtful (0.6, `REVIEW`). No evaluation figure moved; the probes are unit tests. Known limits:
+  a name cut at a word boundary (`Delta` for `Delta Hydraulics B.V.`) still passes, and an amount quoted from
+  the wrong line (the VAT line as the total) is caught only by `amounts_consistent`, not by grounding.
 - **Rejected:** trusting the model's evidence; fuzzy matching (it would accept near-hallucinations).
 - **Revisit if:** unnecessary `REVIEW`s from evidence formatting (like `355.07` vs `355,07`) become a
   measurable share of reviews. Matching evidence by position on the page would make the role check exact.

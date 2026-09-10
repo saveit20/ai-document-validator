@@ -1,7 +1,7 @@
 from datetime import date
 from decimal import Decimal
 
-from helpers import golden_text
+from helpers import fixture_text
 
 from validator.extraction import build_extraction
 from validator.heuristic import HeuristicExtractor
@@ -56,7 +56,7 @@ def test_unlabelled_date_is_ambiguous() -> None:
 
 
 def test_spanish_invoice() -> None:
-    extraction = extract(golden_text("inv_02_es_format"))
+    extraction = extract(fixture_text("inv_02_es_format"))
     assert extraction.supplier_name.value == "CONSTRUCCIONES Y REFORMAS GARCÍA S.L."
     assert extraction.invoice_number.value == "2026/0381"
     assert extraction.invoice_date.value == date(2026, 6, 3)
@@ -66,28 +66,28 @@ def test_spanish_invoice() -> None:
 
 
 def test_missing_supplier_is_null() -> None:
-    extraction = extract(golden_text("inv_07_no_supplier"))
+    extraction = extract(fixture_text("inv_07_no_supplier"))
     assert extraction.supplier_name.value is None
     assert extraction.supplier_name.confidence == 0.0
     assert extraction.tax_id.value is None
 
 
 def test_clean_invoice_is_fully_confident() -> None:
-    extraction = extract(golden_text("inv_01_clean_en"))
+    extraction = extract(fixture_text("inv_01_clean_en"))
     assert extraction.total_amount.value == Decimal("1200.00")
     assert extraction.tax_id.value == "GB123456789"
     assert all(extraction.field(name).confidence == 1.0 for name in FIELD_NAMES)
 
 
 def test_extracts_subtotal_tax_and_customer() -> None:
-    extraction = extract(golden_text("inv_09_gbp_long_date"))
+    extraction = extract(fixture_text("inv_09_gbp_long_date"))
     assert extraction.subtotal_amount.value == Decimal("2000.00")
     assert extraction.tax_amount.value == Decimal("400.00")
     assert extraction.customer_name.value == "Northwind Construction UK Ltd"
 
 
 def test_withholding_is_not_tax_and_customer_id_comes_from_customer_block() -> None:
-    extraction = extract(golden_text("inv_14_irpf_withholding"))
+    extraction = extract(fixture_text("inv_14_irpf_withholding"))
     assert extraction.supplier_name.value == "Estudio de Arquitectura Rivas S.L.P."
     assert extraction.tax_amount.value == Decimal("210.00")
     assert extraction.total_amount.value == Decimal("1060.00")

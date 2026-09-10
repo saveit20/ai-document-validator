@@ -19,8 +19,10 @@ from starlette.concurrency import run_in_threadpool
 from validator import __version__
 from validator.config import Settings, load_settings
 from validator.ingest import (
+    MAX_DOCUMENT_BYTES,
     Document,
     DocumentError,
+    DocumentTooLarge,
     PdfText,
     UnsupportedMediaType,
     document_from_bytes,
@@ -37,6 +39,8 @@ from validator.observability import configure_logging, request_id_var
 from validator.pipeline import ExtractionRun, Pipeline, ValidationRun, build_pipeline
 
 logger = logging.getLogger("validator.api")
+
+MAX_REQUEST_BYTES = MAX_DOCUMENT_BYTES * 4 // 3 + 64 * 1024
 
 # A client-supplied request id is echoed into headers and logs, so it is kept short and plain.
 _REQUEST_ID = re.compile(r"[A-Za-z0-9._:-]{1,64}")
@@ -113,6 +117,10 @@ def _validation_details(exc: ValidationError) -> Any:
 async def _read_input(
     request: Request, with_config: bool, pdf_text: PdfText
 ) -> tuple[Document, RuleConfig | None, date | None]:
+    declared = request.headers.get("content-length", "")
+    if declared.isdigit() and int(declared) > MAX_REQUEST_BYTES:
+        # Refused before the body is read: base64 makes a document about 4/3 of its size.
+        raise DocumentTooLarge(f"request exceeds {MAX_REQUEST_BYTES} bytes")
     content_type = request.headers.get("content-type", "").split(";")[0].strip().lower()
     if content_type == "application/json":
         return await _read_json(request, with_config, pdf_text)

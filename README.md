@@ -8,7 +8,8 @@ dispute the result.
 confidence, rules and the verdict — is deterministic code that checks each value against the document. The
 checks are built so that a model error ends in `REVIEW`, for a person, rather than in a wrong decision.
 
-**Result on the test split** — 80 invoices from six independent sources, not used for tuning:
+**Result on the test split** — 80 invoices from six independent sources, held out while the model, the
+input and the prompt were chosen on dev (two later re-scorings are declared [below](#evaluation)):
 
 - Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **95%** of
   invoices, at **$0.034** and ~7 s per invoice (p95 10.9 s).
@@ -43,8 +44,9 @@ flowchart LR
 **Why this shape.** A compliance verdict must be auditable, and an LLM is not. So the model does the one
 thing it is good at — reading a messy, unknown layout — and code checks everything it returns. That check is
 **grounding**: for each value the model must quote the text it read it from; the quote must appear in the
-document's extracted text and must contain the value. A supplier name or tax id quoted from the customer's
-block ("Bill to", "Cliente"…), or equal to the customer's, is doubted too: printed, but not the supplier's.
+document's extracted text and must contain the value as a whole (an invoice number is not a fragment of a
+longer code, a name is matched on word boundaries). A party's name or tax id quoted from the other party's
+block ("Bill to", "From"…), or equal to the other party's, is doubted too: printed, but not theirs.
 The same checks apply to all three extractors, which is what makes them comparable.
 
 **Per-field confidence, our definition** (the same for every extractor, never reported by the model):
@@ -88,9 +90,9 @@ python -m evals.run --extractor heuristic   # the evaluation, offline (more comm
 ```
 
 OpenAPI schema at <http://localhost:8000/docs>. With Docker: `docker compose up --build` (built and
-health-checked in CI). Replayed LLM responses exist only for the 160 evaluation invoices; with `EXTRACTOR=llm`
-and no key, any other document falls back to the heuristic, and the response says so in `extractor_used`
-and `warnings`.
+health-checked in CI). Recorded Opus 5 responses with the final prompt exist for the 80 test invoices
+(dev holds the model and prompt comparisons); with `EXTRACTOR=llm` and no key, any other document falls
+back to the heuristic, and the response says so in `extractor_used` and `warnings`.
 
 | Variable | Default | Meaning |
 |---|---|---|
@@ -124,7 +126,7 @@ JSON config, and an optional `reference_date` (defaults to today). Rule config: 
 
 ```bash
 curl -s -X POST localhost:8000/v1/validate -H "X-Request-ID: demo-0001" \
-  -F "file=@evals/golden/inv_06_traps.txt;type=text/plain" \
+  -F "file=@tests/fixtures/inv_06_traps.txt;type=text/plain" \
   -F 'config={"document_type":"SUPPLIER_INVOICE","max_age_days":90,"allowed_currencies":["EUR","GBP"],"required_fields":["supplier_name","invoice_number","invoice_date","total_amount"]}' \
   -F "reference_date=2026-06-30"
 ```
@@ -166,14 +168,14 @@ the request id).
 
 ```bash
 python -m evals.run --extractor heuristic                                  # dev and test, offline
-python -m evals.run --extractor llm --model claude-opus-5 --split test     # replays the headline run
+python -m evals.run --extractor llm --model claude-opus-5 --split test --show-test-failures   # headline run
 python -m evals.run --extractor hybrid --model claude-opus-5 --split test
 python -m evals.run --extractor llm --model claude-opus-5 --split test --check-baseline   # a CI gate
 ```
 
 Each report gives field exact match, precision and recall per field, verdict agreement with a confusion
 matrix, a breakdown per source and per difficulty, latency and cost, and prints the failures (on dev; test
-failures stay hidden unless `--show-test-failures`).
+failures stayed hidden during development; now that it is frozen, `--show-test-failures` prints them).
 
 **The evaluation set** (the brief's "golden set") is 160 invoices from six sources the author did not write:
 a US invoice template (the largest source, 72 of the 160, so every result is also reported per source),
@@ -181,7 +183,7 @@ German e-invoices, Spanish electricity bills, Gulf invoices in AED and KWD, e-in
 countries, and a "stress set" of 16 deliberately messy layouts written by Claude subagents that never saw
 the code. 21 countries, 12 currencies, 6 label languages, credit notes, multi-page and multi-rate invoices;
 every label checked against the printed PDF. Each source is split 50/50 into **dev** (failures inspected and
-fixed) and **test**. The 14 files in `evals/golden/` are *not* this set: the author wrote them, and they
+fixed) and **test**. The 14 invoices in `tests/fixtures/` are *not* this set: the author wrote them, and they
 serve only as unit-test fixtures.
 
 **Test split** (field figures cover all 10 fields; on the brief's six alone, Opus scores 99% and the
@@ -199,6 +201,10 @@ heuristic 75%):
   agrees on 40 of 44 verdicts (91%).
 - Zero wrong decisions in 80 invoices still allows a true rate of up to about 4% (95% confidence): strong
   evidence, not a guarantee, which is why production monitoring samples `PASS` invoices.
+- The evaluated configs do not set `expected_customer_tax_id`. Text alone cannot always tell whose tax id
+  an unlabelled line holds: one test invoice prints the supplier's under the customer's address, and Opus
+  took it as the customer's. That rule needs evidence matched by position on the page (next steps, 2)
+  before its `FAIL`s can be fully trusted.
 - The test split was first run once with code and prompt frozen (Opus: 95% of verdicts). Two definition
   changes made after independent reviews were then re-scored on it: a field that was not extracted became
   `REVIEW` instead of `FAIL`, and the supplier/customer role check. Neither was tuned to a case; both are
@@ -257,7 +263,8 @@ deploy; the CI quality gates block a regression before one.
 - **Review over automation.** A field that was not extracted, or is doubtful, goes to `REVIEW`; `FAIL` is
   kept for reliable values that break a rule. Price: 4 reviews in 80 with Opus.
 - **Opus 5 over a model five times cheaper, by a rule fixed in advance:** the cheapest model within 3 points
-  of the best on dev (3 points is two invoices out of 80). Haiku 4.5 is 8 verdict points behind; per 1,000
+  of the best on dev (3 points is two invoices out of 80). Haiku 4.5 was 11 verdict points behind when the
+choice was made, 8 on the final dev split; per 1,000
   invoices it would save about $26 and add about 90 manual reviews, so Opus pays for itself once a review
   costs more than about $0.30 ([decisions.md](docs/decisions.md) B5).
 - **A general heuristic over a better score.** Template-specific rules would have lifted it from 55% to 78%
@@ -305,7 +312,7 @@ documents (freely licensed real invoices do not exist, so the evaluation data is
 pytest -q
 ```
 
-277 tests. No test can reach the real API: a fixture removes the key, and every LLM failure mode —
+291 tests. No test can reach the real API: a fixture removes the key, and every LLM failure mode —
 timeouts, rate limits, malformed or truncated JSON, refusals, hallucinated values, a supplier swapped with
 the customer — is driven through a fake transport. Rules, normalisation, the heuristic, the hybrid, the
 HTTP API (JSON and multipart, 413/415/422/500 errors, OpenAPI, request ids) and the evaluation metrics each

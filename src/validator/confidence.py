@@ -6,6 +6,7 @@
 0.0  not found
 """
 
+import re
 from itertools import combinations
 from typing import Any
 
@@ -99,4 +100,34 @@ def supports(field: str, value: Any, evidence: str, document_text: str = "") -> 
         resolved = value == normalize.local_dollar(document_text)
         return bool(flags), bool(flags) and all(flags) and not resolved
     expected = normalize.canon(str(value))
-    return bool(expected) and expected in normalize.canon(evidence), False
+    if not expected or expected not in normalize.canon(evidence):
+        return False, False
+    # Found as a fragment only ("2026" inside "DH/2026/0419", a tax id cut short): grounded but
+    # doubtful, so the rule that uses it returns REVIEW.
+    return True, not _whole_match(field, str(value), evidence)
+
+
+_ID_FIELDS = frozenset({"invoice_number", "tax_id", "customer_tax_id"})
+
+
+def _whole_match(field: str, value: str, evidence: str) -> bool:
+    """Whether the value appears in the evidence as a whole: identifiers not glued to more id
+    characters, names on word boundaries. Separators inside the value may differ (spaces, dots)."""
+    chars = [re.escape(ch) for ch in normalize.fold(value) if ch.isalnum()]
+    if not chars:
+        return False
+    if field in _ID_FIELDS:
+        # PDF text layers glue words together ("Credit noteAV-2024-001", "2015738820Rechnungsnummer"),
+        # so a neighbouring *word* is allowed; more id characters ("NL853746214" + "B01", "/2026/")
+        # are not. Case matters here, so the evidence is not folded.
+        id_chars = [re.escape(ch) for ch in value if ch.isalnum()]
+        body = r"[\s.\-/]*".join(id_chars)
+        pattern = (
+            rf"(?<![0-9A-Z/\-])(?<![0-9A-Za-z][/\-])(?i:{body})"
+            rf"(?![0-9a-z])(?![A-Z](?![a-z]))(?![/\-][0-9A-Za-z])"
+        )
+        return re.search(pattern, evidence) is not None
+    else:
+        body = r"[^0-9a-z]*".join(chars)  # names keep their commas, ampersands and dots
+        pattern = rf"(?<![0-9a-z]){body}(?![0-9a-z])"
+    return re.search(pattern, normalize.fold(evidence)) is not None

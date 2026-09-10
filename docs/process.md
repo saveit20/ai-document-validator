@@ -2,8 +2,8 @@
 
 This project was built in 24 hours with AI coding assistants. To keep that honest, the work followed a
 written protocol from the first minute. This page is the English summary of the rules that governed the
-work; the working files themselves (status board, phase checklists, decision log drafts) are the author's
-private notes and are not part of the deliverable. What the assistants did, and what was rejected, is in
+work. The working documents themselves — the phase guides, the specification and design written before the
+code, the assumption register and the data strategy — are in [approach/](approach/README.md), translated. What the assistants did, and what was rejected, is in
 [AI_USAGE.md](../AI_USAGE.md).
 
 ## Principles

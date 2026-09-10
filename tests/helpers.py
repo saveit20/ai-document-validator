@@ -4,11 +4,11 @@ from pathlib import Path
 from validator.models import FIELD_NAMES
 from validator.transport import LLMRequest, LLMResponse
 
-GOLDEN_DIR = Path(__file__).resolve().parents[1] / "evals" / "golden"
+FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 
 
-def golden_text(case_id: str) -> str:
-    return (GOLDEN_DIR / f"{case_id}.txt").read_text(encoding="utf-8")
+def fixture_text(case_id: str) -> str:
+    return (FIXTURES_DIR / f"{case_id}.txt").read_text(encoding="utf-8")
 
 
 class FakeTransport:

@@ -88,9 +88,15 @@ _CUSTOMER_LABEL = re.compile(
 )
 
 
+_SUPPLIER_LABEL = re.compile(
+    r"\b(from|seller|supplier|vendor|issued\s+by|emisor|proveedor|lieferant|fournisseur|fornitore)\b",
+    re.IGNORECASE,
+)
+
+
 def _check_roles(fields: dict[str, FieldValue]) -> None:
-    """Doubt the supplier's name and tax id when they are the customer's, or quoted from the customer's
-    block: a value that is printed on the invoice but belongs to the other party is still wrong."""
+    """Doubt a party's name and tax id when they are the other party's, or quoted from the other
+    party's block: a value that is printed on the invoice but belongs to the other party is wrong."""
     name, tax_id = fields["supplier_name"], fields["tax_id"]
     customer, customer_tax_id = fields["customer_name"], fields["customer_tax_id"]
     same_party = (
@@ -102,11 +108,16 @@ def _check_roles(fields: dict[str, FieldValue]) -> None:
         and customer_tax_id.value is not None
         and normalize.same_tax_id(tax_id.value, customer_tax_id.value)
     )
-    for field_name in ("supplier_name", "tax_id"):
-        field = fields[field_name]
-        from_customer_block = bool(field.evidence and _CUSTOMER_LABEL.search(field.evidence))
-        if field.confidence == confidence.HIGH and (same_party or from_customer_block):
-            fields[field_name] = field.model_copy(update={"confidence": confidence.AMBIGUOUS})
+    sides = (
+        (("supplier_name", "tax_id"), _CUSTOMER_LABEL),
+        (("customer_name", "customer_tax_id"), _SUPPLIER_LABEL),
+    )
+    for names, other_party_label in sides:
+        for field_name in names:
+            field = fields[field_name]
+            quoted_from_other = bool(field.evidence and other_party_label.search(field.evidence))
+            if field.confidence == confidence.HIGH and (same_party or quoted_from_other):
+                fields[field_name] = field.model_copy(update={"confidence": confidence.AMBIGUOUS})
 
 
 def _reconcile_tax(fields: dict[str, FieldValue]) -> None:

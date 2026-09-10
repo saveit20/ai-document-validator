@@ -4,7 +4,7 @@ from decimal import Decimal
 
 import pytest
 from fastapi.testclient import TestClient
-from helpers import GOLDEN_DIR, golden_text
+from helpers import FIXTURES_DIR, fixture_text
 
 from validator.api import create_app
 from validator.config import Settings
@@ -36,7 +36,7 @@ def test_health_reports_ok(client: TestClient) -> None:
 
 def test_validate_json_text_returns_verdict(client: TestClient) -> None:
     body = {
-        "document": {"text": golden_text("inv_01_clean_en")},
+        "document": {"text": fixture_text("inv_01_clean_en")},
         "config": CONFIG,
         "reference_date": "2026-06-30",
     }
@@ -63,7 +63,7 @@ def test_each_request_logs_one_json_line_with_id_latency_model_and_verdict(
 ) -> None:
     caplog.set_level(logging.INFO, logger="validator.api")
     body = {
-        "document": {"text": golden_text("inv_01_clean_en")},
+        "document": {"text": fixture_text("inv_01_clean_en")},
         "config": CONFIG,
         "reference_date": "2026-06-30",
     }
@@ -84,7 +84,7 @@ def test_each_request_logs_one_json_line_with_id_latency_model_and_verdict(
 
 
 def test_validate_multipart_text_matches_json(client: TestClient) -> None:
-    text = golden_text("inv_01_clean_en")
+    text = fixture_text("inv_01_clean_en")
     response = client.post(
         "/v1/validate",
         files={"file": ("invoice.txt", text.encode(), "text/plain")},
@@ -95,7 +95,7 @@ def test_validate_multipart_text_matches_json(client: TestClient) -> None:
 
 
 def test_validate_multipart_pdf(client: TestClient) -> None:
-    pdf = (GOLDEN_DIR / "inv_10_pdf.pdf").read_bytes()
+    pdf = (FIXTURES_DIR / "inv_10_pdf.pdf").read_bytes()
     response = client.post(
         "/v1/validate",
         files={"file": ("invoice.pdf", pdf, "application/pdf")},
@@ -107,7 +107,7 @@ def test_validate_multipart_pdf(client: TestClient) -> None:
 
 def test_extract_returns_fields_without_rules(client: TestClient) -> None:
     response = client.post(
-        "/v1/extract", json={"document": {"text": golden_text("inv_01_clean_en")}}
+        "/v1/extract", json={"document": {"text": fixture_text("inv_01_clean_en")}}
     )
     assert response.status_code == 200
     assert "rules" not in response.json()
@@ -124,6 +124,13 @@ def test_document_too_large_is_413(client: TestClient) -> None:
     big = b"a" * (MAX_DOCUMENT_BYTES + 1)
     response = client.post("/v1/extract", files={"file": ("big.txt", big, "text/plain")})
     assert response.status_code == 413
+
+
+def test_oversized_request_is_refused_before_reading_the_body(client: TestClient) -> None:
+    big = b"a" * (MAX_DOCUMENT_BYTES * 2)
+    response = client.post("/v1/extract", files={"file": ("big.txt", big, "text/plain")})
+    assert response.status_code == 413
+    assert "request exceeds" in response.json()["error"]["message"]
 
 
 def test_multipart_config_must_be_json(client: TestClient) -> None:

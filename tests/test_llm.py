@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import anthropic
 import httpx2
 import pytest
-from helpers import FakeTransport, golden_text, llm_reply
+from helpers import FakeTransport, fixture_text, llm_reply
 
 from validator.extraction import build_extraction
 from validator.heuristic import HeuristicExtractor
@@ -25,7 +25,7 @@ from validator.transport import (
     RecordedTransport,
 )
 
-DOCUMENT = document_from_text(golden_text("inv_01_clean_en"))
+DOCUMENT = document_from_text(fixture_text("inv_01_clean_en"))
 GOOD = llm_reply(
     supplier_name=("ACME Industrial Supplies Ltd", "ACME Industrial Supplies Ltd"),
     invoice_number=("INV-2026-0142", "Invoice No: INV-2026-0142"),
