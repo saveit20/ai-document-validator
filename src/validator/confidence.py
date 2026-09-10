@@ -6,6 +6,7 @@
 0.0  not found
 """
 
+from itertools import combinations
 from typing import Any
 
 from validator import normalize
@@ -53,6 +54,20 @@ def grounded(evidence: str, document_text: str) -> bool:
     return len(lines) > 1 and all(line in document for line in lines)
 
 
+_MAX_ADDENDS = 6
+
+
+def _is_sum_of(value: Any, amounts: list[Any]) -> bool:
+    """Whether |value| is the sum of two or more of the printed amounts (signs ignored)."""
+    target = abs(value)
+    pool = [abs(amount) for amount in amounts if amount][:10]
+    return any(
+        sum(combo) == target
+        for size in range(2, min(len(pool), _MAX_ADDENDS) + 1)
+        for combo in combinations(pool, size)
+    )
+
+
 def supports(field: str, value: Any, evidence: str, document_text: str = "") -> tuple[bool, bool]:
     """Whether `evidence` really contains `value`, and whether that reading is ambiguous."""
     if field == "invoice_date":
@@ -66,8 +81,19 @@ def supports(field: str, value: Any, evidence: str, document_text: str = "") -> 
     if field in AMOUNT_FIELDS:
         three_decimals = normalize.amount_decimals(document_text) == 3
         amounts = normalize.find_amounts(evidence, three_decimals)
-        flags = [amb for amount, amb, _ in amounts if amount == value]
-        return bool(flags), bool(flags) and all(flags)
+        credit_note = normalize.is_credit_note(document_text)
+        flags = [
+            amb
+            for amount, amb, _ in amounts
+            if amount == value or (credit_note and amount == -value)
+        ]
+        if flags:
+            return True, all(flags)
+        if field == "tax_amount" and _is_sum_of(value, [amount for amount, _, _ in amounts]):
+            # A total computed from printed per-rate lines: grounded, but only as sure as the
+            # subtotal + tax = total cross-check that build_extraction applies afterwards.
+            return True, True
+        return False, False
     if field == "currency":
         flags = [amb for code, amb, _ in normalize.find_currencies(evidence) if code == value]
         resolved = value == normalize.local_dollar(document_text)

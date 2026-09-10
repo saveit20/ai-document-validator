@@ -36,10 +36,10 @@
     "currency": "EUR",
     "tax_id": "B43986918",
     "subtotal_amount": "39.79",
-    "tax_amount": null,
+    "tax_amount": "8.16",
     "customer_name": "Jesús María Donato Peralta",
     "customer_tax_id": "65634782G",
     "verdict": "FAIL"
   },
-  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template3/Invoice1059.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template3/Invoice1059.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount is the sum of the printed VAT/IGIC rate lines (no total line is printed)."
 }

@@ -203,6 +203,23 @@ def normalize_date(raw: str | None, order: DateOrder | None = None) -> date | No
     return found[0][0] if found else None
 
 
+# Titles that only a credit note carries. Corrective invoices ("factura rectificativa", "korekta") are
+# left out on purpose: they can add to the original invoice as well as reduce it.
+_CREDIT_NOTE_TITLE = re.compile(
+    r"\b(?:credit\s+note|credit\s+memo|nota\s+de\s+cr[eé]dito|nota\s+de\s+abono|factura\s+de\s+abono|"
+    r"avoir|gutschrift|nota\s+di\s+credito|creditnota|creditfactuur)\b",
+    re.I,
+)
+_TITLE_LINES = 15
+
+
+def is_credit_note(text: str) -> bool:
+    """Whether the document presents itself as a credit note, judged from its first lines."""
+    head = "\n".join(line for line in text.splitlines() if line.strip())
+    head = "\n".join(head.splitlines()[:_TITLE_LINES])
+    return bool(_CREDIT_NOTE_TITLE.search(head))
+
+
 THREE_DECIMAL_CURRENCIES = frozenset(["KWD", "BHD", "OMR", "JOD", "TND", "LYD", "IQD"])
 
 

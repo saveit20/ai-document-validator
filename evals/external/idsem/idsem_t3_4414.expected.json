@@ -36,10 +36,10 @@
     "currency": "EUR",
     "tax_id": "B39702436",
     "subtotal_amount": "85.15",
-    "tax_amount": null,
+    "tax_amount": "0.89",
     "customer_name": "BRENDA IVAÑEZ GAVILÁN",
     "customer_tax_id": "17360603L",
     "verdict": "FAIL"
   },
-  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template3/Invoice4414.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount null when no single VAT/IGIC total is printed."
+  "notes": "IDSEM (Zenodo 6373179, CC BY 4.0) training/template3/Invoice4414.pdf; synthetic Spanish electricity bill. Label mapped from the IDSEM JSON (C1,F1,F3,J5,C2,J4,A1,A2; tax_amount=N5+N8), verified against the printed PDF text; tax_amount is the sum of the printed VAT/IGIC rate lines (no total line is printed)."
 }

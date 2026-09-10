@@ -236,6 +236,73 @@ def test_words_and_short_numbers_are_not_tax_ids(raw: str) -> None:
 
 
 @pytest.mark.parametrize(
+    ("text", "credit_note"),
+    [
+        ("CREDIT NOTE\nNo. CN-12", True),
+        ("Avoir n° 12", True),
+        ("Gutschrift Nr. 7", True),
+        ("Nota de crédito 0001", True),
+        ("Invoice INV-1\nPayment: abono en cuenta", False),
+        ("Factura rectificativa R-3", False),
+        ("INVOICE\nTotal 10.00", False),
+    ],
+)
+def test_credit_notes_are_recognised_by_their_title(text: str, credit_note: bool) -> None:
+    assert n.is_credit_note(text) is credit_note
+
+
+def test_credit_note_amounts_are_booked_negative_even_if_printed_positive() -> None:
+    extraction = heuristic("CREDIT NOTE\nTotal 240.00 EUR\n")
+    assert (extraction.total_amount.value, extraction.total_amount.confidence) == (
+        Decimal("-240.00"),
+        1.0,
+    )
+
+
+@pytest.mark.parametrize(
+    ("text", "expected_confidence"),
+    [("Credit Note\nTotal €240,00\n", 1.0), ("Invoice\nTotal €240,00\n", 0.3)],
+)
+def test_negative_llm_total_is_confirmed_only_on_a_credit_note(
+    text: str, expected_confidence: float
+) -> None:
+    assert llm_field("total_amount", "-240.00", "Total €240,00", text).confidence == (
+        expected_confidence
+    )
+
+
+def _tax_extraction(total: str):
+    text = f"Base imponible 1.000,00\nIVA 10% 60,00\nIVA 21% 84,00\nTotal {total}\n"
+    candidates = {
+        "subtotal_amount": Candidate(raw="1000.00", evidence="Base imponible 1.000,00"),
+        "tax_amount": Candidate(raw="144.00", evidence="IVA 10% 60,00\nIVA 21% 84,00"),
+        "total_amount": Candidate(
+            raw=total.replace(".", "").replace(",", "."), evidence=f"Total {total}"
+        ),
+    }
+    return build_extraction(candidates, document_from_text(text))
+
+
+def test_tax_total_summed_from_printed_rate_lines_is_confirmed_by_the_totals() -> None:
+    extraction = _tax_extraction("1.144,00")
+    assert (extraction.tax_amount.value, extraction.tax_amount.confidence) == (
+        Decimal("144.00"),
+        1.0,
+    )
+
+
+def test_tax_sum_that_does_not_reconcile_stays_under_review() -> None:
+    assert _tax_extraction("1.150,00").tax_amount.confidence == 0.6
+
+
+def test_tax_value_that_is_no_sum_of_printed_lines_is_not_grounded() -> None:
+    field = llm_field(
+        "tax_amount", "150.00", "IVA 10% 60,00\nIVA 21% 84,00", "IVA 10% 60,00\nIVA 21% 84,00\n"
+    )
+    assert field.confidence == 0.3
+
+
+@pytest.mark.parametrize(
     ("text", "decimals"), [("Total KWD 46.500", 3), ("Total 46.500 BHD", 3), ("Total EUR 1.500", 2)]
 )
 def test_documents_in_three_decimal_currencies_are_detected(text: str, decimals: int) -> None:

@@ -27,14 +27,14 @@
     "supplier_name": "Fournisseur Example SARL",
     "invoice_number": "AV-2024-001",
     "invoice_date": "2024-06-20",
-    "total_amount": "240.00",
+    "total_amount": "-240.00",
     "currency": "EUR",
     "tax_id": "FR44732829320",
-    "subtotal_amount": "200.00",
-    "tax_amount": "40.00",
+    "subtotal_amount": "-200.00",
+    "tax_amount": "-40.00",
     "customer_name": "Client Example SAS",
     "customer_tax_id": "FR39356000000",
-    "verdict": "PASS"
+    "verdict": "FAIL"
   },
-  "notes": "invopop/gobl.html example fr-ctc-credit-note (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
+  "notes": "invopop/gobl.html example fr-ctc-credit-note (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text. Credit note printed with positive amounts; labelled negative (finance books credit notes negative)."
 }
