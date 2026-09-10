@@ -1,0 +1,23 @@
+{
+  "document": "hB_06_credit_note.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "credit_note_refs",
+    "negative_total"
+  ],
+  "expected": {
+    "supplier_name": "Iberia Cerámica Técnica S.A.",
+    "invoice_number": "R-2026-0042",
+    "invoice_date": "2026-06-10",
+    "total_amount": "-242.00",
+    "currency": "EUR",
+    "tax_id": "A28123456",
+    "subtotal_amount": "-200.00",
+    "tax_amount": "-42.00",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "B12345678",
+    "verdict": "FAIL"
+  },
+  "notes": "Credit note that cites the original invoice number, date and original total (1.815,00 €) next to its own; the true total is negative, so it fails the total > 0 rule."
+}

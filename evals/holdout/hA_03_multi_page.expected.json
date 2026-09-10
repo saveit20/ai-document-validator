@@ -1,0 +1,22 @@
+{
+  "document": "hA_03_multi_page.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "multi_page"
+  ],
+  "expected": {
+    "supplier_name": "Stahlbau Keller GmbH",
+    "invoice_number": "RE-2026-00318",
+    "invoice_date": "2026-03-15",
+    "total_amount": "23629.53",
+    "currency": "EUR",
+    "tax_id": "DE812345678",
+    "subtotal_amount": "19856.75",
+    "tax_amount": "3772.78",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "FAIL"
+  },
+  "notes": "Totals sit on page 2 behind a carried-forward figure on page 1 and a freight line; the issue date (15.03.2026) is older than the 90-day window."
+}

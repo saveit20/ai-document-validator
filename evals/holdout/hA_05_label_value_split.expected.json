@@ -1,0 +1,22 @@
+{
+  "document": "hA_05_label_value_split.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "label_value_split"
+  ],
+  "expected": {
+    "supplier_name": "Menuiserie Dubois SARL",
+    "invoice_number": "F-2026-1142",
+    "invoice_date": "2026-04-22",
+    "total_amount": "9768.00",
+    "currency": null,
+    "tax_id": "FR45123456789",
+    "subtotal_amount": "8140.00",
+    "tax_amount": "1628.00",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "REVIEW"
+  },
+  "notes": "Labels of three boxes are extracted on one line and their values on the next, so each value must be matched to a label by position; no currency symbol or code is printed."
+}

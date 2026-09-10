@@ -1,0 +1,22 @@
+{
+  "document": "hA_04_table_totals.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "table_totals"
+  ],
+  "expected": {
+    "supplier_name": "Van der Berg Bouwmaterialen B.V.",
+    "invoice_number": "2026-NL-0912",
+    "invoice_date": "2026-06-03",
+    "total_amount": "6787.60",
+    "currency": "USD",
+    "tax_id": "NL812345678B01",
+    "subtotal_amount": "6787.60",
+    "tax_amount": "0.00",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "FAIL"
+  },
+  "notes": "The totals table is drawn label column first and amount column second, so labels and amounts come out as separate runs; invoiced in USD, which is not allowed."
+}

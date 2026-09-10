@@ -1,0 +1,36 @@
+{
+  "document": "hB_02_rechnung_de.pdf",
+  "reference_date": "2026-06-30",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ],
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "expected_customer_tax_id": "ESB12345678"
+  },
+  "difficulty": [
+    "language_de"
+  ],
+  "expected": {
+    "supplier_name": "Hoffmann Baustoffe GmbH",
+    "invoice_number": "RE-2026-06-0317",
+    "invoice_date": "2026-06-15",
+    "total_amount": "10013.85",
+    "currency": "EUR",
+    "tax_id": "DE287654321",
+    "subtotal_amount": "8415.00",
+    "tax_amount": "1598.85",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "PASS"
+  },
+  "notes": "German labels, dotted dates next to an order date and delivery date, dot thousands separator; customer VAT printed as 'ES B12345678' must match the expected ESB12345678."
+}

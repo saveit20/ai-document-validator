@@ -1,0 +1,22 @@
+{
+  "document": "hA_01_two_column_header.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "two_column_header"
+  ],
+  "expected": {
+    "supplier_name": "Hormigones y Áridos del Sur S.L.",
+    "invoice_number": "FV-2026/0417",
+    "invoice_date": "2026-05-12",
+    "total_amount": "5902.74",
+    "currency": "EUR",
+    "tax_id": "B41234567",
+    "subtotal_amount": "4878.30",
+    "tax_amount": "1024.44",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "PASS"
+  },
+  "notes": "Seller and buyer blocks share the same rows, so the text layer interleaves both legal names and both tax ids on the same lines."
+}

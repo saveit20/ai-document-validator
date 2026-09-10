@@ -1,0 +1,37 @@
+{
+  "document": "hB_05_ocr_noise.pdf",
+  "reference_date": "2026-06-30",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ],
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "expected_customer_tax_id": "B12345678"
+  },
+  "difficulty": [
+    "ocr_noise",
+    "customer_tax_id_missing"
+  ],
+  "expected": {
+    "supplier_name": "Harlow & Finch Ltd",
+    "invoice_number": "HF-26-00731",
+    "invoice_date": "2026-05-22",
+    "total_amount": "1025.40",
+    "currency": "GBP",
+    "tax_id": "GB294773108",
+    "subtotal_amount": "854.50",
+    "tax_amount": "170.90",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": null,
+    "verdict": "REVIEW"
+  },
+  "notes": "OCR-style text layer ('lnvoice N0.', 'T0TAL', 'Dat e:', O/0 and l/1 swaps in labels, a broken line) while key values stay clean; the config expects a customer tax id that is not printed, so the correct verdict is REVIEW."
+}

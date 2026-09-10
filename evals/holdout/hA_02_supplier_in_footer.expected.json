@@ -1,0 +1,22 @@
+{
+  "document": "hA_02_supplier_in_footer.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "supplier_in_footer"
+  ],
+  "expected": {
+    "supplier_name": "Brightline Access Solutions Ltd",
+    "invoice_number": "INV-58213",
+    "invoice_date": "2026-06-14",
+    "total_amount": "4600.80",
+    "currency": "GBP",
+    "tax_id": "GB284551290",
+    "subtotal_amount": "3834.00",
+    "tax_amount": "766.80",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "PASS"
+  },
+  "notes": "The prominent header only says BRIGHTLINE; the legal name and VAT number live in a 6.5pt footer next to a company number that looks like a tax id."
+}

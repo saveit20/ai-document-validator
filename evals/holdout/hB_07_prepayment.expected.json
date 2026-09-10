@@ -1,0 +1,23 @@
+{
+  "document": "hB_07_prepayment.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "prepayment",
+    "balance_due_zero"
+  ],
+  "expected": {
+    "supplier_name": "Baltic Scaffold Systems OÜ",
+    "invoice_number": "BSS/2026/0088",
+    "invoice_date": "2026-06-03",
+    "total_amount": "1016.80",
+    "currency": "EUR",
+    "tax_id": "EE101234567",
+    "subtotal_amount": "820.00",
+    "tax_amount": "196.80",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "PASS"
+  },
+  "notes": "Fully prepaid invoice: the last and most prominent figure is 'Balance due 0.00 EUR', and taking it as the total would wrongly fail the total > 0 rule."
+}

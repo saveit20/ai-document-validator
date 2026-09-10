@@ -1,0 +1,22 @@
+{
+  "document": "hA_07_multi_vat.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "multi_vat"
+  ],
+  "expected": {
+    "supplier_name": "Suministros y Obras Levante S.A.",
+    "invoice_number": "A-26/1093",
+    "invoice_date": "2026-05-28",
+    "total_amount": "7485.50",
+    "currency": "EUR",
+    "tax_id": "A46123456",
+    "subtotal_amount": "6566.00",
+    "tax_amount": "919.50",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "B12345678",
+    "verdict": "PASS"
+  },
+  "notes": "Two VAT rates with per-rate base, tax and total columns; there is no single total-tax line, so tax_amount must be summed and per-rate totals look like candidate totals."
+}

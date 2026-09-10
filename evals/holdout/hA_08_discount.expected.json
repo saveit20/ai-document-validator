@@ -1,0 +1,36 @@
+{
+  "document": "hA_08_discount.pdf",
+  "reference_date": "2026-06-30",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ],
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "expected_customer_tax_id": "ESB12345678"
+  },
+  "difficulty": [
+    "discount"
+  ],
+  "expected": {
+    "supplier_name": "Kabel & Leitung Wien GmbH",
+    "invoice_number": "2026-4471",
+    "invoice_date": "2026-06-17",
+    "total_amount": "5513.38",
+    "currency": "EUR",
+    "tax_id": "ATU63456789",
+    "subtotal_amount": "4594.48",
+    "tax_amount": "918.90",
+    "customer_name": "Northwind Logistics S.L.",
+    "customer_tax_id": "ESB87654321",
+    "verdict": "FAIL"
+  },
+  "notes": "Gross, discount and taxable base are three net-looking figures (the discount is negative and a 2% early-payment Skonto is mentioned), and the invoice is addressed to a sister company whose tax id differs from the expected customer."
+}

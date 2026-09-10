@@ -1,0 +1,22 @@
+{
+  "document": "hA_06_total_distractors.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "total_distractors"
+  ],
+  "expected": {
+    "supplier_name": "Ferramenta Lombarda S.r.l.",
+    "invoice_number": "FT-0588/26",
+    "invoice_date": "2026-06-09",
+    "total_amount": "2898.72",
+    "currency": "EUR",
+    "tax_id": "IT01234567890",
+    "subtotal_amount": "2376.00",
+    "tax_amount": "522.72",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "B12345678",
+    "verdict": "PASS"
+  },
+  "notes": "Four lines start with 'Total' (items, weight, excl. VAT, incl. VAT) and the footer prints share capital in euros; only 'Total incl. VAT' is the invoice total."
+}

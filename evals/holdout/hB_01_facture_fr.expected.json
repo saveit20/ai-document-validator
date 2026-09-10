@@ -1,0 +1,22 @@
+{
+  "document": "hB_01_facture_fr.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "language_fr"
+  ],
+  "expected": {
+    "supplier_name": "Durand Équipements SAS",
+    "invoice_number": "F2026-0512",
+    "invoice_date": "2026-05-12",
+    "total_amount": "1234.56",
+    "currency": "EUR",
+    "tax_id": "FR32412345678",
+    "subtotal_amount": "1028.80",
+    "tax_amount": "205.76",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "PASS"
+  },
+  "notes": "French labels, space thousands separator and decimal comma; three dates (invoice, delivery, due) must not be confused."
+}

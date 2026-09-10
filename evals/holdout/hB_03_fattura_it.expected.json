@@ -1,0 +1,23 @@
+{
+  "document": "hB_03_fattura_it.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "language_it_pt",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Edilforniture Lombarde S.r.l.",
+    "invoice_number": "118/2026",
+    "invoice_date": "2026-03-18",
+    "total_amount": "4209.00",
+    "currency": "EUR",
+    "tax_id": "IT01234567890",
+    "subtotal_amount": "3450.00",
+    "tax_amount": "759.00",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "FAIL"
+  },
+  "notes": "Italian labels ('Imponibile', 'Totale documento'); the issue date 18/03/2026 is before the 90-day window while the due date 17/04/2026 is inside it, so picking the wrong date flips FAIL to PASS."
+}

@@ -1,0 +1,37 @@
+{
+  "document": "hB_08_currency_far.pdf",
+  "reference_date": "2026-06-30",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "allowed_currencies": [
+      "EUR",
+      "GBP",
+      "CHF"
+    ],
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ]
+  },
+  "difficulty": [
+    "currency_far",
+    "swiss_number_format"
+  ],
+  "expected": {
+    "supplier_name": "Alpen Hebetechnik AG",
+    "invoice_number": "AH-26-1147",
+    "invoice_date": "2026-04-28",
+    "total_amount": "5621.20",
+    "currency": "CHF",
+    "tax_id": "CHE123456789",
+    "subtotal_amount": "5200.00",
+    "tax_amount": "421.20",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "PASS"
+  },
+  "notes": "Currency appears only once, in a sentence in the opening paragraph; totals carry no code or symbol and use the Swiss apostrophe thousands separator (5'621.20). CHF is allowed by this case's config, so missing it downgrades a PASS to REVIEW."
+}

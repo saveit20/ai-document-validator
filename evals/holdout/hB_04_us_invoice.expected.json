@@ -1,0 +1,23 @@
+{
+  "document": "hB_04_us_invoice.pdf",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "difficulty": [
+    "us_date",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Cascade Tool Supply, Inc.",
+    "invoice_number": "CTS-104552",
+    "invoice_date": "2026-06-05",
+    "total_amount": "4862.50",
+    "currency": "USD",
+    "tax_id": "911234567",
+    "subtotal_amount": "4862.50",
+    "tax_amount": "0.00",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "FAIL"
+  },
+  "notes": "Month-first date 06/05/2026 means June 5 (read day-first it becomes May 6); the invoice is in USD, which is not an allowed currency."
+}
