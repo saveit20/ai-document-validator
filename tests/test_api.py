@@ -142,6 +142,16 @@ def test_multipart_config_must_be_json(client: TestClient) -> None:
     assert response.status_code == 422
 
 
+def test_the_documented_example_is_what_the_service_returns(client: TestClient) -> None:
+    operation = client.get("/openapi.json").json()["paths"]["/v1/validate"]["post"]
+    request = operation["requestBody"]["content"]["application/json"]["example"]
+    documented = operation["responses"]["200"]["content"]["application/json"]["example"]
+    response = client.post("/v1/validate", json=request, headers={"X-Request-ID": "example-0001"})
+    assert response.status_code == 200
+    # FastAPI drops null values when it publishes examples ("llm": null in heuristic mode).
+    assert {key: value for key, value in response.json().items() if value is not None} == documented
+
+
 def test_openapi_documents_both_body_types_for_both_routes(client: TestClient) -> None:
     paths = client.get("/openapi.json").json()["paths"]
     assert set(paths) == {"/health", "/v1/validate", "/v1/extract"}

@@ -118,7 +118,9 @@ Invalid combinations fail at start-up with a clear message (for example `EXTRACT
 
 JSON body: `{"document": {"text": "..."} | {"content_base64": "...", "media_type": "application/pdf"},
 "config": {...}, "reference_date": "YYYY-MM-DD"}`. Multipart: a `file` part, a `config` part holding the
-JSON config, and an optional `reference_date` (defaults to today). Rule config: `document_type`
+JSON config, and an optional `reference_date` (defaults to today). The sample invoices in
+`tests/fixtures/` are dated June 2026: send `reference_date=2026-06-30`, or the age rule will (correctly)
+fail them. `/docs` comes with a ready-to-run example. Rule config: `document_type`
 (`SUPPLIER_INVOICE`), `max_age_days`, and optionally `allowed_currencies`, `required_fields` and
 `expected_customer_tax_id`.
 
@@ -137,6 +139,7 @@ Response (abridged to 3 of the 10 fields; headers include `X-Request-ID`):
 {
   "request_id": "demo-0001",
   "status": "PASS",
+  "document_type": "SUPPLIER_INVOICE",
   "extractor_used": "heuristic",
   "reference_date": "2026-06-30",
   "warnings": [],

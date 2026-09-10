@@ -18,6 +18,13 @@ from starlette.concurrency import run_in_threadpool
 
 from validator import __version__
 from validator.config import Settings, load_settings
+from validator.examples import (
+    EXAMPLE_CONFIG,
+    EXAMPLE_EXTRACT_REQUEST,
+    EXAMPLE_REFERENCE_DATE,
+    EXAMPLE_VALIDATE_REQUEST,
+    EXAMPLE_VALIDATE_RESPONSE,
+)
 from validator.ingest import (
     MAX_DOCUMENT_BYTES,
     Document,
@@ -44,13 +51,6 @@ MAX_REQUEST_BYTES = MAX_DOCUMENT_BYTES * 4 // 3 + 64 * 1024
 
 # A client-supplied request id is echoed into headers and logs, so it is kept short and plain.
 _REQUEST_ID = re.compile(r"[A-Za-z0-9._:-]{1,64}")
-
-EXAMPLE_CONFIG = {
-    "document_type": "SUPPLIER_INVOICE",
-    "max_age_days": 90,
-    "allowed_currencies": ["EUR", "GBP"],
-    "required_fields": ["supplier_name", "invoice_number", "invoice_date", "total_amount"],
-}
 
 
 class InvalidRequest(Exception):
@@ -97,13 +97,21 @@ def _request_body(model: type[BaseModel], with_config: bool) -> dict[str, Any]:
         multipart["properties"]["reference_date"] = {
             "type": "string",
             "format": "date",
-            "description": "Date the invoice age is measured against; defaults to today",
+            "description": (
+                "Date the invoice age is measured against; defaults to today. The sample invoices "
+                "are dated June 2026, so use 2026-06-30 with them."
+            ),
+            "example": EXAMPLE_REFERENCE_DATE,
         }
+    example = EXAMPLE_VALIDATE_REQUEST if with_config else EXAMPLE_EXTRACT_REQUEST
     return {
         "requestBody": {
             "required": True,
             "content": {
-                "application/json": {"schema": _inline_refs(model.model_json_schema())},
+                "application/json": {
+                    "schema": _inline_refs(model.model_json_schema()),
+                    "example": example,
+                },
                 "multipart/form-data": {"schema": multipart},
             },
         }
@@ -272,6 +280,7 @@ def create_app(settings: Settings | None = None, pipeline: Pipeline | None = Non
     @app.post(
         "/v1/validate",
         response_model=ValidationResponse,
+        responses={200: {"content": {"application/json": {"example": EXAMPLE_VALIDATE_RESPONSE}}}},
         openapi_extra=_request_body(ValidateRequest, with_config=True),
         summary="Extract fields and validate them against business rules",
     )

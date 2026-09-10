@@ -128,10 +128,18 @@ class ExtractionResponse(BaseModel):
     warnings: list[str] = []
 
 
-class ValidationResponse(ExtractionResponse):
+class ValidationResponse(BaseModel):
+    """The verdict and the rules come first; the extracted fields, the longest part, come last."""
+
+    request_id: str
     status: Status
+    document_type: Literal["SUPPLIER_INVOICE"] = "SUPPLIER_INVOICE"
+    extractor_used: str
     reference_date: date
+    warnings: list[str] = []
+    llm: LLMCallInfo | None = None
     rules: list[RuleResult]
+    extraction: Extraction
 
 
 class DocumentIn(BaseModel):
