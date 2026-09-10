@@ -163,6 +163,37 @@ The default model is **the cheapest one whose dev field exact match and dev verd
 cheaper model ties the most capable one, the cheaper model wins. The hybrid cascade is evaluated with the
 chosen model.
 
+### Stage 3 result: the rule picks Opus 5
+
+Dev, 67 invoices, PDF + text input (§8), prompt v3, all replayed with the same code:
+
+| Configuration | Field exact match | Verdict agreement | Cost / document | p95 latency |
+|---|---|---|---|---|
+| Heuristic | 48% | 40% | $0 | 0.44 s (mean 0.11 s, PDF parsing included) |
+| Haiku 4.5 | 96% | 79% | $0.0076 | 10.8 s |
+| Sonnet 5 | 95% | 73% | $0.0140 | 7.7 s |
+| **Opus 5** | **98%** | **90%** | $0.0351 | 8.6 s |
+| Hybrid (heuristic → Opus 5) | 98% | 88% | $0.0351 | 8.6 s |
+
+- **The rule selects Opus 5.** Haiku is 11 verdict points behind and Sonnet 17, both outside the 3-point
+  margin. Sonnet does not beat Haiku on this data despite costing twice as much.
+- **No model produced a wrong `PASS` or `FAIL`.** Every verdict error of every model is a `REVIEW` on an
+  invoice that should have passed or failed: when the model is wrong, the grounding check catches it.
+  The cost of a weaker model is more manual reviews, not wrong decisions.
+- **The hybrid saves nothing here.** On these varied layouts the heuristic is never confident about every
+  field, so the cascade calls the LLM on 67 of 67 invoices. It would pay off on a stream dominated by a few
+  known, clean templates, where the heuristic alone reaches full confidence (see the README on when not to
+  use an LLM).
+- **Prompt caching, measured.** Opus 5 and Sonnet 5 each read ~2,240 cached tokens on 66 of 67 calls (the
+  first call writes the cache). On Opus 5 that saves ~$0.010 per invoice, about 22% of what it would cost
+  uncached; on Sonnet 5, ~$0.004, also ~22%. Haiku 4.5 needs a 4,096-token prefix: 0 cache hits in 181
+  calls, as the documentation predicts. LLM latencies above are API time; PDF parsing adds the heuristic's
+  ~0.1 s.
+- **Where the best model still fails:** the IDSEM bills print two VAT lines and never their sum; models
+  often add them up (a value not printed, rejected by the check), and the scrambled text layer of those
+  bills makes some evidence unverifiable. Both end in `REVIEW` (IDSEM verdicts: Opus 73%, Haiku and Sonnet
+  27%).
+
 ## 8. How the document reaches the model
 
 The prompt is only half of what the model sees. The other half is the document itself, and the way it is
