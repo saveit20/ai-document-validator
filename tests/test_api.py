@@ -1,3 +1,5 @@
+import json
+import logging
 from decimal import Decimal
 
 import pytest
@@ -7,6 +9,7 @@ from helpers import golden_text
 from validator.api import create_app
 from validator.config import Settings
 from validator.heuristic import HeuristicExtractor
+from validator.observability import JsonFormatter
 from validator.pipeline import Pipeline
 
 CONFIG = {
@@ -52,6 +55,31 @@ def test_validate_json_text_returns_verdict(client: TestClient) -> None:
     assert data["llm"] is None
     assert data["extractor_used"] == "heuristic"
     assert data["request_id"] == response.headers["X-Request-ID"]
+
+
+def test_each_request_logs_one_json_line_with_id_latency_model_and_verdict(
+    client: TestClient, caplog: pytest.LogCaptureFixture
+) -> None:
+    caplog.set_level(logging.INFO, logger="validator.api")
+    body = {
+        "document": {"text": golden_text("inv_01_clean_en")},
+        "config": CONFIG,
+        "reference_date": "2026-06-30",
+    }
+    response = client.post("/v1/validate", json=body, headers={"X-Request-ID": "log-check"})
+    lines = [
+        json.loads(JsonFormatter().format(record))
+        for record in caplog.records
+        if getattr(record, "request_id", None) == "log-check"
+    ]
+    assert len(lines) == 1
+    line = lines[0]
+    assert line["event"] == "request_completed"
+    assert line["latency_ms"] >= 0
+    assert line["verdict"] == response.json()["status"]
+    assert line["extractor_used"] == "heuristic"
+    assert "model" in line
+    assert "Northwind" not in json.dumps(line)
 
 
 def test_validate_rejects_invalid_config(client: TestClient) -> None:

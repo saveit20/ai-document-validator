@@ -184,21 +184,20 @@ def _error(status_code: int, code: str, message: str, details: Any = None) -> JS
     return JSONResponse(status_code=status_code, content={"error": error})
 
 
-def _log_run(document: Document, run: ExtractionRun) -> None:
-    logger.info(
-        "document_processed",
-        extra={
-            "extractor_used": run.extractor_used,
-            "model": run.llm.model if run.llm else None,
-            "prompt_version": run.llm.prompt_version if run.llm else None,
-            "llm_latency_ms": run.llm.latency_ms if run.llm else None,
-            "input_tokens": run.llm.input_tokens if run.llm else None,
-            "output_tokens": run.llm.output_tokens if run.llm else None,
-            "status": run.status.value if isinstance(run, ValidationRun) else None,
-            "document_chars": len(document.text),
-            "document_sha256": hashlib.sha256(document.text.encode("utf-8")).hexdigest()[:16],
-        },
-    )
+def _run_fields(document: Document, run: ExtractionRun) -> dict[str, Any]:
+    """What the request log line records about one run: never the document's content."""
+    return {
+        "extractor_used": run.extractor_used,
+        "model": run.llm.model if run.llm else None,
+        "prompt_version": run.llm.prompt_version if run.llm else None,
+        "llm_latency_ms": run.llm.latency_ms if run.llm else None,
+        "input_tokens": run.llm.input_tokens if run.llm else None,
+        "output_tokens": run.llm.output_tokens if run.llm else None,
+        "estimated_cost_usd": run.llm.estimated_cost_usd if run.llm else None,
+        "verdict": run.status.value if isinstance(run, ValidationRun) else None,
+        "document_chars": len(document.text),
+        "document_sha256": hashlib.sha256(document.text.encode("utf-8")).hexdigest()[:16],
+    }
 
 
 def create_app(settings: Settings | None = None, pipeline: Pipeline | None = None) -> FastAPI:
@@ -219,13 +218,16 @@ def create_app(settings: Settings | None = None, pipeline: Pipeline | None = Non
         try:
             response = await call_next(request)
             response.headers["X-Request-ID"] = request_id
+            # One line per request: id, latency, and for document requests the model and verdict.
             logger.info(
                 "request_completed",
                 extra={
+                    "request_id": request_id,
                     "method": request.method,
                     "path": request.url.path,
                     "status_code": response.status_code,
                     "latency_ms": int((time.perf_counter() - started) * 1000),
+                    **getattr(request.state, "log_fields", {}),
                 },
             )
             return response
@@ -264,7 +266,7 @@ def create_app(settings: Settings | None = None, pipeline: Pipeline | None = Non
         run = await run_in_threadpool(
             pipeline.validate, document, config, reference_date or date.today()
         )
-        _log_run(document, run)
+        request.state.log_fields = _run_fields(document, run)
         return ValidationResponse(
             request_id=request_id_var.get() or "",
             extractor_used=run.extractor_used,
@@ -285,7 +287,7 @@ def create_app(settings: Settings | None = None, pipeline: Pipeline | None = Non
     async def extract(request: Request) -> ExtractionResponse:
         document, _, _ = await _read_input(request, with_config=False, pdf_text=settings.pdf_text)
         run = await run_in_threadpool(pipeline.extract, document)
-        _log_run(document, run)
+        request.state.log_fields = _run_fields(document, run)
         return ExtractionResponse(
             request_id=request_id_var.get() or "",
             extractor_used=run.extractor_used,
