@@ -117,6 +117,7 @@ Rules we held ourselves to:
 | Formatting the generator | Reformatting `generate_batch_a.py` displayed part of one held-out invoice | No code or prompt changed; PDFs verified byte-identical |
 | Prompt draft | Five instructions mirrored held-out difficulty categories | Reverted before any model call |
 | Haiku pilot on dev | Fields 96% but verdicts 27%: the grounding check rejected correct values (space thousands separators, US dates, bare `$`, evidence split across table columns). Fixed with general rules, each driven by a unit test written from invented inputs (D16) | Same recordings, dev verdicts 27% → 64%. Test not inspected |
+| Finance labelling policy | IDSEM and GOBL labels were aligned with the pre-registered guide (tax total summed from per-rate lines, credit notes negative), by rule and without looking at any test output | The heuristic's IDSEM field score fell from 43% to 37% (it does not sum tax lines); its quality-gate baseline was lowered accordingly, with this reason |
 | Prompt v3 | Two general instructions: copy numbers in the evidence with their original separators (the model rewrote `$ 802,73` as `$ 802.73`, which the check rightly rejected), and read numeric dates in the issuer's convention | Recordings invalidated and re-recorded on dev |
 
 ## 5. Metrics
@@ -135,22 +136,36 @@ Because Mendeley invoices date from 2012–2021 and are in USD, the brief's conf
 fail. Each Mendeley case therefore carries its own config and reference date, cycling through three
 scenarios (pass, disallowed currency, invoice too old), so verdicts carry information.
 
-## 6. Results so far — heuristic extractor
+## 6. Final results on the test split
 
-`python -m evals.run --extractor heuristic`
+Run once, after the model (§7), the input (§8) and the prompt (§9) had been chosen on dev and the code was
+frozen. `python -m evals.run --extractor llm --model claude-opus-5 --split test` replays it.
 
-| Configuration | Field exact match | Verdict agreement |
-|---|---|---|
-| test / all | 47% | 50% |
-| test / Mendeley | 44% | 50% |
-| test / held-out | 62% | 50% |
+| Configuration | Field exact match | Verdict agreement | Verdict errors | Mean / p95 latency | Cost / invoice |
+|---|---|---|---|---|---|
+| Heuristic | 50% | 55% | 36: 34 wrong `FAIL`, 2 `REVIEW` | 0.11 s / 0.44 s | $0 |
+| **Opus 5, PDF + text, prompt v4b** | **98%** | **95%** | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
+| Hybrid, heuristic then Opus 5 | 98% | 96% | 3, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
 
-On the dev half of Mendeley the heuristic finds **no** invoice date (0/36) and **no** total, subtotal or
-tax (0/36): the template prints each label on one line and its value on the next, dates are month-first,
-and the totals table lists all labels before all values. It returns `FAIL` for every invoice, so its 50%
-verdict agreement is only the invoices that were supposed to fail. Hand-written rules work for the layouts
-they were written for; this is the gap the LLM path has to close, and the next section measures whether it
-does and at what cost.
+Opus 5 per source (fields / verdicts): Mendeley 100% / 100%, Mustang 97% / 100%, IDSEM 100% / 93%,
+SalorWorks 94% / 100%, GOBL 95% / 77%, held-out 98% / 100%.
+
+- **No wrong `PASS` or `FAIL`.** Of the four disagreements, three are invoices that should have passed and
+  one that should have failed; the system sent all four to a person instead of deciding wrongly.
+- **Test is better than dev (95% against 90%)**, because the dev figure for Opus was measured with the
+  earlier prompt (v3) and the test run uses v4b. We report both rather than re-running dev, which would have
+  cost another ~$2.7.
+- **The weakest source is GOBL** (13 test invoices), the one with the most countries and document types.
+  Per-case failures on test stay hidden by design.
+- **The hybrid saves nothing on this data**: it called the LLM on all 80 invoices.
+
+The heuristic, by contrast, fails the other way: it wrongly rejects 34 of the 80 test invoices. On layouts
+it was not written for it misses a required field, and a field that is reliably absent is a `FAIL`. It
+never wrongly passes an invoice, but a system that rejects four in ten valid invoices is not usable on
+varied layouts, which is why the LLM path exists.
+
+**What the whole evaluation cost:** 661 recorded calls (Haiku 4.5 434, Sonnet 5 67, Opus 5 160), about
+$9.40, including every experiment.
 
 ## 7. How the LLM runs are spent: in stages, dev first
 
@@ -161,10 +176,10 @@ the test split is run **once**, at the end, with prompt and code frozen.
 | Stage | What | Calls | Purpose |
 |---|---|---|---|
 | 0. Smoke | cheapest model on 3 dev invoices | 3 | first contact with the real API: schema accepted, parameters accepted, parsing works |
-| 1. Pilot | cheapest model on the 44 dev invoices | 44 | find prompt and normalisation failures cheaply |
+| 1. Pilot | cheapest model on the dev invoices (44 at the time; dev grew to 80 as sources were added) | 44 | find prompt and normalisation failures cheaply |
 | 2. Refine | general fixes only; re-record just what changed | as needed | iterate until dev stops improving |
 | 3. Compare | the other two models on dev | 88 | decide which models go to test |
-| 4. Test | finalists on the 44 test invoices, once | 44–132 | the headline number |
+| 4. Test | the chosen model and prompt on the 80 test invoices, once | 80 | the headline number |
 
 ### Model selection rule (fixed before seeing any result)
 
@@ -175,7 +190,9 @@ chosen model.
 
 ### Stage 3 result: the rule picks Opus 5
 
-Dev, 67 invoices, PDF + text input (§8), prompt v3, all replayed with the same code:
+Dev as it was at that point (67 invoices, before the GOBL source was added), PDF + text input (§8),
+prompt v3, all replayed with the same code. On the final 80-invoice dev split, Opus 5 with v3 scores 97%
+of fields and 90% of verdicts.
 
 | Configuration | Field exact match | Verdict agreement | Cost / document | p95 latency |
 |---|---|---|---|---|
@@ -239,7 +256,8 @@ text, so the same grounding check applies. Sending only the PDF would make the e
 
 ### What we measured
 
-Same prompt (v3), same model (Haiku 4.5), same 47 dev invoices; only the input changes.
+Same prompt (v3), same model (Haiku 4.5), same 47 dev invoices (the dev split at that point); only the
+input changes.
 
 | Mode | Field exact match | Invoice date | Verdict agreement | Cost / document | p95 latency |
 |---|---|---|---|---|---|

@@ -8,7 +8,11 @@ or dispute the result.
 confidence, rules and the verdict — is deterministic code that checks each value against the document.
 When the model is wrong, the result is a `REVIEW` for a person, not a wrong `PASS` or `FAIL`.
 
-<!-- HEADLINE -->
+**Result on the held-back test split** (80 invoices, six sources, run once with code and prompt frozen):
+Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **95%** of
+invoices, at **$0.034** and ~7 s per invoice (p95 10.9 s). The free heuristic scores 50% and 55%. **No
+invoice got a wrong `PASS` or `FAIL`**: the four disagreements are all `REVIEW`s, where the system was unsure
+and asked for a person.
 
 ## How this answers the brief
 
@@ -203,15 +207,70 @@ the author are excluded from every metric.
 What the data covers and how it was built: [docs/data.md](docs/data.md). Method, experiments and the
 contamination log: [docs/evaluation.md](docs/evaluation.md).
 
-<!-- FILL AFTER RECORDING: comparison table (heuristic, 3 models, hybrid) on the test split, per source,
-with field exact match, verdict agreement, LLM calls, mean/p95 latency and cost per document. -->
+**Test split, run once** (80 invoices; the chosen configuration and the free alternatives):
+
+| Configuration | Field exact match | Verdict agreement | Wrong `PASS`/`FAIL` | LLM calls | Cost / invoice |
+|---|---|---|---|---|---|
+| Heuristic | 50% | 55% | 34 wrong `FAIL`, 0 wrong `PASS` | 0 | $0 |
+| **LLM — Opus 5, PDF + text, prompt v4b** | **98%** | **95%** | **0** | 80 | $0.034 |
+| Hybrid — heuristic first, Opus 5 when unsure | 98% | 96% | 0 | 80 | $0.034 |
+
+Opus 5 per source on test: Mendeley 100% verdicts, Mustang 100%, IDSEM 93%, SalorWorks 100%, GOBL 77%,
+held-out 100%. On dev the three models were compared first and a rule written in advance picked Opus 5
+(Haiku 4.5 and Sonnet 5 were more than 3 points behind on verdicts); four prompt variants were compared on
+dev before the test run. Details: [docs/evaluation.md](docs/evaluation.md).
+
+The hybrid called the LLM on all 80 invoices: on varied layouts the heuristic is never sure of every field,
+so it saves nothing here. It would on a stream of a few known templates.
 
 ## Cost, latency and risk
 
-<!-- FILL AFTER RECORDING: the three answers with measured numbers.
-1. When would you not use an LLM?
-2. Measured latency and cost per document.
-3. What to monitor in production. -->
+**When would we not use an LLM?**
+
+- **When the invoice carries its own data.** E-invoices such as ZUGFeRD / Factur-X (the Mustang source) embed
+  an EN 16931 XML with every field. Reading that XML is exact, free and instant; an LLM there only adds cost
+  and risk.
+- **When the stream is a few known, clean templates.** The heuristic costs nothing and takes ~0.1 s; the
+  hybrid mode calls the LLM only when the heuristic is unsure. On our deliberately varied data the heuristic
+  was never sure (the hybrid called the LLM on every invoice), so it only pays off on a narrow stream —
+  measure the share of `hybrid:heuristic_only` responses before relying on it.
+- **When the document cannot leave the premises**, or a sub-second synchronous answer is required.
+
+**What did we measure?** Per invoice, on the test split with the chosen configuration (Opus 5, PDF + text,
+prompt v4b):
+
+| | Mean | p95 |
+|---|---|---|
+| Latency, LLM call (PDF + text) | 7.0 s | 10.9 s |
+| Latency, heuristic only (PDF parsing included) | 0.11 s | 0.44 s |
+| Cost per invoice, Opus 5 | $0.034 | $0.069 on the 2–4-page utility bills |
+| Cost per 1,000 invoices, Opus 5 | ~$34 | |
+
+The whole evaluation — every model, prompt variant and input experiment, 661 recorded calls — cost about
+$9.40 in API usage.
+
+On dev, the same measurement for the cheaper models: Haiku 4.5 costs about 1/4.5 of Opus per invoice
+(~$0.0076) and Sonnet 5 ~$0.014. With the tuned prompt Haiku extracts 99% of dev fields correctly, but it
+sends more invoices to `REVIEW` than Opus (81% verdict agreement on dev, against 90% for Opus with the
+earlier prompt) ([evaluation §7 and §9](docs/evaluation.md)). Prompt caching of the instructions saves
+~22% per invoice on Opus and Sonnet (measured: cache hits on 66 of 67 calls). For bulk, non-urgent
+processing the Batch API would halve the price again. The heuristic path costs nothing and takes 0.11 s on
+average, PDF parsing included.
+
+**What would we monitor in production?**
+
+| Signal | Why | Where it comes from |
+|---|---|---|
+| `REVIEW` rate, per customer and per supplier | the real cost of the system is the people reviewing; a jump means a new layout or a model change | verdict in the JSON log |
+| Share of fields that fail grounding (confidence 0.3) | the model saying things the document does not say: hallucination or a broken text layer | per-field confidence |
+| Share of `FAIL` per rule | a business signal (old invoices, wrong currency), and a sanity check when it moves suddenly | rule results |
+| LLM errors, fallbacks, p95 latency | provider incidents, timeouts, rate limits | `extractor_used`, latency in the log |
+| Cost per invoice, tokens, cache hit rate | spend drifts when documents get longer or caching breaks | `usage` returned by the API |
+| A weekly sample of `PASS` invoices checked by a person | the only way to catch a wrong `PASS`, which the system cannot see by itself | review queue |
+
+Every model call is logged with the model id and the prompt version, so a change in any of these can be tied
+to a deploy. Before changing model or prompt, the evaluation set is re-run and the CI quality gate blocks a
+regression.
 
 ## Design decisions and trade-offs
 
