@@ -106,8 +106,41 @@ Details, numbers and every source we considered are in [evaluation.md](evaluatio
   against the printed PDF.
 - **Held-out set**: 16 layout-rich PDFs written by two isolated agents that never saw the extractor, and
   labelled twice blind.
+- **Mustang project test invoices** (Apache-2.0): 6 German ZUGFeRD PDFs, labelled from the EN 16931 XML
+  embedded in each PDF and checked against the printed text. Added to widen the layouts beyond one template.
 - Each source is split 50/50 with a fixed seed into **dev** (inspected, used to fix bugs) and **test** (never
   inspected; the headline number). The 14 invoices written by the system's author are **excluded from all
   metrics** and kept only as unit-test fixtures, because they are circular.
 - No source is real. Freely licensed real invoices do not exist, because real invoices contain personal and
   commercial data; production would use customer documents under a data processing agreement.
+
+## D16 — Numeric date order is decided per document
+
+`04/08/2026` is 4 August in Europe and 8 April in the US. The first design read every numeric date
+day-first, for a European B2B domain. The external data contradicted it: every Mendeley invoice is from a US
+issuer and dates month-first. The order is now decided from the document itself:
+
+1. an unambiguous numeric date in the same document (a component above 12) fixes the order;
+2. otherwise the issuer's country: a US postal address means month-first; a euro or pound sign or an EU VAT
+   number means day-first;
+3. conflicting or absent signals: read day-first, but at confidence 0.6, so the verdict is `REVIEW`.
+
+The same signal resolves a bare `$`, which is otherwise ambiguous (USD, CAD, AUD, MXN...). European invoices
+keep their previous behaviour. The prompt asks the model for the same convention, but the confidence is
+still decided by the code: a model reading that contradicts the document's convention scores 0.3.
+
+## D17 — Prompt caching on the static instructions
+
+The system prompt (~1,700 tokens) is identical on every call; only the document changes. It is sent as a
+block with `cache_control: {"type": "ephemeral"}`, and the cost estimate prices cache reads (0.1× input) and
+writes (1.25×) from the `usage` the API returns. The minimum cacheable prefix depends on the model: 4,096
+tokens on Haiku 4.5, 1,024 on Sonnet 5 and 512 on Opus 5, so our prefix is cached on Sonnet and Opus and
+silently not cached on Haiku. Padding the prompt to reach Haiku's minimum was rejected: it would pay for
+more tokens in order to save on them.
+
+## D18 — The hybrid calls the LLM only when it is needed
+
+The heuristic runs first. The LLM is called when a field it found is uncertain (confidence between 0 and 1)
+or one of the six fields the brief lists is missing. A missing optional field (customer tax id, for example)
+does not trigger a call: many invoices legitimately lack it, and otherwise almost every invoice would pay
+for an LLM call.

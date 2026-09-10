@@ -39,58 +39,11 @@ _DAY_MONTH_YEAR = re.compile(
 _MONTH_DAY_YEAR = re.compile(r"\b([^\W\d_]{3,})\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b")
 
 _US_STATES = [
-    "AL",
-    "AK",
-    "AZ",
-    "AR",
-    "CA",
-    "CO",
-    "CT",
-    "DE",
-    "DC",
-    "FL",
-    "GA",
-    "HI",
-    "ID",
-    "IL",
-    "IN",
-    "IA",
-    "KS",
-    "KY",
-    "LA",
-    "ME",
-    "MD",
-    "MA",
-    "MI",
-    "MN",
-    "MS",
-    "MO",
-    "MT",
-    "NE",
-    "NV",
-    "NH",
-    "NJ",
-    "NM",
-    "NY",
-    "NC",
-    "ND",
-    "OH",
-    "OK",
-    "OR",
-    "PA",
-    "RI",
-    "SC",
-    "SD",
-    "TN",
-    "TX",
-    "UT",
-    "VT",
-    "VA",
-    "WA",
-    "WV",
-    "WI",
-    "WY",
-]
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA",
+    "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM",
+    "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA",
+    "WV", "WI", "WY",
+]  # fmt: skip
 _US_ADDRESS = re.compile(rf"\b(?:{'|'.join(_US_STATES)})\s+\d{{5}}(?:-\d{{4}})?\b")
 
 _GROUP_SEPARATORS = "   '’"
@@ -100,64 +53,14 @@ _AMOUNT_TOKEN = re.compile(
 )
 _DECIMALS = re.compile(r"[.,]\d{2}$")
 
-ISO_CURRENCIES = frozenset(
-    [
-        "EUR",
-        "GBP",
-        "USD",
-        "CHF",
-        "SEK",
-        "NOK",
-        "DKK",
-        "ISK",
-        "PLN",
-        "CZK",
-        "HUF",
-        "RON",
-        "BGN",
-        "RSD",
-        "UAH",
-        "RUB",
-        "TRY",
-        "ILS",
-        "AED",
-        "SAR",
-        "QAR",
-        "KWD",
-        "BHD",
-        "OMR",
-        "EGP",
-        "MAD",
-        "NGN",
-        "KES",
-        "ZAR",
-        "INR",
-        "PKR",
-        "BDT",
-        "LKR",
-        "CNY",
-        "HKD",
-        "TWD",
-        "JPY",
-        "KRW",
-        "SGD",
-        "MYR",
-        "THB",
-        "IDR",
-        "PHP",
-        "VND",
-        "AUD",
-        "NZD",
-        "CAD",
-        "MXN",
-        "BRL",
-        "ARS",
-        "CLP",
-        "COP",
-        "PEN",
-        "UYU",
-    ]
-)
+# Currencies of the main trading economies. ISO codes that are also common words ("ALL", "TOP", "CUP")
+# are left out, because a bare three-letter word would otherwise read as a currency.
+ISO_CURRENCIES = frozenset([
+    "EUR", "GBP", "USD", "CHF", "SEK", "NOK", "DKK", "ISK", "PLN", "CZK", "HUF", "RON", "BGN", "RSD",
+    "UAH", "RUB", "TRY", "ILS", "AED", "SAR", "QAR", "KWD", "BHD", "OMR", "EGP", "MAD", "NGN", "KES",
+    "ZAR", "INR", "PKR", "BDT", "LKR", "CNY", "HKD", "TWD", "JPY", "KRW", "SGD", "MYR", "THB", "IDR",
+    "PHP", "VND", "AUD", "NZD", "CAD", "MXN", "BRL", "ARS", "CLP", "COP", "PEN", "UYU",
+])  # fmt: skip
 _CURRENCY_CODE = re.compile(r"\b[A-Z]{3}\b")
 # (symbol, ISO code, ambiguous). Letter-prefixed dollars must be tried before the bare "$".
 _SYMBOLS = [
@@ -185,41 +88,10 @@ _CURRENCY_WORDS = [
     (re.compile(r"\byen\b", re.I), "JPY", False),
 ]
 
-_VAT_PREFIXES = frozenset(
-    [
-        "AT",
-        "BE",
-        "BG",
-        "CY",
-        "CZ",
-        "DE",
-        "DK",
-        "EE",
-        "EL",
-        "ES",
-        "FI",
-        "FR",
-        "GB",
-        "HR",
-        "HU",
-        "IE",
-        "IT",
-        "LT",
-        "LU",
-        "LV",
-        "MT",
-        "NL",
-        "PL",
-        "PT",
-        "RO",
-        "SE",
-        "SI",
-        "SK",
-        "XI",
-        "CH",
-        "NO",
-    ]
-)
+_VAT_PREFIXES = frozenset([
+    "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES", "FI", "FR", "GB", "HR", "HU", "IE",
+    "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK", "XI", "CH", "NO",
+])  # fmt: skip
 _EU_VAT_ID = re.compile(
     rf"\b(?:{'|'.join(sorted(_VAT_PREFIXES - {'CH', 'NO'}))})[ ]?(?=[0-9A-Z]*\d{{6}})[0-9A-Z]{{8,12}}\b"
 )

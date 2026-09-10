@@ -17,6 +17,7 @@ those 14 invoices are now used only as unit-test fixtures and appear in no metri
 | Source | Author | Licence | Cases used | Role |
 |---|---|---|---|---|
 | Mendeley *Samples of electronic invoices* (Kozłowski & Weichbroth, 2021) | third party | CC BY 4.0 | 72 | dev + test |
+| Mustang project test resources (`evals/external/mustang/`) | third party | Apache-2.0 | 6 | dev + test |
 | Held-out set (`evals/holdout/`) | two isolated agents that never saw the code | this project | 16 | dev + test |
 | Author-written invoices (`evals/golden/`) | the system's author | this project | 14 | unit tests only |
 
@@ -25,6 +26,13 @@ company names without a legal form). PDFs with a real text layer. Labels come fr
 [katanaml-org/invoices-donut-data-v1](https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1)
 (MIT), made by a third party on the same invoices. Attribution and the list of changes are in
 `evals/external/mendeley/LICENSE-DATA.txt`.
+
+**Mustang.** Six German ZUGFeRD / Factur-X invoices from the test resources of an open-source e-invoicing
+library: real ERP layouts, German number and date formats, prepayments, two VAT rates, one GBP invoice that
+also prints its tax in EUR. Labels come from the EN 16931 XML embedded in each PDF and were checked against
+the printed text; where they disagree, the printed document wins (one total printed as 963,12 against 963.11
+in the XML; tax ids present in the XML but not printed were set to null). Near-duplicates and PDFs without
+embedded data were left out.
 
 **Held-out set.** 16 PDFs with deliberately messy, European layouts: two-column headers, legal name only in
 the footer, totals on page two, label and value in separate table columns, several VAT rates, discounts,
@@ -37,7 +45,7 @@ stated away from the totals. Each invoice is tagged with its difficulty.
 |---|---|
 | DocILE (Rossum, 6.7k real annotated business documents) | access through a research-only request form, no redistribution: a reviewer could not reproduce it |
 | RVL-CDIP (Hugging Face) | scanned 1980s-90s tobacco-litigation images, no text layer (OCR is out of scope), only a document-class label, no fields, 38.8 GB, unclear licence |
-| FATURA / FATURA2 | original licence CC BY-NC-SA (non-commercial); the Hugging Face copy relabels it |
+| FATURA / FATURA2 (Zenodo 10371464, CC BY 4.0) | 10,000 images from 50 templates, no text layer (OCR is out of scope), labels are bounding boxes rather than field values |
 | ~30 other Hugging Face invoice datasets | images only, no licence, retail receipts, or no field labels |
 | Invoice PDFs found on the web | personal data, unknown rights, no labels |
 
@@ -61,13 +69,13 @@ Labels were not trusted blindly.
 
 ## 4. Split and protocol
 
-`evals/splits.json` records the split: each source (Mendeley, held-out batch A, held-out batch B) is shuffled
-with a fixed seed and cut in half.
+`evals/splits.json` records the split: each source (Mendeley, Mustang, held-out batch A, held-out batch B) is
+shuffled with a fixed seed and cut in half.
 
-| Split | Mendeley | Held-out | Total | Use |
-|---|---|---|---|---|
-| dev | 36 | 8 | 44 | failures inspected, bugs fixed |
-| test | 36 | 8 | 44 | aggregate metrics only; per-case failures hidden unless `--show-test-failures` |
+| Split | Mendeley | Mustang | Held-out | Total | Use |
+|---|---|---|---|---|---|
+| dev | 36 | 3 | 8 | 47 | failures inspected, bugs fixed |
+| test | 36 | 3 | 8 | 47 | aggregate metrics only; per-case failures hidden unless `--show-test-failures` |
 
 Rules we held ourselves to:
 
@@ -85,6 +93,8 @@ Rules we held ourselves to:
 | Customer-block fix | A dev bug (PDF text loses blank lines, so the customer block never ended) was fixed with a general rule | Also raised the then-hidden held-out score; declared |
 | Formatting the generator | Reformatting `generate_batch_a.py` displayed part of one held-out invoice | No code or prompt changed; PDFs verified byte-identical |
 | Prompt draft | Five instructions mirrored held-out difficulty categories | Reverted before any model call |
+| Haiku pilot on dev | Fields 96% but verdicts 27%: the grounding check rejected correct values (space thousands separators, US dates, bare `$`, evidence split across table columns). Fixed with general rules, each driven by a unit test written from invented inputs (D16) | Same recordings, dev verdicts 27% → 64%. Test not inspected |
+| Prompt v3 | Two general instructions: copy numbers in the evidence with their original separators (the model rewrote `$ 802,73` as `$ 802.73`, which the check rightly rejected), and read numeric dates in the issuer's convention | Recordings invalidated and re-recorded on dev |
 
 ## 5. Metrics
 
@@ -118,3 +128,25 @@ and the totals table lists all labels before all values. It returns `FAIL` for e
 verdict agreement is only the invoices that were supposed to fail. Hand-written rules work for the layouts
 they were written for; this is the gap the LLM path has to close, and the next section measures whether it
 does and at what cost.
+
+## 7. How the LLM runs are spent: in stages, dev first
+
+Model calls are recorded once and replayed forever after, so every call is paid once. Even so, they are
+spent in stages, each one teaching something before the next is paid for. Iteration happens **only on dev**;
+the test split is run **once**, at the end, with prompt and code frozen.
+
+| Stage | What | Calls | Purpose |
+|---|---|---|---|
+| 0. Smoke | cheapest model on 3 dev invoices | 3 | first contact with the real API: schema accepted, parameters accepted, parsing works |
+| 1. Pilot | cheapest model on the 44 dev invoices | 44 | find prompt and normalisation failures cheaply |
+| 2. Refine | general fixes only; re-record just what changed | as needed | iterate until dev stops improving |
+| 3. Compare | the other two models on dev | 88 | decide which models go to test |
+| 4. Test | finalists on the 44 test invoices, once | 44–132 | the headline number |
+
+### Model selection rule (fixed before seeing any result)
+
+The default model is **the cheapest one whose dev field exact match and dev verdict agreement are both within
+3 percentage points of the best model**, unless its p95 latency is more than twice the best model's. If a
+cheaper model ties the most capable one, the cheaper model wins. The hybrid cascade is evaluated with the
+chosen model.
+
