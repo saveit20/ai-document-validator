@@ -15,23 +15,31 @@ from validator.transport import LLMInvalidOutput, LLMRequest, LLMTransport
 class _FieldOut(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    value: str | None
-    evidence: str | None
+    value: str
+    evidence: str
 
 
 class _InvoiceOut(BaseModel):
+    """The model's answer: every field is present, and null when it is not in the document."""
+
     model_config = ConfigDict(extra="forbid")
 
-    supplier_name: _FieldOut
-    invoice_number: _FieldOut
-    invoice_date: _FieldOut
-    total_amount: _FieldOut
-    currency: _FieldOut
-    tax_id: _FieldOut
-    subtotal_amount: _FieldOut
-    tax_amount: _FieldOut
-    customer_name: _FieldOut
-    customer_tax_id: _FieldOut
+    supplier_name: _FieldOut | None
+    invoice_number: _FieldOut | None
+    invoice_date: _FieldOut | None
+    total_amount: _FieldOut | None
+    currency: _FieldOut | None
+    tax_id: _FieldOut | None
+    subtotal_amount: _FieldOut | None
+    tax_amount: _FieldOut | None
+    customer_name: _FieldOut | None
+    customer_tax_id: _FieldOut | None
+
+
+def _candidate(field: _FieldOut | None) -> Candidate:
+    if field is None or not field.value.strip():
+        return Candidate()
+    return Candidate(raw=field.value, evidence=field.evidence or None)
 
 
 class LLMExtractor:
@@ -54,12 +62,7 @@ class LLMExtractor:
             raise LLMInvalidOutput(
                 f"model output does not match the schema ({type(exc).__name__})"
             ) from exc
-        candidates = {
-            name: Candidate(
-                raw=getattr(parsed, name).value, evidence=getattr(parsed, name).evidence
-            )
-            for name in FIELD_NAMES
-        }
+        candidates = {name: _candidate(getattr(parsed, name)) for name in FIELD_NAMES}
         info = LLMCallInfo(
             model=response.model,
             latency_ms=response.latency_ms,

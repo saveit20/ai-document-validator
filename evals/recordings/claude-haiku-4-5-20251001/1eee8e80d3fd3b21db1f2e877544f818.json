@@ -1,0 +1,7 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Stahlbau Keller GmbH\",\"evidence\":\"Stahlbau Keller GmbH\\nIndustriestraße 41 · 70565 Stuttgart · Deutschland\"},\"invoice_number\":{\"value\":\"RE-2026-00318\",\"evidence\":\"Rechnungs-Nr.: RE-2026-00318\"},\"invoice_date\":{\"value\":\"2026-03-15\",\"evidence\":\"Rechnungsdatum: 15.03.2026\"},\"total_amount\":{\"value\":\"23629.53\",\"evidence\":\"Rechnungsbetrag / Total 23.629,53 EUR\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Rechnungsbetrag / Total 23.629,53 EUR\"},\"tax_id\":{\"value\":\"DE 812 345 678\",\"evidence\":\"USt-IdNr.: DE 812 345 678\"},\"subtotal_amount\":{\"value\":\"19856.75\",\"evidence\":\"Nettobetrag / Net total 19.856,75 EUR\"},\"tax_amount\":{\"value\":\"3772.78\",\"evidence\":\"zzgl. 19 % MwSt. / VAT 3.772,78 EUR\"},\"customer_name\":{\"value\":\"Northwind Construction S.L.\",\"evidence\":\"Northwind Construction S.L.\\nCalle de Alcalá 214, 3º B, 28028 Madrid, Spanien\"},\"customer_tax_id\":{\"value\":\"ESB12345678\",\"evidence\":\"USt-IdNr. Kunde / Customer VAT: ESB12345678\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 3666,
+  "output_tokens": 382,
+  "latency_ms": 11247
+}

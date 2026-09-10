@@ -173,3 +173,26 @@ def test_recorded_transport_without_recording_is_unavailable(tmp_path) -> None:
 
 def test_prompt_change_invalidates_recordings() -> None:
     assert _request().cache_key() != replace(_request(), prompt_version="changed").cache_key()
+
+
+def _unions(node: object) -> int:
+    if isinstance(node, dict):
+        own = 1 if "anyOf" in node or isinstance(node.get("type"), list) else 0
+        return own + sum(_unions(value) for value in node.values())
+    if isinstance(node, list):
+        return sum(_unions(item) for item in node)
+    return 0
+
+
+def test_output_schema_respects_the_provider_union_limit() -> None:
+    # Anthropic's structured outputs reject schemas with more than 16 union-typed parameters.
+    assert _unions(OUTPUT_SCHEMA) <= 16
+
+
+def test_null_field_means_not_found() -> None:
+    _, extraction = run_llm(
+        llm_reply(invoice_number=("INV-2026-0142", "Invoice No: INV-2026-0142"))
+    )
+    assert extraction.invoice_number.confidence == 1.0
+    assert extraction.supplier_name.value is None
+    assert extraction.supplier_name.confidence == 0.0

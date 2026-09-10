@@ -35,14 +35,13 @@ class FakeTransport:
         )
 
 
-def llm_reply(**fields: tuple[str | None, str | None]) -> str:
-    """A model reply in the output schema; fields not given are null."""
+def llm_reply(**fields: tuple[str, str]) -> str:
+    """A model reply in the output schema: given fields as (value, evidence), all others null."""
     return json.dumps(
         {
-            name: {
-                "value": fields.get(name, (None, None))[0],
-                "evidence": fields.get(name, (None, None))[1],
-            }
+            name: {"value": fields[name][0], "evidence": fields[name][1]}
+            if name in fields
+            else None
             for name in FIELD_NAMES
         }
     )
