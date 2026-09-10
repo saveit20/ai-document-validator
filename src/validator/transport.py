@@ -1,9 +1,10 @@
 """LLM transport boundary: moves text to and from the model; never parses or validates it."""
 
+import base64
 import hashlib
 import json
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -30,14 +31,15 @@ class LLMRequest:
     schema: dict[str, Any]
     prompt_version: str
     max_tokens: int = 4096
+    pdf: bytes | None = field(default=None, repr=False)
+    """The original PDF, sent to the model alongside the text when the input mode is 'pdf'."""
 
     def cache_key(self) -> str:
         """Stable key over everything that shapes the answer; changes when the prompt changes."""
-        payload = json.dumps(
-            [self.model, self.prompt_version, self.system, self.user, self.schema],
-            sort_keys=True,
-            ensure_ascii=False,
-        )
+        parts: list[Any] = [self.model, self.prompt_version, self.system, self.user, self.schema]
+        if self.pdf is not None:
+            parts.append(hashlib.sha256(self.pdf).hexdigest())
+        payload = json.dumps(parts, sort_keys=True, ensure_ascii=False)
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:32]
 
 
@@ -58,6 +60,22 @@ class LLMTransport(Protocol):
 
 
 _EFFORT_MODELS = ("claude-opus-5", "claude-sonnet-5")
+
+
+def _user_content(request: LLMRequest) -> str | list[dict[str, Any]]:
+    """The user turn: the text alone, or the PDF first (the API renders each page as an image and
+    extracts its text) followed by the text."""
+    if request.pdf is None:
+        return request.user
+    pdf = {
+        "type": "document",
+        "source": {
+            "type": "base64",
+            "media_type": "application/pdf",
+            "data": base64.b64encode(request.pdf).decode("ascii"),
+        },
+    }
+    return [pdf, {"type": "text", "text": request.user}]
 
 
 class AnthropicTransport:
@@ -92,7 +110,7 @@ class AnthropicTransport:
                         "cache_control": {"type": "ephemeral"},
                     }
                 ],
-                messages=[{"role": "user", "content": request.user}],
+                messages=[{"role": "user", "content": _user_content(request)}],
                 output_config=output_config,
             )
         except anthropic.APIError as exc:

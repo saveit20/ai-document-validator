@@ -103,10 +103,15 @@ def _as_text(value: object) -> str | None:
     return str(value)
 
 
-def run_cases(pipeline: Pipeline, cases: list[Case]) -> list[CaseResult]:
+def run_cases(pipeline: Pipeline, cases: list[Case], pdf_text: str = "plain") -> list[CaseResult]:
     results = []
     for case in cases:
-        document = document_from_bytes(case.path.read_bytes(), case.media_type, case.path.name)
+        document = document_from_bytes(
+            case.path.read_bytes(),
+            case.media_type,
+            case.path.name,
+            pdf_text,  # type: ignore[arg-type]
+        )
         run = pipeline.validate(document, case.config, case.reference_date)
         results.append(
             CaseResult(
@@ -135,7 +140,9 @@ def summaries_by_source(name: str, cases: list[Case], results: list[CaseResult])
     return summaries
 
 
-def build(extractor: str, model: str, record: bool) -> tuple[str, Pipeline]:
+def build(
+    extractor: str, model: str, record: bool, llm_input: str = "text"
+) -> tuple[str, Pipeline]:
     heuristic = HeuristicExtractor()
     if extractor == "heuristic":
         return "heuristic", Pipeline(heuristic, heuristic)
@@ -144,11 +151,12 @@ def build(extractor: str, model: str, record: bool) -> tuple[str, Pipeline]:
         api_key = os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
             raise SystemExit("--record needs ANTHROPIC_API_KEY in the environment or in .env")
-        live = AnthropicTransport(api_key)
-    llm = LLMExtractor(RecordedTransport(RECORDINGS_DIR, live=live), model)
+        live = AnthropicTransport(api_key, timeout_s=90.0)
+    llm = LLMExtractor(RecordedTransport(RECORDINGS_DIR, live=live), model, llm_input)  # type: ignore[arg-type]
+    suffix = "+pdf" if llm_input == "pdf" else ""
     if extractor == "llm":
-        return f"llm:{model}", Pipeline(llm, heuristic)
-    return f"hybrid:{model}", Pipeline(HybridExtractor(heuristic, llm), heuristic)
+        return f"llm:{model}{suffix}", Pipeline(llm, heuristic)
+    return f"hybrid:{model}{suffix}", Pipeline(HybridExtractor(heuristic, llm), heuristic)
 
 
 def _check_baseline(summaries: list[Summary]) -> int:
@@ -188,6 +196,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--split", choices=("dev", "test", "both"), default="both")
     parser.add_argument("--record", action="store_true", help="call the API for missing recordings")
+    parser.add_argument(
+        "--pdf-text", choices=("plain", "layout"), default="plain", help="how PDF text is extracted"
+    )
+    parser.add_argument(
+        "--llm-input", choices=("text", "pdf"), default="text", help="also send the PDF itself"
+    )
     parser.add_argument("--all", action="store_true", help="heuristic, every model, and hybrid")
     parser.add_argument(
         "--show-test-failures",
@@ -206,13 +220,17 @@ def main(argv: list[str] | None = None) -> int:
     else:
         configs = [(args.extractor, args.model)]
     splits = ["dev", "test"] if args.split == "both" else [args.split]
-    pipelines = [build(extractor, model, args.record) for extractor, model in configs]
+    pipelines = [
+        build(extractor, model, args.record, args.llm_input) for extractor, model in configs
+    ]
+    text_suffix = "+layout" if args.pdf_text == "layout" else ""
 
     summaries: list[Summary] = []
     for split in splits:
         cases = load_cases(split)
         for name, pipeline in pipelines:
-            summaries += summaries_by_source(f"{name}@{split}", cases, run_cases(pipeline, cases))
+            results = run_cases(pipeline, cases, args.pdf_text)
+            summaries += summaries_by_source(f"{name}{text_suffix}@{split}", cases, results)
 
     report = "\n".join(
         render(s, show_failures=args.show_test_failures or "@dev/" in s.name) for s in summaries

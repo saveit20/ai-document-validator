@@ -24,6 +24,8 @@ class Settings:
     llm_timeout_s: float = 30.0
     recordings_dir: Path = DEFAULT_RECORDINGS_DIR
     log_level: str = "INFO"
+    pdf_text: str = "plain"
+    llm_input: str = "text"
 
 
 def load_settings(env: Mapping[str, str] | None = None) -> Settings:
@@ -39,7 +41,13 @@ def load_settings(env: Mapping[str, str] | None = None) -> Settings:
         llm_timeout_s=float(env.get("LLM_TIMEOUT_S", "30")),
         recordings_dir=Path(env.get("RECORDINGS_DIR", str(DEFAULT_RECORDINGS_DIR))),
         log_level=env.get("LOG_LEVEL", "INFO").strip().upper(),
+        pdf_text=env.get("PDF_TEXT", "plain").strip().lower(),
+        llm_input=env.get("LLM_INPUT", "text").strip().lower(),
     )
+    if settings.pdf_text not in {"plain", "layout"}:
+        raise ConfigError(f"PDF_TEXT must be plain or layout, not '{settings.pdf_text}'")
+    if settings.llm_input not in {"text", "pdf"}:
+        raise ConfigError(f"LLM_INPUT must be text or pdf, not '{settings.llm_input}'")
     if settings.extractor not in {"heuristic", "llm", "hybrid"}:
         raise ConfigError(f"EXTRACTOR must be heuristic, llm or hybrid, not '{settings.extractor}'")
     if settings.llm_transport not in {"live", "replay"}:

@@ -20,6 +20,7 @@ from validator.config import Settings, load_settings
 from validator.ingest import (
     Document,
     DocumentError,
+    PdfText,
     UnsupportedMediaType,
     document_from_bytes,
     document_from_text,
@@ -106,13 +107,13 @@ def _validation_details(exc: ValidationError) -> Any:
 
 
 async def _read_input(
-    request: Request, with_config: bool
+    request: Request, with_config: bool, pdf_text: PdfText
 ) -> tuple[Document, RuleConfig | None, date | None]:
     content_type = request.headers.get("content-type", "").split(";")[0].strip().lower()
     if content_type == "application/json":
-        return await _read_json(request, with_config)
+        return await _read_json(request, with_config, pdf_text)
     if content_type == "multipart/form-data":
-        return await _read_multipart(request, with_config)
+        return await _read_multipart(request, with_config, pdf_text)
     raise UnsupportedMediaType(
         f"unsupported content type '{content_type or 'none'}'; "
         "use application/json or multipart/form-data"
@@ -120,7 +121,7 @@ async def _read_input(
 
 
 async def _read_json(
-    request: Request, with_config: bool
+    request: Request, with_config: bool, pdf_text: PdfText
 ) -> tuple[Document, RuleConfig | None, date | None]:
     try:
         raw = await request.json()
@@ -141,20 +142,22 @@ async def _read_json(
             data = base64.b64decode(source.content_base64 or "", validate=True)
         except (binascii.Error, ValueError) as exc:
             raise InvalidRequest("content_base64 is not valid base64") from exc
-        document = document_from_bytes(data, source.media_type, source.filename)
+        document = document_from_bytes(data, source.media_type, source.filename, pdf_text)
     if isinstance(body, ValidateRequest):
         return document, body.config, body.reference_date
     return document, None, None
 
 
 async def _read_multipart(
-    request: Request, with_config: bool
+    request: Request, with_config: bool, pdf_text: PdfText
 ) -> tuple[Document, RuleConfig | None, date | None]:
     form = await request.form()
     upload = form.get("file")
     if upload is None or isinstance(upload, str):
         raise InvalidRequest("multipart body needs a 'file' part")
-    document = document_from_bytes(await upload.read(), upload.content_type, upload.filename)
+    document = document_from_bytes(
+        await upload.read(), upload.content_type, upload.filename, pdf_text
+    )
     if not with_config:
         return document, None, None
     raw_config = form.get("config")
@@ -252,7 +255,9 @@ def create_app(settings: Settings | None = None, pipeline: Pipeline | None = Non
         summary="Extract fields and validate them against business rules",
     )
     async def validate(request: Request) -> ValidationResponse:
-        document, config, reference_date = await _read_input(request, with_config=True)
+        document, config, reference_date = await _read_input(
+            request, with_config=True, pdf_text=settings.pdf_text
+        )
         if config is None:
             raise InvalidRequest("config is required")
         run = await run_in_threadpool(
@@ -277,7 +282,7 @@ def create_app(settings: Settings | None = None, pipeline: Pipeline | None = Non
         summary="Extract fields only, without evaluating rules",
     )
     async def extract(request: Request) -> ExtractionResponse:
-        document, _, _ = await _read_input(request, with_config=False)
+        document, _, _ = await _read_input(request, with_config=False, pdf_text=settings.pdf_text)
         run = await run_in_threadpool(pipeline.extract, document)
         _log_run(document, run)
         return ExtractionResponse(

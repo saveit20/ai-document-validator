@@ -79,6 +79,6 @@ def build_pipeline(settings: Settings) -> Pipeline:
         transport = RecordedTransport(settings.recordings_dir)
     else:
         transport = AnthropicTransport(settings.anthropic_api_key or "", settings.llm_timeout_s)
-    llm = LLMExtractor(transport, settings.llm_model)
+    llm = LLMExtractor(transport, settings.llm_model, settings.llm_input)  # type: ignore[arg-type]
     extractor = llm if settings.extractor == "llm" else HybridExtractor(heuristic, llm)
     return Pipeline(extractor, fallback=heuristic)

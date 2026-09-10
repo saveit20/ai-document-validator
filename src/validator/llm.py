@@ -1,6 +1,7 @@
 """Typed layer over the transport: builds the request and validates the model's JSON."""
 
 import json
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, ValidationError
 
@@ -42,18 +43,27 @@ def _candidate(field: _FieldOut | None) -> Candidate:
     return Candidate(raw=field.value, evidence=field.evidence or None)
 
 
+LLMInput = Literal["text", "pdf"]
+
+
 class LLMExtractor:
-    def __init__(self, transport: LLMTransport, model: str) -> None:
+    """`input_mode='pdf'` also sends the original PDF, so the model sees the page layout; the
+    evidence is still checked against the extracted text."""
+
+    def __init__(self, transport: LLMTransport, model: str, input_mode: LLMInput = "text") -> None:
         self._transport = transport
         self._model = model
+        self._input_mode = input_mode
 
     def extract(self, document: Document) -> ExtractorOutput:
+        pdf = document.data if self._input_mode == "pdf" else None
         request = LLMRequest(
             model=self._model,
             system=SYSTEM_PROMPT,
-            user=build_user_prompt(document.text),
+            user=build_user_prompt(document.text, with_pdf=pdf is not None),
             schema=OUTPUT_SCHEMA,
             prompt_version=PROMPT_VERSION,
+            pdf=pdf,
         )
         response = self._transport.complete(request)
         try:
