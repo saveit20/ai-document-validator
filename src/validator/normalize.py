@@ -328,8 +328,10 @@ def normalize_tax_id(raw: str | None) -> str | None:
     """Canonical tax id (upper case, no spaces, dots or hyphens) if it looks like one."""
     if not raw:
         return None
-    # A country printed apart from the number, as in "(ES) B98602642", is a label, not part of the id.
+    # A country printed apart from the number, as in "(ES) B98602642", is a label, not part of the id;
+    # a second tax label on the same line ("CIF: B-41234567 NIF: ESB...") starts another id.
     raw = re.sub(r"^\s*\([A-Z]{2}\)\s*", "", raw.upper())
+    raw = re.split(r"\s+(?:NIF|CIF|VAT|TVA|IVA|UID|NIP|TIN|TRN|UST-?IDNR)\b", raw)[0]
     compact = re.sub(r"[\s.\-]", "", raw)
     match = re.match(r"[A-Z0-9]+", compact)
     if not match:

@@ -20,6 +20,8 @@ jobs:
         run: python -m evals.run --extractor heuristic --check-baseline
       - name: Evaluation quality gate (Opus 5 on test, replayed from recordings)
         run: python -m evals.run --extractor llm --model claude-opus-5 --split test --check-baseline
+      - name: Evaluation quality gate (hybrid on test, replayed from recordings)
+        run: python -m evals.run --extractor hybrid --model claude-opus-5 --split test --check-baseline
 
   docker:
     runs-on: ubuntu-latest

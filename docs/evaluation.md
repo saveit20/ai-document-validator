@@ -117,6 +117,7 @@ Rules we held ourselves to:
 | Formatting the generator | Reformatting `generate_batch_a.py` displayed part of one held-out invoice | No code or prompt changed; PDFs verified byte-identical |
 | Prompt draft | Five instructions mirrored held-out difficulty categories | Reverted before any model call |
 | Haiku pilot on dev | Fields 96% but verdicts 27%: the grounding check rejected correct values (space thousands separators, US dates, bare `$`, evidence split across table columns). Fixed with general rules, each driven by a unit test written from invented inputs (D16) | Same recordings, dev verdicts 27% → 64%. Test not inspected |
+| Heuristic fixes after the test run | General fixes designed on dev errors only; heuristic and hybrid then re-run on test (a second look, for these two configurations only). A version with template-specific labels was measured and rejected as overfitting | Test figures for the heuristic and the hybrid in §6 are from this second run; the LLM figures are unchanged |
 | Finance labelling policy | IDSEM and GOBL labels were aligned with the pre-registered guide (tax total summed from per-rate lines, credit notes negative), by rule and without looking at any test output | The heuristic's IDSEM field score fell from 43% to 37% (it does not sum tax lines); its quality-gate baseline was lowered accordingly, with this reason |
 | Prompt v3 | Two general instructions: copy numbers in the evidence with their original separators (the model rewrote `$ 802,73` as `$ 802.73`, which the check rightly rejected), and read numeric dates in the issuer's convention | Recordings invalidated and re-recorded on dev |
 
@@ -143,7 +144,7 @@ frozen. `python -m evals.run --extractor llm --model claude-opus-5 --split test`
 
 | Configuration | Field exact match | Verdict agreement | Verdict errors | Mean / p95 latency | Cost / invoice |
 |---|---|---|---|---|---|
-| Heuristic | 50% | 55% | 36: 34 wrong `FAIL`, 2 `REVIEW` | 0.11 s / 0.44 s | $0 |
+| Heuristic | 64% | 55% | 36: 26 `FAIL` (25 on valid invoices), 10 `REVIEW` | 0.11 s / 0.44 s | $0 |
 | **Opus 5, PDF + text, prompt v4b** | **98%** | **95%** | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
 | Hybrid, heuristic then Opus 5 | 98% | 96% | 3, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
 
@@ -157,12 +158,35 @@ SalorWorks 94% / 100%, GOBL 95% / 77%, held-out 98% / 100%.
   cost another ~$2.7.
 - **The weakest source is GOBL** (13 test invoices), the one with the most countries and document types.
   Per-case failures on test stay hidden by design.
-- **The hybrid saves nothing on this data**: it called the LLM on all 80 invoices.
+- **The hybrid saves nothing with a general heuristic**: it called the LLM on all 80 invoices.
 
-The heuristic, by contrast, fails the other way: it wrongly rejects 34 of the 80 test invoices. On layouts
-it was not written for it misses a required field, and a field that is reliably absent is a `FAIL`. It
-never wrongly passes an invoice, but a system that rejects four in ten valid invoices is not usable on
-varied layouts, which is why the LLM path exists.
+The heuristic fails the other way: it wrongly rejects 25 of the 80 test invoices. On layouts it was not
+written for it misses a required field, and a field that is reliably absent is a `FAIL`. It never wrongly
+passes an invoice, but a system that rejects a third of valid invoices is not usable on varied layouts,
+which is why the LLM path exists.
+
+### The heuristic: improved, but kept general on purpose
+
+After the test run the heuristic was improved with general fixes, each driven by a dev error and covered by
+a unit test written from invented inputs: a value printed on the line after its label, tables printed as
+all labels then all values, total/net/tax and invoice-number labels in German, French, Italian,
+Portuguese and Dutch, an invoice number must contain a digit, a date on the line after its label, and a
+six-line customer block. Then the heuristic and the hybrid were run on test a second time (declared in the
+contamination log).
+
+| Heuristic on test | Fields | Verdicts | Hybrid: invoices without an LLM call | Hybrid cost / invoice |
+|---|---|---|---|---|
+| Before the fixes | 50% | 55% | 0 of 80 | $0.034 |
+| **General fixes (shipped)** | **64%** | **55%** | 0 of 80 | $0.034 |
+| General fixes + the Mendeley template's own labels (`Net worth`, `Gross worth`) — not shipped | 73% | 78% | 36 of 80 | $0.023 |
+
+Per source, the template-specific version gained almost only on Mendeley (verdicts 50% → 100%), whose
+template is in both dev and test; on the held-out set, the only source whose layouts never repeat
+between dev and test, it found more fields (64% → 78%) but its verdicts did not improve. Those two labels
+are not standard accounting vocabulary; they are that template's wording. Keeping them would have turned
+the hybrid into a 33% saving on our data by learning the evaluation set, so they were removed: the
+service must work on invoices we have not seen. The measurement stays here because it shows exactly when
+the hybrid pays — once rules exist for a customer's frequent templates.
 
 **What the whole evaluation cost:** 661 recorded calls (Haiku 4.5 434, Sonnet 5 67, Opus 5 160), about
 $9.40, including every experiment.
@@ -207,7 +231,7 @@ of fields and 90% of verdicts.
 - **No model produced a wrong `PASS` or `FAIL`.** Every verdict error of every model is a `REVIEW` on an
   invoice that should have passed or failed: when the model is wrong, the grounding check catches it.
   The cost of a weaker model is more manual reviews, not wrong decisions.
-- **The hybrid saves nothing here.** On these varied layouts the heuristic is never confident about every
+- **The hybrid saves nothing here** (with the heuristic of that time; see §6 for the final one). On these varied layouts the heuristic is never confident about every
   field, so the cascade calls the LLM on 67 of 67 invoices. It would pay off on a stream dominated by a few
   known, clean templates, where the heuristic alone reaches full confidence (see the README on when not to
   use an LLM).

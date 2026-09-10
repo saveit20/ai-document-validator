@@ -17,18 +17,20 @@ listed below.
 
 ### Decisions the author took, and what they changed
 
-The assistant wrote most of the code; these course changes came from the author, usually by challenging
-what the assistant had produced.
+The assistant wrote most of the code. These course changes came from the author, usually by challenging
+what the assistant had produced; each one is a decision with a reason, not a preference.
 
-| The author asked | What it changed |
-|---|---|
-| "The first test data is too easy and written by us" | The author-written invoices were removed from all metrics; independent sources replaced them ([evaluation.md](docs/evaluation.md) §2) |
-| "Do not overfit to one sample: find many sources, languages and currencies" | Six sources instead of one: US, German ZUGFeRD, Spanish utility bills, Gulf (AED/KWD), 13 countries from GOBL, and a held-out set ([docs/data.md](docs/data.md)) |
-| "Are we making the model read the PDF the way you misread the brief?" | Measured how the document reaches the model; sending the PDF with our text raised dev verdict agreement from 74% to 94% on Haiku, and became the default ([evaluation.md](docs/evaluation.md) §8) |
-| "Decide what a finance team would want, not what is easiest" | Credit notes booked negative, tax total summed from printed rate lines, both still verified against the document ([decisions.md](docs/decisions.md) C4, C5) |
-| "Optimise the prompt before spending more calls" | A controlled comparison of prompt variants on dev before the test run ([evaluation.md](docs/evaluation.md) §9) |
-| "We have a fixed API budget" | Staged recording, and a hard cap: the evaluation runner refuses to call the API without `--max-calls` |
-| "Stay with what the brief values" | Data expansion stopped; remaining time went to the test run, README and reproducibility |
+| Decision taken by the author | Why | What it changed |
+|---|---|---|
+| Drop the invoices written by the system's author from every metric | They were easy and circular: the heuristic scored 100% on them and about half on anyone else's | Independent sources replaced them ([evaluation.md](docs/evaluation.md) §2) |
+| Use many public sources, languages and currencies, never one sample | A system tuned on one template looks excellent on it and fails on the next; the evaluation must reflect invoices we have not seen | Six sources, 18 countries, 12 currencies ([docs/data.md](docs/data.md)) |
+| Only redistributable, reproducible data | A reviewer must be able to rerun every number | Datasets behind request forms or with unclear licences were rejected; every source ships with its licence and its rebuild script |
+| Check how the document reaches the model, not only the prompt | The assistant itself had misread the brief from a rendered PDF; the model could suffer the same loss | Sending the PDF with our text raised dev verdicts from 74% to 94% on Haiku and became the default ([evaluation.md](docs/evaluation.md) §8) |
+| Label credit notes and multi-rate tax the way a finance team books them | The easy option ("only what is printed") gives a tax total and a sign that accounting cannot use | Credit notes negative, tax total summed from printed rate lines, both still verified ([decisions.md](docs/decisions.md) C4, C5) |
+| Optimise the prompt before spending the test budget | Prompt engineering is a lever as big as the model, and it had never been compared side by side | Four variants compared on dev; v4b chosen ([evaluation.md](docs/evaluation.md) §9) |
+| Improve the heuristic, but conservatively | A heuristic tuned to our own templates would be misleading: the service must work on suppliers we have not seen | General fixes kept; template-specific labels measured and removed, even though they scored better ([decisions.md](docs/decisions.md) B9) |
+| A fixed API budget | Every call costs real money; spending must be deliberate | Staged recording, and a hard cap: the runner refuses to call the API without `--max-calls` |
+| Stay with what the brief values | "Prefer depth over breadth"; the README must be reviewable in 15 minutes | Data expansion stopped; time went to the test run, documentation and reproducibility |
 
 ## 2. Suggestions we rejected, and why
 

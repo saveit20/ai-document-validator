@@ -230,6 +230,14 @@ def test_tax_ids_from_outside_the_eu(raw: str, expected: str) -> None:
     assert n.normalize_tax_id(raw) == expected
 
 
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [("B-41234567 NIF: ESB12345678", "B41234567"), ("DE123456789 USt-IdNr. DE987", "DE123456789")],
+)
+def test_tax_id_stops_at_the_next_tax_label(raw: str, expected: str) -> None:
+    assert n.normalize_tax_id(raw) == expected
+
+
 @pytest.mark.parametrize("raw", ["Invoice", "20% 200.00", "12345", "ABCDEFGHIJ1"])
 def test_words_and_short_numbers_are_not_tax_ids(raw: str) -> None:
     assert n.normalize_tax_id(raw) is None

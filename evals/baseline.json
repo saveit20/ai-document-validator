@@ -1,59 +1,59 @@
 {
   "heuristic@dev/all": {
-    "verdict_agreement": 0.425,
-    "field_exact_rate": 0.4675
+    "verdict_agreement": 0.4125,
+    "field_exact_rate": 0.605
   },
   "heuristic@dev/mendeley": {
     "verdict_agreement": 0.5,
-    "field_exact_rate": 0.5166666666666667
+    "field_exact_rate": 0.7166666666666667
   },
   "heuristic@dev/holdout": {
-    "verdict_agreement": 0.375,
-    "field_exact_rate": 0.4625
+    "verdict_agreement": 0.0,
+    "field_exact_rate": 0.6625
   },
   "heuristic@test/all": {
     "verdict_agreement": 0.55,
-    "field_exact_rate": 0.5025
+    "field_exact_rate": 0.6375
   },
   "heuristic@test/mendeley": {
     "verdict_agreement": 0.5,
-    "field_exact_rate": 0.5388888888888889
+    "field_exact_rate": 0.7388888888888889
   },
   "heuristic@test/holdout": {
-    "verdict_agreement": 0.5,
-    "field_exact_rate": 0.6375
+    "verdict_agreement": 0.25,
+    "field_exact_rate": 0.775
   },
   "heuristic@dev/mustang": {
     "verdict_agreement": 0.3333333333333333,
-    "field_exact_rate": 0.26666666666666666
+    "field_exact_rate": 0.3333333333333333
   },
   "heuristic@test/mustang": {
     "verdict_agreement": 0.3333333333333333,
-    "field_exact_rate": 0.4666666666666667
+    "field_exact_rate": 0.6
   },
   "heuristic@dev/idsem": {
     "verdict_agreement": 0.26666666666666666,
-    "field_exact_rate": 0.36666666666666664
+    "field_exact_rate": 0.4
   },
   "heuristic@dev/salorworks": {
-    "verdict_agreement": 0.2,
-    "field_exact_rate": 0.56
+    "verdict_agreement": 0.6,
+    "field_exact_rate": 0.8
   },
   "heuristic@test/idsem": {
     "verdict_agreement": 0.6666666666666666,
-    "field_exact_rate": 0.36666666666666664
+    "field_exact_rate": 0.4
   },
   "heuristic@test/salorworks": {
-    "verdict_agreement": 0.6,
-    "field_exact_rate": 0.54
+    "verdict_agreement": 1.0,
+    "field_exact_rate": 0.8
   },
   "heuristic@dev/gobl": {
     "verdict_agreement": 0.5384615384615384,
-    "field_exact_rate": 0.46153846153846156
+    "field_exact_rate": 0.4846153846153846
   },
   "heuristic@test/gobl": {
     "verdict_agreement": 0.6153846153846154,
-    "field_exact_rate": 0.46923076923076923
+    "field_exact_rate": 0.49230769230769234
   },
   "llm:claude-opus-5+pdf@test/all": {
     "verdict_agreement": 0.95,
@@ -82,5 +82,33 @@
   "llm:claude-opus-5+pdf@test/holdout": {
     "verdict_agreement": 1.0,
     "field_exact_rate": 0.975
+  },
+  "hybrid:claude-opus-5+pdf@test/all": {
+    "verdict_agreement": 0.95,
+    "field_exact_rate": 0.98125
+  },
+  "hybrid:claude-opus-5+pdf@test/mendeley": {
+    "verdict_agreement": 1.0,
+    "field_exact_rate": 1.0
+  },
+  "hybrid:claude-opus-5+pdf@test/mustang": {
+    "verdict_agreement": 1.0,
+    "field_exact_rate": 0.9333333333333333
+  },
+  "hybrid:claude-opus-5+pdf@test/idsem": {
+    "verdict_agreement": 0.9333333333333333,
+    "field_exact_rate": 0.9933333333333333
+  },
+  "hybrid:claude-opus-5+pdf@test/salorworks": {
+    "verdict_agreement": 1.0,
+    "field_exact_rate": 0.96
+  },
+  "hybrid:claude-opus-5+pdf@test/gobl": {
+    "verdict_agreement": 0.7692307692307693,
+    "field_exact_rate": 0.9461538461538461
+  },
+  "hybrid:claude-opus-5+pdf@test/holdout": {
+    "verdict_agreement": 1.0,
+    "field_exact_rate": 0.9625
   }
 }

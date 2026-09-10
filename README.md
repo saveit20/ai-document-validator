@@ -10,7 +10,7 @@ When the model is wrong, the result is a `REVIEW` for a person, not a wrong `PAS
 
 **Result on the held-back test split** (80 invoices, six sources, run once with code and prompt frozen):
 Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **95%** of
-invoices, at **$0.034** and ~7 s per invoice (p95 10.9 s). The free heuristic scores 50% and 55%. **No
+invoices, at **$0.034** and ~7 s per invoice (p95 10.9 s). The free heuristic scores 64% and 55%. **No
 invoice got a wrong `PASS` or `FAIL`**: the four disagreements are all `REVIEW`s, where the system was unsure
 and asked for a person.
 
@@ -18,7 +18,7 @@ and asked for a person.
 
 | What the brief values | What we did | Where to check |
 |---|---|---|
-| **Judgment** — heuristic vs LLM vs hybrid, and why | All three behind one interface, measured on the same 160 invoices. The heuristic is free but reads only the layouts it was written for; the hybrid saves calls only on known templates; the LLM is needed for varied layouts. Model chosen by a rule written before seeing results | [Evaluation](#evaluation), [When not to use an LLM](#cost-latency-and-risk) |
+| **Judgment** — heuristic vs LLM vs hybrid, and why | All three behind one interface, measured on the same 160 invoices, and a clear recommendation: the LLM for varied suppliers, the hybrid only once a customer's frequent templates are known, the heuristic offline. The heuristic was kept general on purpose, even though template-specific rules scored better on our data. Model and prompt chosen by rules written before seeing results | [Which mode to use](#which-mode-to-use), [Evaluation](#evaluation) |
 | **Production mindset** — contracts, failure modes, observability, cost/latency | Typed Pydantic contracts; timeouts, retries and a fallback to the heuristic when the LLM fails; JSON logs with request id, latency, model and verdict; cost and latency measured per document; prompt caching; a hard cap on paid calls | [API](#api), [Cost, latency and risk](#cost-latency-and-risk) |
 | **Extraction + rules design** — extensibility, typing, failure handling | Rules are small classes behind a `Protocol`: adding one is a class and a line. Confidence comes from checking evidence against the document, never from the model | [Architecture](#architecture), [docs/decisions.md](docs/decisions.md) |
 | **Evaluation mindset** — golden set quality, metrics honesty | 160 invoices from six sources the author did not write, labels checked against the printed PDF, a dev half for fixing and a test half run once. Every metric per source; failures printed | [Evaluation](#evaluation), [docs/evaluation.md](docs/evaluation.md), [docs/data.md](docs/data.md) |
@@ -31,15 +31,26 @@ and asked for a person.
 ```mermaid
 flowchart LR
     A[PDF or text] --> B[ingest]
-    B --> C{extractor}
+    B --> C{"EXTRACTOR setting<br/>(one mode per deployment)"}
     C -->|heuristic| D[label patterns]
-    C -->|llm| E[Claude, JSON schema]
+    C -->|llm| E[Claude: PDF + text,<br/>JSON schema]
     C -->|hybrid| F[heuristic first,<br/>LLM if unsure]
     D & E & F --> G[normalise]
     G --> H[confidence<br/>grounding]
     H --> I[rules]
     I --> J[verdict<br/>FAIL > REVIEW > PASS]
 ```
+
+The three extractors do not run in parallel: a deployment uses one, chosen with `EXTRACTOR`. All three
+feed the same checks, which is what made it possible to compare them on the same data and choose.
+
+### Which mode to use
+
+| Mode | Use it when | Test result |
+|---|---|---|
+| **`llm`** — Claude Opus 5 | **Recommended for production**: suppliers and layouts vary | 98% fields, 95% verdicts, no wrong `PASS`/`FAIL`, $0.034 per invoice |
+| `hybrid` | Most invoices come from a few known templates, for which rules have been written: the heuristic answers those for free | Same as `llm` on our data: the general heuristic was never sure of a whole invoice, so it always called the LLM |
+| `heuristic` | No API key or no network (the default, so the service runs offline), and as the automatic fallback when the LLM fails | 64% fields, 55% verdicts; it rejects valid invoices it cannot read, and never passes a bad one |
 
 **Why this shape.** A compliance verdict must be auditable, and an LLM is not. So the model is used for
 the one thing it is good at — reading a messy, unknown layout — and everything it returns is checked by
@@ -211,7 +222,7 @@ contamination log: [docs/evaluation.md](docs/evaluation.md).
 
 | Configuration | Field exact match | Verdict agreement | Wrong `PASS`/`FAIL` | LLM calls | Cost / invoice |
 |---|---|---|---|---|---|
-| Heuristic | 50% | 55% | 34 wrong `FAIL`, 0 wrong `PASS` | 0 | $0 |
+| Heuristic | 64% | 55% | 25 wrong `FAIL`, 0 wrong `PASS` | 0 | $0 |
 | **LLM — Opus 5, PDF + text, prompt v4b** | **98%** | **95%** | **0** | 80 | $0.034 |
 | Hybrid — heuristic first, Opus 5 when unsure | 98% | 96% | 0 | 80 | $0.034 |
 
@@ -220,8 +231,13 @@ held-out 100%. On dev the three models were compared first and a rule written in
 (Haiku 4.5 and Sonnet 5 were more than 3 points behind on verdicts); four prompt variants were compared on
 dev before the test run. Details: [docs/evaluation.md](docs/evaluation.md).
 
-The hybrid called the LLM on all 80 invoices: on varied layouts the heuristic is never sure of every field,
-so it saves nothing here. It would on a stream of a few known templates.
+The hybrid called the LLM on all 80 invoices: the heuristic is deliberately general, and on varied layouts
+it is never sure of a whole invoice. We measured what template-specific rules would change — adding the
+Mendeley template's own labels let the hybrid skip the LLM on 45% of test invoices (36 of 80) at the same 95%
+verdict agreement, for $0.023 per invoice — and **did not ship them**: that template appears in both dev and
+test, so the gain would be learnt from the evaluation data, not earned. In production those rules would be
+written for a customer's frequent suppliers, which is where the hybrid pays
+([evaluation §6](docs/evaluation.md#6-final-results-on-the-test-split)).
 
 ## Cost, latency and risk
 
@@ -231,9 +247,10 @@ so it saves nothing here. It would on a stream of a few known templates.
   an EN 16931 XML with every field. Reading that XML is exact, free and instant; an LLM there only adds cost
   and risk.
 - **When the stream is a few known, clean templates.** The heuristic costs nothing and takes ~0.1 s; the
-  hybrid mode calls the LLM only when the heuristic is unsure. On our deliberately varied data the heuristic
-  was never sure (the hybrid called the LLM on every invoice), so it only pays off on a narrow stream —
-  measure the share of `hybrid:heuristic_only` responses before relying on it.
+  hybrid mode calls the LLM only when the heuristic is unsure. With rules written for one frequent template,
+  it skipped the LLM on 45% of our test invoices and cut the cost per invoice by a third; with general rules
+  only, it never skipped. So it pays off once a customer's frequent templates are known — measure the share
+  of `hybrid:heuristic_only` responses before relying on it.
 - **When the document cannot leave the premises**, or a sub-second synchronous answer is required.
 
 **What did we measure?** Per invoice, on the test split with the chosen configuration (Opus 5, PDF + text,

@@ -26,7 +26,8 @@ read a section only when you want to challenge the decision it covers.
 | B5 | Model choice | Rule fixed before results → Opus 5 | Pick after seeing numbers | [evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5) |
 | B6 | Call parameters | No server-side model fallback, `effort: low`, no sampling params | Server-side fallback on refusals | [transport.py](../src/validator/transport.py) |
 | B7 | Prompt caching | Cache the system prompt | Pad the prompt so Haiku can cache | [evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5) |
-| B8 | Hybrid | Heuristic first; LLM only for uncertain or missing brief fields | Call the LLM on any gap | [evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5), [test_hybrid.py](../tests/test_hybrid.py) |
+| B8 | Hybrid | Heuristic first; LLM only for uncertain or missing brief fields | Call the LLM on any gap | [evaluation §6](evaluation.md#6-final-results-on-the-test-split), [test_hybrid.py](../tests/test_hybrid.py) |
+| B9 | Heuristic scope | General fixes only; template-specific labels measured and removed | Keep what scores best on our data | [evaluation §6](evaluation.md#the-heuristic-improved-but-kept-general-on-purpose) |
 | C1 | Confidence | Four discrete levels from verifiable signals | Model self-reported score | [test_extraction.py](../tests/test_extraction.py) |
 | C2 | Grounding | Evidence must appear in our text, verbatim or line by line | Trust the model's evidence | [test_llm.py](../tests/test_llm.py) |
 | C3 | Numeric date order | Decided per document from its own signals | Always day-first | [test_formats.py](../tests/test_formats.py) |
@@ -242,14 +243,35 @@ read a section only when you want to challenge the decision it covers.
   (0 < confidence < 1), or if one of the six brief fields is missing. A missing optional field does not
   trigger a call. After the call, each field keeps whichever candidate scores higher; ties go to the LLM.
   All three modes are measured on the same data.
-- **Why:** measured on dev, the hybrid saved nothing. The heuristic is never fully confident on these
-  varied layouts, so it called the LLM on 67/67 invoices: 98% fields / 88% verdicts, the same cost as Opus
-  alone. The heuristic alone scores 48% / 40%. The hybrid would pay off on a stream dominated by a few
-  known, clean templates.
+- **Why:** measured on test, the hybrid matches the LLM (98% fields, 95% verdicts, no wrong `PASS`/`FAIL`)
+  but saves nothing: the general heuristic (B9) is never sure of a whole invoice on these varied layouts,
+  so it called the LLM on 80 of 80. With rules written for one frequent template it skipped the LLM on 36
+  of 80 invoices at the same verdict agreement and cut the cost per invoice by a third ($0.034 → $0.023).
+  That is the case the hybrid is for: a customer's frequent suppliers.
 - **Rejected:** calling on any field below 1.0, including missing optional ones (almost every invoice
-  would call); per-field LLM calls (more complex, loses cross-field context); LLM only (no baseline).
+  would call); per-field LLM calls (more complex, loses cross-field context); shipping the template rules
+  that made the hybrid pay on our data (B9).
 - **Revisit if:** production traffic concentrates on known templates. The share of `hybrid:heuristic_only`
   responses is the metric to watch.
+
+### B9 — The heuristic stays general: no rules learnt from one template
+
+- **Problem:** the heuristic improves fastest by adding the exact labels of the templates it fails on. On an
+  evaluation set whose templates also appear in the test half, that looks like progress but is memory.
+- **Decision:** only general fixes, each driven by a dev error and covered by a unit test on invented
+  inputs: a value on the line after its label, tables printed as labels then values, standard accounting
+  labels in German, French, Italian, Portuguese and Dutch, an invoice number must contain a digit, a date
+  on the line after its label, a six-line customer block. Two labels found only in the Mendeley template
+  (`Net worth`, `Gross worth`) were measured and removed.
+- **Why:** with them the heuristic scored 73% of fields and 78% of verdicts on test, and the hybrid saved a
+  third of the cost; without them 64% and 55%. The gain was almost all on Mendeley, whose template is in
+  both dev and test; on the held-out set, whose layouts never repeat, the verdicts did not improve. A
+  number learnt from the evaluation data would mislead anyone deploying this on new suppliers
+  ([evaluation §6](evaluation.md#the-heuristic-improved-but-kept-general-on-purpose)).
+- **Rejected:** keeping the template labels (overfitting to our data); per-template rule files (the right
+  tool in production, per customer, but not something to tune on the test set).
+- **Revisit if:** a customer's supplier list is known. Rules for its most frequent templates are then
+  exactly what makes the hybrid worth it.
 
 ## (c) Trust and verification
 
@@ -484,5 +506,7 @@ read a section only when you want to challenge the decision it covers.
 - **Re-run the model comparison with the final prompt.** Models were compared with prompt v3; the prompt was
   then tuned on Haiku and applied to Opus. With v4b Haiku extracts 99% of dev fields, so the gap to Opus may
   be smaller than the 11 verdict points measured with v3.
-- **Measure the hybrid on production-like traffic.** Our data is deliberately varied, so the heuristic was
-  never confident; a real customer's stream repeats suppliers and templates, which is where the hybrid pays.
+- **Measure the hybrid on production-like traffic.** Our data is deliberately varied, so the general
+  heuristic was never confident; a real customer's stream repeats suppliers and templates. Rules for those
+  templates, written from the customer's own documents rather than from the test set, are where the hybrid
+  pays (B9).
