@@ -1,0 +1,19 @@
+CONSTRUCCIONES Y REFORMAS GARCÍA S.L.
+Avda. de la Constitución 21, 41001 Sevilla
+NIF: B-87654321
+
+FACTURA
+
+Factura nº: 2026/0381
+Fecha de emisión: 03/06/2026
+
+Cliente:
+Northwind Construction S.L.
+CIF: B12345678
+
+Concepto                                  Importe
+Reforma de oficina, fase 1               1.020,30 €
+
+Base imponible                            1.020,30 €
+IVA 21%                                     214,26 €
+Total factura                             1.234,56 €

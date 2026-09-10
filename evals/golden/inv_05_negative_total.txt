@@ -1,0 +1,14 @@
+Iberia Scaffolding S.A.
+Polígono Industrial Norte, nave 4, 50014 Zaragoza
+CIF: A-50123456
+
+FACTURA RECTIFICATIVA / CREDIT NOTE
+
+Factura nº: R-2026-007
+Fecha: 22/06/2026
+Rectifica a la factura 2026-118
+
+Cliente: Northwind Construction S.L. (CIF B12345678)
+
+Devolución de andamio no utilizado          -150,00 EUR
+Total: -150,00 EUR

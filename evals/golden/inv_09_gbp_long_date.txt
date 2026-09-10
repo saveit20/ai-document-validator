@@ -1,0 +1,18 @@
+Thames Valley Plant Hire PLC
+Unit 7, Riverside Park, Reading RG1 8AB
+VAT No. GB 987 6543 21
+
+INVOICE
+
+Invoice Number: TVP-2026-1188
+Invoice Date: 15 May 2026
+
+Bill to:
+Northwind Construction UK Ltd
+London
+
+Excavator hire (5 days)               £1,750.00
+Delivery and collection                 £250.00
+Net total                             £2,000.00
+VAT @ 20%                               £400.00
+Invoice total                         £2,400.00

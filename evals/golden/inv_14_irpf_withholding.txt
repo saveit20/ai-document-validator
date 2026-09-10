@@ -1,0 +1,17 @@
+Estudio de Arquitectura Rivas S.L.P.
+Calle Serrano 45, 28001 Madrid
+NIF: B28456781
+
+FACTURA
+Factura nº: EAR-2026-031
+Fecha de emisión: 20/06/2026
+
+Cliente:
+Northwind Construction S.L.
+CIF: B12345678
+
+Proyecto básico de nave industrial          1.000,00 €
+Base imponible                              1.000,00 €
+IVA 21%                                       210,00 €
+Retención IRPF 15%                           -150,00 €
+Total factura                               1.060,00 €

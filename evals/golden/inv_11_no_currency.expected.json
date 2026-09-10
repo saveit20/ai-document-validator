@@ -1,0 +1,19 @@
+{
+  "document": "inv_11_no_currency.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": "Hormigones del Norte S.L.",
+    "invoice_number": "HN-2026-2210",
+    "invoice_date": "2026-06-25",
+    "total_amount": "1379.40",
+    "currency": null,
+    "tax_id": "B39876543",
+    "subtotal_amount": "1140.00",
+    "tax_amount": "239.40",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": null,
+    "verdict": "REVIEW"
+  },
+  "notes": "No currency code or symbol anywhere."
+}

@@ -1,0 +1,14 @@
+Hormigones del Norte S.L.
+Carretera N-634 km 12, 39600 Camargo (Cantabria)
+NIF: B39876543
+
+FACTURA
+Factura nº: HN-2026-2210
+Fecha factura: 25/06/2026
+
+Cliente: Northwind Construction S.L.
+
+Hormigón HA-25, 12 m3                         1.140,00
+Base imponible                                1.140,00
+IVA 21%                                         239,40
+Total                                         1.379,40

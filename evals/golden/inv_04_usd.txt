@@ -1,0 +1,16 @@
+Pacific Tooling Inc.
+455 Market Street, San Francisco, CA 94105, USA
+Tax ID: 94-3175623
+
+INVOICE #PT-10077
+Invoice Date: June 20, 2026
+
+Bill To:
+Northwind Construction S.L.
+Madrid, Spain
+
+Item                               Amount
+Hydraulic press repair kit      $2,480.00
+Shipping                          $120.00
+
+Total Due: $2,600.00 USD

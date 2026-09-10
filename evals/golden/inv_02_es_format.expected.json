@@ -1,0 +1,33 @@
+{
+  "document": "inv_02_es_format.txt",
+  "reference_date": "2026-06-30",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ],
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "expected_customer_tax_id": "ESB12345678"
+  },
+  "expected": {
+    "supplier_name": "CONSTRUCCIONES Y REFORMAS GARCÍA S.L.",
+    "invoice_number": "2026/0381",
+    "invoice_date": "2026-06-03",
+    "total_amount": "1234.56",
+    "currency": "EUR",
+    "tax_id": "B87654321",
+    "subtotal_amount": "1020.30",
+    "tax_amount": "214.26",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "B12345678",
+    "verdict": "PASS"
+  },
+  "notes": "Spanish layout: day-first date, 1.234,56 amounts, euro symbol; config expects customer ESB12345678 and the invoice prints B12345678 (same company)."
+}

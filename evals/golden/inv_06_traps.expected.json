@@ -1,0 +1,19 @@
+{
+  "document": "inv_06_traps.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": "Delta Hydraulics B.V.",
+    "invoice_number": "DH/2026/0419",
+    "invoice_date": "2026-06-01",
+    "total_amount": "4114.00",
+    "currency": "EUR",
+    "tax_id": "NL853746214B01",
+    "subtotal_amount": "3400.00",
+    "tax_amount": "714.00",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "PASS"
+  },
+  "notes": "Bill to before the supplier, due date before issue date, subtotal and VAT before the total."
+}

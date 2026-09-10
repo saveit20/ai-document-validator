@@ -1,0 +1,19 @@
+{
+  "document": "inv_04_usd.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": "Pacific Tooling Inc.",
+    "invoice_number": "PT-10077",
+    "invoice_date": "2026-06-20",
+    "total_amount": "2600.00",
+    "currency": "USD",
+    "tax_id": "943175623",
+    "subtotal_amount": null,
+    "tax_amount": null,
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "USD is not in allowed_currencies."
+}

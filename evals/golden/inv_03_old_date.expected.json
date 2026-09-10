@@ -1,0 +1,19 @@
+{
+  "document": "inv_03_old_date.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": "Brightline Electrical GmbH",
+    "invoice_number": "BE-55821",
+    "invoice_date": "2026-01-10",
+    "total_amount": "856.80",
+    "currency": "EUR",
+    "tax_id": "DE811234567",
+    "subtotal_amount": "720.00",
+    "tax_amount": "136.80",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "Issued 2026-01-10, older than 90 days."
+}

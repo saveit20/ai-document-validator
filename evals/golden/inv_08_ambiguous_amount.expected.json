@@ -1,0 +1,19 @@
+{
+  "document": "inv_08_ambiguous_amount.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": "Nordic Timber AB",
+    "invoice_number": "NT-3390",
+    "invoice_date": "2026-06-10",
+    "total_amount": "1500.00",
+    "currency": "EUR",
+    "tax_id": "SE556677889901",
+    "subtotal_amount": null,
+    "tax_amount": null,
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": null,
+    "verdict": "REVIEW"
+  },
+  "notes": "Total '1.500' is ambiguous (1.5 or 1500)."
+}

@@ -1,0 +1,19 @@
+{
+  "document": "inv_01_clean_en.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": "ACME Industrial Supplies Ltd",
+    "invoice_number": "INV-2026-0142",
+    "invoice_date": "2026-06-15",
+    "total_amount": "1200.00",
+    "currency": "EUR",
+    "tax_id": "GB123456789",
+    "subtotal_amount": "1000.00",
+    "tax_amount": "200.00",
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "PASS"
+  },
+  "notes": "Clean English invoice; the customer's VAT id inside the Bill to block must be ignored."
+}

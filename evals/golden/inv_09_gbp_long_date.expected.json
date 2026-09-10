@@ -1,0 +1,19 @@
+{
+  "document": "inv_09_gbp_long_date.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": "Thames Valley Plant Hire PLC",
+    "invoice_number": "TVP-2026-1188",
+    "invoice_date": "2026-05-15",
+    "total_amount": "2400.00",
+    "currency": "GBP",
+    "tax_id": "GB987654321",
+    "subtotal_amount": "2000.00",
+    "tax_amount": "400.00",
+    "customer_name": "Northwind Construction UK Ltd",
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "Long-form date, pound sign, net total before the invoice total."
+}

@@ -1,0 +1,21 @@
+ACME Industrial Supplies Ltd
+12 Harbour Road, Bristol BS1 4QA, United Kingdom
+VAT Reg. No: GB123456789
+
+INVOICE
+
+Invoice No: INV-2026-0142
+Invoice date: 2026-06-15
+
+Bill to:
+Northwind Construction S.L.
+Calle Mayor 5, 28013 Madrid, Spain
+VAT: ESB12345678
+
+Description                         Qty     Unit price     Amount
+Steel anchors M12                    200          2.50     500.00
+Safety harness, class A                5        100.00     500.00
+
+Subtotal                                                  1,000.00
+VAT 20%                                                     200.00
+Total due (EUR)                                           1,200.00

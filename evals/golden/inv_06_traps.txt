@@ -1,0 +1,20 @@
+TAX INVOICE
+
+Bill to:
+Northwind Construction S.L.
+Calle Mayor 5, 28013 Madrid
+VAT: ESB12345678
+
+From:
+Delta Hydraulics B.V.
+Havenweg 14, 3011 Rotterdam, Netherlands
+VAT number: NL853746214B01
+
+Invoice no.: DH/2026/0419
+Due date: 2026-07-31
+Invoice date: 2026-06-01
+
+Subtotal:        3,400.00 EUR
+VAT (21%):         714.00 EUR
+Amount due:      4,114.00 EUR
+Payment terms: 60 days. Late payment interest of 1.5% per month.

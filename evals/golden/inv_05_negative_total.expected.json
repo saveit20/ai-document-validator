@@ -1,0 +1,19 @@
+{
+  "document": "inv_05_negative_total.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": "Iberia Scaffolding S.A.",
+    "invoice_number": "R-2026-007",
+    "invoice_date": "2026-06-22",
+    "total_amount": "-150.00",
+    "currency": "EUR",
+    "tax_id": "A50123456",
+    "subtotal_amount": null,
+    "tax_amount": null,
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "B12345678",
+    "verdict": "FAIL"
+  },
+  "notes": "Credit note with a negative total."
+}

@@ -1,0 +1,19 @@
+{
+  "document": "inv_07_no_supplier.txt",
+  "reference_date": "2026-06-30",
+  "config": null,
+  "expected": {
+    "supplier_name": null,
+    "invoice_number": "88213",
+    "invoice_date": "2026-06-18",
+    "total_amount": "650.00",
+    "currency": "EUR",
+    "tax_id": null,
+    "subtotal_amount": null,
+    "tax_amount": null,
+    "customer_name": "Northwind Construction S.L.",
+    "customer_tax_id": "ESB12345678",
+    "verdict": "FAIL"
+  },
+  "notes": "No supplier legal name printed; only the customer is named."
+}

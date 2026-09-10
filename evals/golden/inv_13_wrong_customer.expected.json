@@ -1,0 +1,33 @@
+{
+  "document": "inv_13_wrong_customer.txt",
+  "reference_date": "2026-06-30",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ],
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "expected_customer_tax_id": "ESB12345678"
+  },
+  "expected": {
+    "supplier_name": "Levante Steel Supplies S.L.",
+    "invoice_number": "LSS-2026-0512",
+    "invoice_date": "2026-06-24",
+    "total_amount": "2057.00",
+    "currency": "EUR",
+    "tax_id": "B46123457",
+    "subtotal_amount": "1700.00",
+    "tax_amount": "357.00",
+    "customer_name": "Southwind Logistics S.A.",
+    "customer_tax_id": "A46987654",
+    "verdict": "FAIL"
+  },
+  "notes": "Addressed to another company; config expects ESB12345678."
+}

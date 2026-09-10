@@ -1,0 +1,15 @@
+INVOICE
+
+Invoice No: 88213
+Invoice date: 2026-06-18
+
+Bill to:
+Northwind Construction S.L.
+Calle Mayor 5, 28013 Madrid
+VAT: ESB12345678
+
+Pallet racking inspection (annual)          650.00
+Total due: EUR 650.00
+
+Thank you for your business!
+Payments to IBAN ES91 2100 0418 4502 0005 1332
