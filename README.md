@@ -88,7 +88,7 @@ With Docker instead: `docker compose up --build` (the image is built and health-
 |---|---|---|
 | `EXTRACTOR` | `heuristic` | `heuristic`, `llm` or `hybrid` |
 | `LLM_MODEL` | `claude-opus-5` | Claude model for `llm` / `hybrid` |
-| `LLM_TRANSPORT` | `replay` in `.env.example` | `replay` uses recorded responses (no key); `live` calls the API |
+| `LLM_TRANSPORT` | `replay` in `.env.example` (`live` if unset) | `replay` uses recorded responses (no key); `live` calls the API |
 | `ANTHROPIC_API_KEY` | empty | only needed with `LLM_TRANSPORT=live` |
 | `LLM_TIMEOUT_S` | `30` | per-request timeout; the SDK retries 408/409/429/5xx twice |
 | `LLM_INPUT` | `pdf` | `pdf` also sends the original PDF so the model sees the page layout; `text` sends only the extracted text. Evidence is always checked against the extracted text ([measured](docs/evaluation.md#8-how-the-document-reaches-the-model)) |
