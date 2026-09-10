@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Hernandez, Coleman and Alvarado\",\"evidence\":\"Hernandez, Coleman and Alvarado\"},\"invoice_number\":{\"value\":\"14878236\",\"evidence\":\"Invoice no: 14878236\"},\"invoice_date\":{\"value\":\"2015-04-26\",\"evidence\":\"04/26/2015\"},\"total_amount\":{\"value\":\"568.49\",\"evidence\":\"$ 568,49\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"988-79-4495\",\"evidence\":\"Tax Id: 988-79-4495\"},\"subtotal_amount\":{\"value\":\"516.81\",\"evidence\":\"$ 516,81\"},\"tax_amount\":{\"value\":\"51.68\",\"evidence\":\"$ 51,68\"},\"customer_name\":{\"value\":\"Turner-Green\",\"evidence\":\"Turner-Green\"},\"customer_tax_id\":{\"value\":\"950-70-5065\",\"evidence\":\"Tax Id: 950-70-5065\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4829,
+  "output_tokens": 231,
+  "latency_ms": 7989,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

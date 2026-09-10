@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Ελληνικά Τρόφιμα Α.Ε.\",\"evidence\":\"Supplier\\nΕλληνικά  Τρόφιμα  Α . Ε .\"},\"invoice_number\":{\"value\":\"GRT-082\",\"evidence\":\"Service invoice\\nGRT-082\"},\"invoice_date\":{\"value\":\"2024-07-12\",\"evidence\":\"Issue date\\n2024-07-12\"},\"total_amount\":{\"value\":\"111.60\",\"evidence\":\"Total to pay €111,60\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Currency\\nEuro (EUR)\"},\"tax_id\":{\"value\":\"177472438\",\"evidence\":\"TIN: (EL) 177472438\"},\"subtotal_amount\":{\"value\":\"90.00\",\"evidence\":\"Sum €90,00\"},\"tax_amount\":{\"value\":\"21.60\",\"evidence\":\"Tax €21,60\"},\"customer_name\":{\"value\":\"Αιγαίο Λιανική Α.Ε.\",\"evidence\":\"Customer\\nΑιγαίο  Λιανική  Α . Ε .\"},\"customer_tax_id\":{\"value\":\"841442160\",\"evidence\":\"TIN: (EL) 841442160\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4483,
+  "output_tokens": 309,
+  "latency_ms": 9741,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

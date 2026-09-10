@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"Provide One S.L.\",\"evidence\":\"Provide One S.L.\"},\"invoice_number\":{\"value\":\"SAMPLE-X-002\",\"evidence\":\"SAMPLE-X-002\"},\"invoice_date\":{\"value\":\"2022-02-01\",\"evidence\":\"2022-02-01\"},\"total_amount\":{\"value\":\"575.00\",\"evidence\":\"Total to pay €575,00\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Euro (EUR)\"},\"tax_id\":{\"value\":\"ESB98602642\",\"evidence\":\"NIF: ESB98602642\"},\"subtotal_amount\":{\"value\":\"575.00\",\"evidence\":\"€575,00\"},\"tax_amount\":{\"value\":\"0.00\",\"evidence\":\"€0,00\"},\"customer_name\":{\"value\":\"Sample Consumer\",\"evidence\":\"Sample Consumer\"},\"customer_tax_id\":{\"value\":\"NL000099995B57\",\"evidence\":\"TIN: NL000099995B57\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4299,
+  "output_tokens": 244,
+  "latency_ms": 8128,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

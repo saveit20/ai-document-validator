@@ -263,9 +263,39 @@ Same prompt (v3), same model (Haiku 4.5), same 47 dev invoices; only the input c
   against, so every field would be unverified. The pipeline keeps rejecting PDFs without a text layer;
   accepting them would need OCR to produce a checkable text, which is out of scope (see Limitations).
 
-**A pitfall found on the way.** With layout text the *heuristic* reaches 100% verdict agreement on
+**A pitfall found on the way (heuristic).** With layout text the *heuristic* reaches 100% verdict agreement on
 Mendeley dev while its field accuracy drops from 52% to 40%. The layout fixes the date and the totals (label
 and value now share a line), but the heuristic takes the column header `Client` as the supplier name, and
 the "supplier present" rule is satisfied by any non-empty name. A verdict can be right for the wrong
 reason, which is why every report shows field accuracy next to verdict agreement.
+
+## 9. Prompt variants
+
+The prompt had changed three times (v1 written before any data, v2 for an API schema limit, v3 with two
+fixes from dev errors), but always one fix at a time. Before spending the test budget we compared variants
+side by side: same model (Haiku 4.5, the cheapest, to stay within budget), same 80 dev invoices, same input
+(PDF + text), same code. Each variant is in [`evals/prompt_variants.py`](../evals/prompt_variants.py) and
+can be replayed with `python -m evals.run --extractor llm --model claude-haiku-4-5-20251001 --split dev
+--prompt <variant>`.
+
+| Variant | What changes | Fields | Invoice dates | Tax total | Verdicts | Cost / doc |
+|---|---|---|---|---|---|---|
+| v3 | the prompt used until then | 97% | 79/80 | — | 82% | $0.0073 |
+| v4a | clearer field rules from dev errors: names without address, the taxable base defined, tax total summed from per-rate lines, credit notes negative, and "decide the issuer's country before reading a date" | 98% | 74/80 | 78/80 | 80% | $0.0074 |
+| v4b | v4a, and the schema asks for `issuer_country` and `date_format` **before** the fields | **99%** | **80/80** | 79/80 | 81% | $0.0076 |
+<!-- V4C -->
+
+What we learned:
+
+- **An instruction that sounds right can make things worse.** v4a's sentence "decide the issuer's country,
+  then read the date in that country's convention" doubled down on the wrong convention: US dates misread
+  went from 1 to 6.
+- **Making the model write its reasoning into the output fixes it.** v4b asks for the issuer's country and
+  the date format as the first two properties of the JSON. Having committed to `MM/DD/YYYY` in writing, the
+  model then read all 80 dates correctly. Those two properties are dropped before validation.
+- **Clearer field definitions help the fields that were ambiguous**: the tax total went from mostly wrong
+  (v3 told the model never to compute) to 79/80 once the finance rule was stated.
+- **Verdicts barely move, and that is informative.** The remaining `REVIEW`s are the Spanish utility bills,
+  whose scrambled text layer makes evidence unverifiable. No prompt fixes that; it is a limitation of the
+  grounding check, and it fails safe.
 

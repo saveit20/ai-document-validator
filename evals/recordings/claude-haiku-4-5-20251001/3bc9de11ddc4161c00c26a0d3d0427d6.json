@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Fournisseur France SARL\",\"evidence\":\"Supplier\\nFournisseur France SARL\"},\"invoice_number\":{\"value\":\"FAC-2024-INT-001\",\"evidence\":\"FAC-2024-INT-001\"},\"invoice_date\":{\"value\":\"2024-06-15\",\"evidence\":\"Issue date\\n2024-06-15\"},\"total_amount\":{\"value\":\"1000.00\",\"evidence\":\"Total to pay €1.000,00\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Currency\\nEuro (EUR)\"},\"tax_id\":{\"value\":\"FR44732829320\",\"evidence\":\"TVA: FR44732829320\"},\"subtotal_amount\":{\"value\":\"1000.00\",\"evidence\":\"Sum €1.000,00\"},\"tax_amount\":{\"value\":\"0.00\",\"evidence\":\"Tax €0,00\"},\"customer_name\":{\"value\":\"Kunde Deutschland GmbH\",\"evidence\":\"Customer\\nKunde Deutschland GmbH\"},\"customer_tax_id\":{\"value\":\"DE111111125\",\"evidence\":\"USt-IdNr.: DE111111125\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4321,
+  "output_tokens": 264,
+  "latency_ms": 3732,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

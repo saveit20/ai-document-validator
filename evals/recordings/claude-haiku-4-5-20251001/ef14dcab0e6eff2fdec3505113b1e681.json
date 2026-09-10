@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"DD.MM.YYYY\",\"supplier_name\":{\"value\":\"ELÉCTRICAS LA ENGUERINA, S L\",\"evidence\":\"ELÉCTRICAS LA ENGUERINA, S L\"},\"invoice_number\":{\"value\":\"ST1492263241\",\"evidence\":\"Nº factura: ST1492263241\"},\"invoice_date\":{\"value\":\"2002-02-05\",\"evidence\":\"Fecha de emisión: 05.02.2002\"},\"total_amount\":{\"value\":\"46.98\",\"evidence\":\"Total factura 46,98 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"46,98 €\"},\"tax_id\":{\"value\":\"B98109721\",\"evidence\":\"CIF B98109721\"},\"subtotal_amount\":{\"value\":\"40.43\",\"evidence\":\"Base imponible 40,43 €\"},\"tax_amount\":{\"value\":\"6.55\",\"evidence\":\"IGIC 15% 6,06 € and IGIC 7% 0,03 € and Impuesto electricidad 1,97 €\"},\"customer_name\":{\"value\":\"Domenico Cuesta Montecinos\",\"evidence\":\"Nombre: Domenico Cuesta Montecinos\"},\"customer_tax_id\":{\"value\":\"87918379M\",\"evidence\":\"NIF: 87918379M\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 11366,
+  "output_tokens": 321,
+  "latency_ms": 10085,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

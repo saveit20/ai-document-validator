@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Rivera-Thompson\",\"evidence\":\"Rivera-Thompson\"},\"invoice_number\":{\"value\":\"79128264\",\"evidence\":\"Invoice no: 79128264\"},\"invoice_date\":{\"value\":\"2014-12-31\",\"evidence\":\"Date of issue: 12/31/2014\"},\"total_amount\":{\"value\":\"382.98\",\"evidence\":\"$ 382,98\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"926-97-6956\",\"evidence\":\"Tax Id: 926-97-6956\"},\"subtotal_amount\":{\"value\":\"348.16\",\"evidence\":\"$ 348,16\"},\"tax_amount\":{\"value\":\"34.82\",\"evidence\":\"$ 34,82\"},\"customer_name\":{\"value\":\"Pearson, Gibbs and Ayala\",\"evidence\":\"Pearson, Gibbs and Ayala\"},\"customer_tax_id\":{\"value\":\"991-70-8455\",\"evidence\":\"Tax Id: 991-70-8455\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4600,
+  "output_tokens": 238,
+  "latency_ms": 7971,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

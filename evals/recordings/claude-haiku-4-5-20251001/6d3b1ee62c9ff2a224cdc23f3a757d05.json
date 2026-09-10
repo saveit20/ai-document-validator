@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"ENERGIAS DE BENASQUE S.L\", \"evidence\": \"ENERGIAS DE BENASQUE S.L\"}, \"invoice_number\": {\"value\": \"L1362494263\", \"evidence\": \"Nº factura: L1362494263\"}, \"invoice_date\": {\"value\": \"1993-09-01\", \"evidence\": \"Fecha de emisión: 01.09.1993\"}, \"total_amount\": {\"value\": \"53.31\", \"evidence\": \"Total factura 53,31 €\"}, \"currency\": {\"value\": \"EUR\", \"evidence\": \"53,31 €\"}, \"tax_id\": {\"value\": \"B22215487\", \"evidence\": \"CIF B22215487\"}, \"subtotal_amount\": {\"value\": \"45.71\", \"evidence\": \"Base imponible 45,71 €\"}, \"tax_amount\": {\"value\": \"4.57\", \"evidence\": \"IGIC 10% 4,57 €\"}, \"customer_name\": {\"value\": \"ELÍAS PADILLA MARTÍNEZ\", \"evidence\": \"Nombre: ELÍAS PADILLA MARTÍNEZ\"}, \"customer_tax_id\": {\"value\": \"45976943N\", \"evidence\": \"NIF: 45976943N\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 11390,
+  "output_tokens": 312,
+  "latency_ms": 10250,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

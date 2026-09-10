@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"SG\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"Defence Collective Singapore Ltd\",\"evidence\":\"Defence Collective Singapore Ltd\"},\"invoice_number\":{\"value\":\"SGC-DCS-28\",\"evidence\":\"SGC-DCS-28\"},\"invoice_date\":{\"value\":\"2026-05-14\",\"evidence\":\"2026-05-14\"},\"total_amount\":{\"value\":\"1526.00\",\"evidence\":\"Total to pay $1,526.00\"},\"currency\":{\"value\":\"SGD\",\"evidence\":\"Singapore Dollar (SGD)\"},\"tax_id\":{\"value\":\"199307558M\",\"evidence\":\"GST Reg No.: (SG) 199307558M\"},\"subtotal_amount\":{\"value\":\"1400.00\",\"evidence\":\"Sum $1,400.00\"},\"tax_amount\":{\"value\":\"126.00\",\"evidence\":\"Tax $126.00\"},\"customer_name\":{\"value\":\"Harbourfront Events Pte Ltd\",\"evidence\":\"Harbourfront Events Pte Ltd\"},\"customer_tax_id\":{\"value\":\"200312345A\",\"evidence\":\"GST Reg No.: (SG) 200312345A\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4261,
+  "output_tokens": 276,
+  "latency_ms": 9173,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"US\",\"date_format\":\"MM/DD/YYYY\",\"supplier_name\":{\"value\":\"Grant and Sons\",\"evidence\":\"Grant and Sons\"},\"invoice_number\":{\"value\":\"87428284\",\"evidence\":\"Invoice no: 87428284\"},\"invoice_date\":{\"value\":\"2015-06-17\",\"evidence\":\"06/17/2015\"},\"total_amount\":{\"value\":\"21.52\",\"evidence\":\"$ 21,52\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"990-75-0951\",\"evidence\":\"Tax Id: 990-75-0951\"},\"subtotal_amount\":{\"value\":\"19.56\",\"evidence\":\"$ 19,56\"},\"tax_amount\":{\"value\":\"1.96\",\"evidence\":\"$ 1,96\"},\"customer_name\":{\"value\":\"Meza, Harrison and Campbell\",\"evidence\":\"Meza, Harrison and Campbell\"},\"customer_tax_id\":{\"value\":\"934-80-1178\",\"evidence\":\"Tax Id: 934-80-1178\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4317,
+  "output_tokens": 243,
+  "latency_ms": 2735,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

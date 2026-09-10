@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"CH\",\"date_format\":\"DD.MM.YYYY\",\"supplier_name\":{\"value\":\"Alpen Hebetechnik AG\",\"evidence\":\"Alpen Hebetechnik AG\"},\"invoice_number\":{\"value\":\"AH-26-1147\",\"evidence\":\"Rechnung Nr.: AH-26-1147\"},\"invoice_date\":{\"value\":\"2026-04-28\",\"evidence\":\"Datum: 28.04.2026\"},\"total_amount\":{\"value\":\"5621.20\",\"evidence\":\"Rechnungstotal 5'621.20\"},\"currency\":{\"value\":\"CHF\",\"evidence\":\"All amounts are in Swiss francs (CHF)\"},\"tax_id\":{\"value\":\"CHE-123.456.789\",\"evidence\":\"UID: CHE-123.456.789\"},\"subtotal_amount\":{\"value\":\"5200.00\",\"evidence\":\"Total netto 5'200.00\"},\"tax_amount\":{\"value\":\"421.20\",\"evidence\":\"MWST 8.1 % 421.20\"},\"customer_name\":{\"value\":\"Northwind Construction S.L.\",\"evidence\":\"Northwind Construction S.L.\"},\"customer_tax_id\":{\"value\":\"ESB12345678\",\"evidence\":\"UID/VAT: ESB12345678\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4881,
+  "output_tokens": 306,
+  "latency_ms": 9724,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

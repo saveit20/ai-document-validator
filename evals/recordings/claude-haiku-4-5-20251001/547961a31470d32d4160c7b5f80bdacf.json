@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"AE\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"Fictional Gulf Foods LLC\",\"evidence\":\"Fictional Gulf Foods LLC\"},\"invoice_number\":{\"value\":\"INV-2026-002\",\"evidence\":\"Invoice: INV-2026-002\"},\"invoice_date\":{\"value\":\"2026-08-02\",\"evidence\":\"Date: 2026-08-02\"},\"total_amount\":{\"value\":\"420.00\",\"evidence\":\"Total AED 420.00\"},\"currency\":{\"value\":\"AED\",\"evidence\":\"Currency: AED\"},\"tax_id\":null,\"subtotal_amount\":{\"value\":\"400.00\",\"evidence\":\"Subtotal AED 400.00\"},\"tax_amount\":{\"value\":\"20.00\",\"evidence\":\"VAT 5% AED 20.00\"},\"customer_name\":{\"value\":\"Example Grocery Trading LLC\",\"evidence\":\"Bill to: Example Grocery Trading LLC, Dubai\"},\"customer_tax_id\":null}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 7016,
+  "output_tokens": 230,
+  "latency_ms": 6537,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

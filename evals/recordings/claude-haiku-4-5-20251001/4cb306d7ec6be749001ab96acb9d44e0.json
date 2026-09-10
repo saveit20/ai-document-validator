@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Carter Inc\",\"evidence\":\"Carter Inc\"},\"invoice_number\":{\"value\":\"61669642\",\"evidence\":\"Invoice no: 61669642\"},\"invoice_date\":{\"value\":\"2013-11-12\",\"evidence\":\"11/12/2013\"},\"total_amount\":{\"value\":\"151.38\",\"evidence\":\"$ 151,38\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"940-76-9247\",\"evidence\":\"Tax Id: 940-76-9247\"},\"subtotal_amount\":{\"value\":\"137.62\",\"evidence\":\"137,62\"},\"tax_amount\":{\"value\":\"13.76\",\"evidence\":\"13,76\"},\"customer_name\":{\"value\":\"Torres, Sutton and Weeks\",\"evidence\":\"Torres, Sutton and Weeks\"},\"customer_tax_id\":{\"value\":\"909-87-3064\",\"evidence\":\"Tax Id: 909-87-3064\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4245,
+  "output_tokens": 221,
+  "latency_ms": 7473,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

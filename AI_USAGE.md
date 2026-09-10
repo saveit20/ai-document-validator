@@ -13,7 +13,22 @@ listed below.
 | **Claude subagents** (isolated, with no access to the code) | Two agents wrote the 16 held-out invoice PDFs; a third labelled them again blind to measure label agreement; a fourth reviewed the system for country- and format-specific assumptions |
 | **ChatGPT** | First draft of the working protocol (phases and checklists), later restructured |
 | **Codex** | Independent review of the protocol; it found a real design flaw (below) |
-| **The author** | Every scope, data and trade-off decision: extending the field set, evaluating three models plus a hybrid, rejecting the first test data as too easy, requiring public redistributable data, the dev/test split, and the final sign-off |
+| **The author** | Every scope, data and trade-off decision: extending the field set, evaluating three models plus a hybrid, rejecting the first test data as too easy, requiring public redistributable data, the dev/test split, and the final sign-off (details below) |
+
+### Decisions the author took, and what they changed
+
+The assistant wrote most of the code; these course changes came from the author, usually by challenging
+what the assistant had produced.
+
+| The author asked | What it changed |
+|---|---|
+| "The first test data is too easy and written by us" | The author-written invoices were removed from all metrics; independent sources replaced them ([evaluation.md](docs/evaluation.md) §2) |
+| "Do not overfit to one sample: find many sources, languages and currencies" | Six sources instead of one: US, German ZUGFeRD, Spanish utility bills, Gulf (AED/KWD), 13 countries from GOBL, and a held-out set ([docs/data.md](docs/data.md)) |
+| "Are we making the model read the PDF the way you misread the brief?" | Measured how the document reaches the model; sending the PDF with our text raised dev verdict agreement from 74% to 94% on Haiku, and became the default ([evaluation.md](docs/evaluation.md) §8) |
+| "Decide what a finance team would want, not what is easiest" | Credit notes booked negative, tax total summed from printed rate lines, both still verified against the document ([decisions.md](docs/decisions.md) C4, C5) |
+| "Optimise the prompt before spending more calls" | A controlled comparison of prompt variants on dev before the test run ([evaluation.md](docs/evaluation.md) §9) |
+| "We have a fixed API budget" | Staged recording, and a hard cap: the evaluation runner refuses to call the API without `--max-calls` |
+| "Stay with what the brief values" | Data expansion stopped; remaining time went to the test run, README and reproducibility |
 
 ## 2. Suggestions we rejected, and why
 

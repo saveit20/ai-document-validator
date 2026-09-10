@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Fournisseur Example SARL\",\"evidence\":\"Fournisseur Example SARL\"},\"invoice_number\":{\"value\":\"AV-2024-001\",\"evidence\":\"Credit noteAV-2024-001\"},\"invoice_date\":{\"value\":\"2024-06-20\",\"evidence\":\"Issue date\\n2024-06-20\"},\"total_amount\":{\"value\":\"240.00\",\"evidence\":\"Total €240,00\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Euro (EUR)\"},\"tax_id\":{\"value\":\"FR44732829320\",\"evidence\":\"TVA: FR44732829320\"},\"subtotal_amount\":{\"value\":\"200.00\",\"evidence\":\"Sum €200,00\"},\"tax_amount\":{\"value\":\"40.00\",\"evidence\":\"Tax €40,00\"},\"customer_name\":{\"value\":\"Client Example SAS\",\"evidence\":\"Client Example SAS\"},\"customer_tax_id\":{\"value\":\"FR39356000000\",\"evidence\":\"TVA: FR39356000000\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4319,
+  "output_tokens": 238,
+  "latency_ms": 8681,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

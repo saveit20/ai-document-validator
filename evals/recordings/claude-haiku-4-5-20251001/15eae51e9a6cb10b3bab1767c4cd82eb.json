@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"IGNIS ENERGÍA S.L\",\"evidence\":\"IGNIS ENERGÍA S.L\"},\"invoice_number\":{\"value\":\"YR2053383809\",\"evidence\":\"Nº factura: YR2053383809\"},\"invoice_date\":{\"value\":\"2010-05-19\",\"evidence\":\"Fecha de emisión: 19.05.2010\"},\"total_amount\":{\"value\":\"27.36\",\"evidence\":\"Total factura 27,36 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"27,36 €\"},\"tax_id\":{\"value\":\"B87290805\",\"evidence\":\"C.I.F. B87290805\"},\"subtotal_amount\":{\"value\":\"26.95\",\"evidence\":\"Total electricidad 26,95 €\"},\"tax_amount\":{\"value\":\"0.41\",\"evidence\":\"IGIC 1% 0,24 € and IGIC 6,5% 0,17 €\"},\"customer_name\":{\"value\":\"YAMIL BARRIENTOS GRANADA\",\"evidence\":\"Nombre: YAMIL BARRIENTOS GRANADA\"},\"customer_tax_id\":{\"value\":\"36469874Q\",\"evidence\":\"NIF: 36469874Q\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 9255,
+  "output_tokens": 287,
+  "latency_ms": 9394,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

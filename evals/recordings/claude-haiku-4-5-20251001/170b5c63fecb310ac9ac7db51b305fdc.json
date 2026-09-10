@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Young, Owens and Hall\",\"evidence\":\"Young, Owens and Hall\"},\"invoice_number\":{\"value\":\"76903393\",\"evidence\":\"Invoice no: 76903393\"},\"invoice_date\":{\"value\":\"2012-07-24\",\"evidence\":\"07/24/2012\"},\"total_amount\":{\"value\":\"5230.40\",\"evidence\":\"$ 5 230,40\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"964-86-1473\",\"evidence\":\"Tax Id: 964-86-1473\"},\"subtotal_amount\":{\"value\":\"4754.91\",\"evidence\":\"$ 4 754,91\"},\"tax_amount\":{\"value\":\"475.49\",\"evidence\":\"$ 475,49\"},\"customer_name\":{\"value\":\"King-Wells\",\"evidence\":\"King-Wells\"},\"customer_tax_id\":{\"value\":\"993-82-3637\",\"evidence\":\"Tax Id: 993-82-3637\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4843,
+  "output_tokens": 231,
+  "latency_ms": 7704,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

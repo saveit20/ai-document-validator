@@ -12,9 +12,10 @@ Changes made: 5 labelled bills were drawn with a fixed seed from each of the 6 l
 archive with HTTP range requests, without downloading it whole. The PDFs themselves are unmodified.
 
 The labels (*.expected.json) are mapped from the dataset's per-bill JSON and checked against the text
-printed in each PDF. The bills print two VAT lines but never their sum, so tax_amount is null (the
-evaluation only expects what the document shows). Rule configurations and expected verdicts were added by
-this project.
+printed in each PDF. The bills print one VAT (or IGIC) line per rate and never their sum; following the
+labelling policy (docs/data.md), tax_amount is the sum of those printed lines. Rule configurations and
+expected verdicts were added by this project. Rebuild: python -m evals.sources.idsem (see
+evals/sources/README.md).
 
 The bills are synthetic: the dataset authors generated them from templates modelled on real Spanish
 utilities, with names drawn from dictionaries. They contain no real personal data.

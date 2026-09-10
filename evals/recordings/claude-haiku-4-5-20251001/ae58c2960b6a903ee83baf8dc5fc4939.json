@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"IT\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"Hotel California\",\"evidence\":\"Supplier\\nHotel California\"},\"invoice_number\":{\"value\":\"SAMPLE-002\",\"evidence\":\"Invoice\\nSAMPLE-002\"},\"invoice_date\":{\"value\":\"2023-05-21\",\"evidence\":\"Issue date\\n2023-05-21\"},\"total_amount\":{\"value\":\"126.00\",\"evidence\":\"Total to pay €126,00\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"Currency\\nEuro (EUR)\"},\"tax_id\":{\"value\":\"12345678903\",\"evidence\":\"P.IVA: (IT) 12345678903\"},\"subtotal_amount\":{\"value\":\"114.64\",\"evidence\":\"Total €114,64\"},\"tax_amount\":{\"value\":\"11.36\",\"evidence\":\"Included VAT €11,36\"},\"customer_name\":{\"value\":\"Mela S.r.l.\",\"evidence\":\"Customer\\nMela S.r.l.\"},\"customer_tax_id\":{\"value\":\"RSSGNN60R30H501U\",\"evidence\":\"Codice fiscale: RSSGNN60R30H501U\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4389,
+  "output_tokens": 285,
+  "latency_ms": 9189,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

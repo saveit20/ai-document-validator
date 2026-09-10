@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Myers Inc\",\"evidence\":\"Myers Inc\"},\"invoice_number\":{\"value\":\"62256280\",\"evidence\":\"Invoice no: 62256280\"},\"invoice_date\":{\"value\":\"2020-11-08\",\"evidence\":\"Date of issue:\\n11/08/2020\"},\"total_amount\":{\"value\":\"2970.00\",\"evidence\":\"$ 2 970,00\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$\"},\"tax_id\":{\"value\":\"989-81-3221\",\"evidence\":\"Tax Id: 989-81-3221\"},\"subtotal_amount\":{\"value\":\"2700.00\",\"evidence\":\"$ 2 700,00\"},\"tax_amount\":{\"value\":\"270.00\",\"evidence\":\"$ 270,00\"},\"customer_name\":{\"value\":\"Cook-Smith\",\"evidence\":\"Cook-Smith\"},\"customer_tax_id\":{\"value\":\"912-76-2889\",\"evidence\":\"Tax Id: 912-76-2889\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4271,
+  "output_tokens": 226,
+  "latency_ms": 2293,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

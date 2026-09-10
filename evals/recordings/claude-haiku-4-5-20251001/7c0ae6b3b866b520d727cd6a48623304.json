@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"DD/MM/YYYY\",\"supplier_name\":{\"value\":\"HEFAMECOM, S.A.\",\"evidence\":\"HEFAMECOM, S.A.\"},\"invoice_number\":{\"value\":\"AM1417688180\",\"evidence\":\"Nº Factura: AM1417688180\"},\"invoice_date\":{\"value\":\"1990-04-07\",\"evidence\":\"emitida el 07 de abril de 1990\"},\"total_amount\":{\"value\":\"303.30\",\"evidence\":\"TOTAL IMPORTE FACTURA 303,30 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"303,30 €\"},\"tax_id\":{\"value\":\"A73027930\",\"evidence\":\"CIF A73027930\"},\"subtotal_amount\":{\"value\":\"293.50\",\"evidence\":\"Subtotal 293,50 €\"},\"tax_amount\":{\"value\":\"8.87\",\"evidence\":\"3% s/293,50 € 8,80 €\\n7% s/0,93 € 0,07 €\"},\"customer_name\":{\"value\":\"GORDON CALDERA ECHEVERRÍA\",\"evidence\":\"GORDON CALDERA ECHEVERRÍA\"},\"customer_tax_id\":{\"value\":\"63038269F\",\"evidence\":\"NIF: 63038269F\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 11337,
+  "output_tokens": 307,
+  "latency_ms": 9634,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

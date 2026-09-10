@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"MX\",\"date_format\":\"YYYY-MM-DD\",\"supplier_name\":{\"value\":\"ESCUELA KEMPER URGATE\",\"evidence\":\"ESCUELA KEMPER URGATE\"},\"invoice_number\":{\"value\":\"TEST-00001\",\"evidence\":\"TEST-00001\"},\"invoice_date\":{\"value\":\"2023-07-10\",\"evidence\":\"2023-07-10\"},\"total_amount\":{\"value\":\"43.96\",\"evidence\":\"Total to pay $43.96\"},\"currency\":{\"value\":\"MXN\",\"evidence\":\"Mexican Peso (MXN)\"},\"tax_id\":{\"value\":\"EKU9003173C9\",\"evidence\":\"RFC: (MX) EKU9003173C9\"},\"subtotal_amount\":{\"value\":\"37.90\",\"evidence\":\"Sum $37.90\"},\"tax_amount\":{\"value\":\"6.06\",\"evidence\":\"Tax $6.06\"},\"customer_name\":{\"value\":\"UNIVERSIDAD ROBOTICA ESPAÑOLA\",\"evidence\":\"UNIVERSIDAD ROBOTICA ESPAÑOLA\"},\"customer_tax_id\":{\"value\":\"URE180429TM6\",\"evidence\":\"RFC: (MX) URE180429TM6\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4367,
+  "output_tokens": 275,
+  "latency_ms": 8896,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

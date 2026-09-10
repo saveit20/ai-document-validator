@@ -1,0 +1,9 @@
+{
+  "text": "{\"issuer_country\":\"ES\",\"date_format\":\"DD/MM/YYYY\",\"supplier_name\":{\"value\":\"Suministros y Obras Levante S.A.\",\"evidence\":\"Suministros y Obras Levante S.A.\"},\"invoice_number\":{\"value\":\"A-26/1093\",\"evidence\":\"Número A-26/1093\"},\"invoice_date\":{\"value\":\"2026-05-28\",\"evidence\":\"Fecha: 28/05/2026\"},\"total_amount\":{\"value\":\"7485.50\",\"evidence\":\"TOTAL FACTURA 7.485,50 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"TOTAL FACTURA 7.485,50 €\"},\"tax_id\":{\"value\":\"A46123456\",\"evidence\":\"CIF A46123456\"},\"subtotal_amount\":{\"value\":\"6566.00\",\"evidence\":\"Suma bases imponibles 6.566,00 €\"},\"tax_amount\":{\"value\":\"919.50\",\"evidence\":\"417,60 cuota IVA and 501,90 cuota IVA\"},\"customer_name\":{\"value\":\"Northwind Construction S.L.\",\"evidence\":\"Northwind Construction S.L.\"},\"customer_tax_id\":{\"value\":\"B12345678\",\"evidence\":\"CIF B12345678\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 5019,
+  "output_tokens": 309,
+  "latency_ms": 2929,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

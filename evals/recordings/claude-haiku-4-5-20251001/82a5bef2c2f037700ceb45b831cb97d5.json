@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Byrd PLC\",\"evidence\":\"Seller:\\n Byrd PLC\"},\"invoice_number\":{\"value\":\"84777898\",\"evidence\":\"Invoice no: 84777898\"},\"invoice_date\":{\"value\":\"2017-06-02\",\"evidence\":\"Date of issue:\\n06/02/2017\"},\"total_amount\":{\"value\":\"314.62\",\"evidence\":\"$ 314,62\"},\"currency\":{\"value\":\"USD\",\"evidence\":\"$ 286,02\"},\"tax_id\":{\"value\":\"991-72-8541\",\"evidence\":\"Tax Id: 991-72-8541\"},\"subtotal_amount\":{\"value\":\"286.02\",\"evidence\":\"286,02\"},\"tax_amount\":{\"value\":\"28.60\",\"evidence\":\"28,60\"},\"customer_name\":{\"value\":\"Palmer LLC\",\"evidence\":\"Client:\\n Palmer LLC\"},\"customer_tax_id\":{\"value\":\"947-73-4805\",\"evidence\":\"Tax Id: 947-73-4805\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4397,
+  "output_tokens": 231,
+  "latency_ms": 7889,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

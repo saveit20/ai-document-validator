@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"INTERNATIONAL MARINA TARRAGONA, S.L.\", \"evidence\": \"INTERNATIONAL MARINA TARRAGONA, S.L.\"}, \"invoice_number\": {\"value\": \"H9098782829\", \"evidence\": \"Nº Factura: H9098782829\"}, \"invoice_date\": {\"value\": \"2009-04-16\", \"evidence\": \"emitida el 16 de abril de 2009\"}, \"total_amount\": {\"value\": \"37.17\", \"evidence\": \"TOTAL IMPORTE FACTURA 37,17 €\"}, \"currency\": {\"value\": \"EUR\", \"evidence\": \"37,17 €\"}, \"tax_id\": {\"value\": \"B83682245\", \"evidence\": \"CIF B83682245\"}, \"subtotal_amount\": {\"value\": \"30.92\", \"evidence\": \"IMPORTE TOTAL 30,92 €\"}, \"tax_amount\": {\"value\": \"6.25\", \"evidence\": \"21% s/29,12 € 6,12 € 7% s/1,80 € 0,13 €\"}, \"customer_name\": {\"value\": \"Libera Solís Jurado\", \"evidence\": \"Titular: Libera Solís Jurado\"}, \"customer_tax_id\": {\"value\": \"22436676S\", \"evidence\": \"NIF: 22436676S\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 11223,
+  "output_tokens": 338,
+  "latency_ms": 3932,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}
