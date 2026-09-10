@@ -283,7 +283,15 @@ can be replayed with `python -m evals.run --extractor llm --model claude-haiku-4
 | v3 | the prompt used until then | 97% | 79/80 | — | 82% | $0.0073 |
 | v4a | clearer field rules from dev errors: names without address, the taxable base defined, tax total summed from per-rate lines, credit notes negative, and "decide the issuer's country before reading a date" | 98% | 74/80 | 78/80 | 80% | $0.0074 |
 | v4b | v4a, and the schema asks for `issuer_country` and `date_format` **before** the fields | **99%** | **80/80** | 79/80 | 81% | $0.0076 |
-<!-- V4C -->
+| v4c (control) | v4a with v3's date sentence and no preamble | 99% | 77/80 | 77/80 | 82% | $0.0074 |
+
+**Chosen: v4b.** It has the best field accuracy and the only perfect date score; its verdict agreement is
+one invoice in 80 below v3 and v4c, which is within noise. The control v4c shows where the date gain
+comes from: removing v4a's harmful sentence recovers most of it (74 → 77), and the preamble adds the last
+three (77 → 80). v4b is the service prompt (`src/validator/prompts.py`); the other variants remain in
+`evals/prompt_variants.py` so their recordings stay replayable. The prompt was compared on Haiku to keep
+within the API budget and then applied to Opus 5, the model the selection rule picked; Opus dev numbers
+in §7 are with v3.
 
 What we learned:
 

@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"KAWIIL GLOBAL ENERGY SERVICES, S.L.\", \"evidence\": \"KAWIIL GLOBAL ENERGY SERVICES, S.L.\"}, \"invoice_number\": {\"value\": \"R5470353831\", \"evidence\": \"Nº factura R5470353831\"}, \"invoice_date\": {\"value\": \"2013-05-29\", \"evidence\": \"Fecha factura 29 de mayo de 2013\"}, \"total_amount\": {\"value\": \"377.91\", \"evidence\": \"TOTAL IMPORTE FACTURA 377,91\"}, \"currency\": {\"value\": \"EUR\", \"evidence\": \"IMPORTE FACTURA 377,91 €\"}, \"tax_id\": {\"value\": \"B87095089\", \"evidence\": \"CIF B87095089\"}, \"subtotal_amount\": {\"value\": \"328.70\", \"evidence\": \"IMPORTE TOTAL 328,70\"}, \"tax_amount\": {\"value\": \"49.21\", \"evidence\": \"15 % s/327,63 € / 6,5 % s/1,07 €\"}, \"customer_name\": {\"value\": \"RICARDO GAITÁN SALINAS\", \"evidence\": \"RICARDO GAITÁN SALINAS\"}, \"customer_tax_id\": {\"value\": \"58960332Q\", \"evidence\": \"NIF 58960332Q\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 9353,
+  "output_tokens": 332,
+  "latency_ms": 10762,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

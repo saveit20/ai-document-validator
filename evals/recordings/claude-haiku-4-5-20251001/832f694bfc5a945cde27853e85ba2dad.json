@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"GEO ALTERNATIVA S.L.\",\"evidence\":\"GEO ALTERNATIVA S.L.\"},\"invoice_number\":{\"value\":\"LF9786832414\",\"evidence\":\"Nº factura: LF9786832414\"},\"invoice_date\":{\"value\":\"2008-01-05\",\"evidence\":\"Fecha de emisión: 05.01.2008\"},\"total_amount\":{\"value\":\"248.46\",\"evidence\":\"Total a pagar 248,46 €\"},\"currency\":{\"value\":\"EUR\",\"evidence\":\"248,46 €\"},\"tax_id\":{\"value\":\"B87382644\",\"evidence\":\"CIF B87382644\"},\"subtotal_amount\":{\"value\":\"236.62\",\"evidence\":\"Total electricidad 236,62 €\"},\"tax_amount\":{\"value\":\"11.84\",\"evidence\":\"IGIC 5% 11,82 € and IGIC 6,5% 0,02 €\"},\"customer_name\":{\"value\":\"EUFEMIA GÓMEZ URIBE\",\"evidence\":\"Nombre: EUFEMIA GÓMEZ URIBE\"},\"customer_tax_id\":{\"value\":\"91488257F\",\"evidence\":\"NIF: 91488257F\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 11332,
+  "output_tokens": 290,
+  "latency_ms": 9383,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

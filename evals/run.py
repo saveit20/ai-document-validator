@@ -170,7 +170,7 @@ def build(
     record: bool,
     llm_input: str = "text",
     max_calls: int = 0,
-    prompt: str = "v3",
+    prompt: str = "v4b",
 ) -> tuple[str, Pipeline]:
     heuristic = HeuristicExtractor()
     if extractor == "heuristic":
@@ -189,7 +189,7 @@ def build(
         llm_input,  # type: ignore[arg-type]
         prompt=VARIANTS[prompt],
     )
-    suffix = ("+pdf" if llm_input == "pdf" else "") + ("" if prompt == "v3" else f"+{prompt}")
+    suffix = ("+pdf" if llm_input == "pdf" else "") + ("" if prompt == "v4b" else f"+{prompt}")
     if extractor == "llm":
         return f"llm:{model}{suffix}", Pipeline(llm, heuristic)
     return f"hybrid:{model}{suffix}", Pipeline(HybridExtractor(heuristic, llm), heuristic)
@@ -236,7 +236,7 @@ def main(argv: list[str] | None = None) -> int:
         "--max-calls", type=int, default=0, help="with --record: stop after this many paid calls"
     )
     parser.add_argument(
-        "--prompt", choices=tuple(VARIANTS), default="v3", help="prompt variant (llm and hybrid)"
+        "--prompt", choices=tuple(VARIANTS), default="v4b", help="prompt variant (llm and hybrid)"
     )
     parser.add_argument(
         "--pdf-text", choices=("plain", "layout"), default="plain", help="how PDF text is extracted"

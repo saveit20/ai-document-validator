@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\":{\"value\":\"Fictional Atlantic Imports Inc.\",\"evidence\":\"Fictional Atlantic Imports Inc.\"},\"invoice_number\":{\"value\":\"INV-2026-011\",\"evidence\":\"Invoice: INV-2026-011\"},\"invoice_date\":{\"value\":\"2026-08-11\",\"evidence\":\"Date: 2026-08-11\"},\"total_amount\":{\"value\":\"704.00\",\"evidence\":\"Total\\nAED 704.00\"},\"currency\":{\"value\":\"AED\",\"evidence\":\"Currency: AED\"},\"tax_id\":null,\"subtotal_amount\":{\"value\":\"620.00\",\"evidence\":\"Subtotal\\nAED 620.00\"},\"tax_amount\":{\"value\":\"31.00\",\"evidence\":\"VAT 5% on goods\\nAED 31.00\"},\"customer_name\":{\"value\":\"Example Grocery Trading LLC\",\"evidence\":\"Bill to: Example Grocery Trading LLC, Dubai\"},\"customer_tax_id\":null}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 4185,
+  "output_tokens": 223,
+  "latency_ms": 7537,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

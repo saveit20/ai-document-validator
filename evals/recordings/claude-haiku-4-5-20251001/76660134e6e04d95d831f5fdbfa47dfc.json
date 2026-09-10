@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"CORPOLUX, S.L.\", \"evidence\": \"Su comercializadora: CORPOLUX, S.L\"}, \"invoice_number\": {\"value\": \"IE2906178042\", \"evidence\": \"Nº factura: IE2906178042\"}, \"invoice_date\": {\"value\": \"1990-04-22\", \"evidence\": \"Fecha emisión factura: 22/04/1990\"}, \"total_amount\": {\"value\": \"160.60\", \"evidence\": \"TOTAL IMPORTE FACTURA 160,60 €\"}, \"currency\": {\"value\": \"EUR\", \"evidence\": \"160,60 €\"}, \"tax_id\": {\"value\": \"B54691589\", \"evidence\": \"CIF B54691589.\"}, \"subtotal_amount\": {\"value\": \"152.91\", \"evidence\": \"Importe total 152,91 €\"}, \"tax_amount\": {\"value\": \"7.69\", \"evidence\": \"IGIC reducido ( 5%) 5% s/ 152,11 7,61 € and IGIC normal ( 10%) 10% s/ 0,80 0,08 €\"}, \"customer_name\": {\"value\": \"BENITO INFANTE HERNÁNDEZ\", \"evidence\": \"Titular del contrato: BENITO INFANTE HERNÁNDEZ\"}, \"customer_tax_id\": {\"value\": \"41240209J\", \"evidence\": \"NIF: 41240209J\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 11795,
+  "output_tokens": 354,
+  "latency_ms": 4143,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}

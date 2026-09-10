@@ -5,17 +5,22 @@ rules and returns `PASS`, `FAIL` or `REVIEW` — with the evidence behind every 
 or dispute the result.
 
 **The idea in one line:** the LLM only *proposes* values; everything that *decides* — normalisation,
-confidence, rules and the verdict — is deterministic and auditable.
+confidence, rules and the verdict — is deterministic code that checks each value against the document.
+When the model is wrong, the result is a `REVIEW` for a person, not a wrong `PASS` or `FAIL`.
 
-- **Three extraction modes** behind one interface: a free heuristic, an LLM (Claude), and a hybrid that calls
-  the LLM only when the heuristic is unsure. All three are measured on the same data.
-- **Confidence you can audit:** a value scores 1.0 only if its evidence appears verbatim in the document and
-  actually contains the value. A hallucinated value drops to 0.3 and the verdict becomes `REVIEW`.
-- **Honest evaluation:** third-party public invoices plus an independently written held-out set, split into a
-  dev half and a test half nobody looks at. See [docs/evaluation.md](docs/evaluation.md).
-- **Runs offline:** no API key needed. LLM results replay from recorded responses.
+<!-- HEADLINE -->
 
-<!-- FILL AFTER RECORDING: one-line headline result (best configuration on the test split). -->
+## How this answers the brief
+
+| What the brief values | What we did | Where to check |
+|---|---|---|
+| **Judgment** — heuristic vs LLM vs hybrid, and why | All three behind one interface, measured on the same 160 invoices. The heuristic is free but reads only the layouts it was written for; the hybrid saves calls only on known templates; the LLM is needed for varied layouts. Model chosen by a rule written before seeing results | [Evaluation](#evaluation), [When not to use an LLM](#cost-latency-and-risk) |
+| **Production mindset** — contracts, failure modes, observability, cost/latency | Typed Pydantic contracts; timeouts, retries and a fallback to the heuristic when the LLM fails; JSON logs with request id, latency, model and verdict; cost and latency measured per document; prompt caching; a hard cap on paid calls | [API](#api), [Cost, latency and risk](#cost-latency-and-risk) |
+| **Extraction + rules design** — extensibility, typing, failure handling | Rules are small classes behind a `Protocol`: adding one is a class and a line. Confidence comes from checking evidence against the document, never from the model | [Architecture](#architecture), [docs/decisions.md](docs/decisions.md) |
+| **Evaluation mindset** — golden set quality, metrics honesty | 160 invoices from six sources the author did not write, labels checked against the printed PDF, a dev half for fixing and a test half run once. Every metric per source; failures printed | [Evaluation](#evaluation), [docs/evaluation.md](docs/evaluation.md), [docs/data.md](docs/data.md) |
+| **AI-assisted engineering** — deliberate use, ownership, accepted/rejected | What each tool did, what the author decided, what was rejected and why | [AI_USAGE.md](AI_USAGE.md) |
+| **Communication** — a README a teammate can run and challenge in 15 minutes | This page: run it, see the numbers, read the trade-offs. Details are one link away | — |
+| **Craft** — clean Python, tests that protect behaviour | ruff, type hints, ~240 tests including every LLM failure mode through a fake transport; CI runs lint, tests, a quality gate and the Docker image | [Testing](#testing) |
 
 ## Architecture
 
@@ -32,10 +37,18 @@ flowchart LR
     I --> J[verdict<br/>FAIL > REVIEW > PASS]
 ```
 
+**Why this shape.** A compliance verdict must be auditable, and an LLM is not. So the model is used for
+the one thing it is good at — reading a messy, unknown layout — and everything it returns is checked by
+code: the evidence must be in the document and must contain the value, or the field drops to low
+confidence and the verdict to `REVIEW`. The same checks apply to all three extractors, which is what makes
+them comparable. We rejected the simpler alternative (let the model return the verdict) because it cannot
+be tested or explained, and the more elaborate ones (agents, several models voting, a vector store) because
+nothing in the brief needs them.
+
 | Step | What it does | Deterministic |
 |---|---|---|
-| ingest | PDF (text layer, via `pypdf`) or UTF-8 text → pages | yes |
-| extractor | proposes a raw value and an evidence snippet per field | heuristic yes, LLM no |
+| ingest | PDF (text layer, via `pypdf`) or UTF-8 text → pages; the original PDF is kept | yes |
+| extractor | proposes a raw value and an evidence snippet per field. The LLM receives the PDF itself (so it sees the layout) plus our extracted text, and must quote the text | heuristic yes, LLM no |
 | normalise | dates → ISO, amounts → `Decimal`, currency → ISO 4217, tax ids → canonical | yes |
 | confidence | checks the evidence is in the document and supports the value | yes |
 | rules | seven independent rules, each `PASS` / `FAIL` / `REVIEW` with a message | yes |
@@ -179,11 +192,16 @@ python -m evals.run --all                           # heuristic, three Claude mo
 python -m evals.run --all --check-baseline          # the CI quality gate
 ```
 
-88 invoices from two sources the author did not write — 72 public Mendeley invoices (CC BY 4.0, labels by a
-third party, each verified against its PDF) and 16 layout-rich held-out invoices written by isolated agents —
-split 50/50 into dev (inspected) and test (never inspected). Invoices written by the author are excluded
-from every metric. Method, sources considered and rejected, label quality and the contamination log:
-[docs/evaluation.md](docs/evaluation.md).
+160 invoices from six sources the author did not write, chosen to avoid tuning to one template: a US
+template (Mendeley), German e-invoices (Mustang), Spanish electricity bills (IDSEM), Gulf invoices in AED and
+KWD (SalorWorks), 13 countries from an e-invoicing library (GOBL) and a held-out set of deliberately messy
+European layouts. 18 countries, 12 currencies, 6 label languages; credit notes, multi-page and multi-rate
+invoices. Every label was checked against the printed PDF. Each source is split 50/50 into **dev** (failures
+inspected and fixed) and **test** (run once, at the end, with code and prompt frozen). Invoices written by
+the author are excluded from every metric.
+
+What the data covers and how it was built: [docs/data.md](docs/data.md). Method, experiments and the
+contamination log: [docs/evaluation.md](docs/evaluation.md).
 
 <!-- FILL AFTER RECORDING: comparison table (heuristic, 3 models, hybrid) on the test split, per source,
 with field exact match, verdict agreement, LLM calls, mean/p95 latency and cost per document. -->
@@ -197,9 +215,18 @@ with field exact match, verdict agreement, LLM calls, mean/p95 latency and cost 
 
 ## Design decisions and trade-offs
 
-The full log, with rejected alternatives, is in [docs/decisions.md](docs/decisions.md). The ones that matter
-most:
+Every decision — problem, choice, evidence, what we rejected and when we would revisit it — is in
+[docs/decisions.md](docs/decisions.md), starting with a one-page table. The ones that matter most:
 
+- **The model sees the PDF, not only extracted text** — PDF text extraction loses the layout; sending the page
+  as well raised dev verdict agreement from 74% to 94% on Haiku for +57% cost. Evidence must still quote our
+  text, so every value stays checkable ([measured](docs/evaluation.md#8-how-the-document-reaches-the-model)).
+- **Model chosen by a rule written before the results** — the cheapest model within 3 points of the best.
+- **Prompt chosen by a controlled experiment**, not by intuition: four variants on the same dev invoices; an
+  instruction that sounded helpful made dates worse, and forcing the model to state the issuer's country and
+  date format first fixed them ([measured](docs/evaluation.md#9-prompt-variants)).
+- **Finance rules, still verified** — credit notes are booked negative, and a tax total may be the sum of
+  printed per-rate lines, trusted only when subtotal + tax = total.
 - **Structured output validated by us, not by the SDK helper** — so corrupt model output can be simulated
   and tested, and responses recorded and replayed.
 - **Confidence from grounding, in four discrete levels** — model self-confidence is not calibrated; a value
@@ -219,8 +246,12 @@ The brief leaves these open; each is documented with its alternatives in [docs/d
 - Only `SUPPLIER_INVOICE` is supported; other types are rejected with a clear error.
 - PDFs must have a text layer; scanned PDFs are rejected (OCR is out of scope).
 - `max_age_days` is measured against `reference_date` (default today), inclusive; a future date fails.
-- Numeric dates are read day-first unless the document shows otherwise.
-- Amounts accept European and English separators; a lone `1.500` is ambiguous and lowers confidence.
+- Numeric dates follow the issuer's convention: a US address means month-first, European signals mean
+  day-first; with no signal a date like `04/08/2026` is ambiguous and goes to `REVIEW`.
+- Amounts accept European, English, Swiss and space-grouped separators; a lone `1.500` is ambiguous and
+  lowers confidence, except in three-decimal currencies such as KWD.
+- Credit notes are negative, even when printed without a minus sign; corrective invoices keep their sign.
+- The tax total may be the sum of the printed per-rate tax lines when no total line is printed.
 - A missing currency when `allowed_currencies` is set gives `REVIEW`, not `FAIL`.
 - `required_fields` is a rule of its own; overlapping rules each report independently.
 
@@ -235,11 +266,16 @@ inference.
 
 ## Limitations and next steps
 
-<!-- FILL AFTER RECORDING: adjust with the measured weaknesses. -->
-
-- **No OCR**: scanned invoices are rejected.
-- **Heuristics are layout-bound**: they work on the layouts they were written for (see the Mendeley results
-  in [docs/evaluation.md](docs/evaluation.md)).
+- **No OCR**: scanned invoices are rejected. The model could read them from the image, but nothing could
+  check what it read. Next: OCR to produce a checkable text layer; the rest of the pipeline stays.
+- **Scrambled text layers cost reviews**: in the Spanish utility bills the PDF text puts labels and amounts
+  in separate blocks, so the model's evidence often cannot be found verbatim and the invoice goes to
+  `REVIEW`. The answer is safe but not automated. Next: match evidence by position, not only by text.
+- **Heuristics are layout-bound**: they work on the layouts they were written for; the hybrid therefore
+  saves calls only on streams dominated by known templates.
+- **The prompt was tuned on the cheapest model**: variants were compared on Haiku and the winner applied to
+  Opus, to stay within the API budget.
+- **Coverage gaps**: no non-Latin label text that survives PDF extraction, no handwritten documents.
 - **Evaluation data is synthetic**: freely licensed real invoices do not exist. Next: a labelled sample of
   real customer documents under a data processing agreement, with double labelling.
 - **Confidence thresholds are not calibrated**: next, fit them against labelled production data.

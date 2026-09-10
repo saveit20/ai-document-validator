@@ -1,0 +1,9 @@
+{
+  "text": "{\"supplier_name\": {\"value\": \"ENERGY TRADER SOLUTIONS, S.L.\", \"evidence\": \"Documento emitido por ENERGY TRADER SOLUTIONS, S.L. – AVDA. DE LORING, MUELLE PONIENTE, 03003 - Alicante\"}, \"invoice_number\": {\"value\": \"F8867153778\", \"evidence\": \"Nº factura F8867153778\"}, \"invoice_date\": {\"value\": \"1990-08-30\", \"evidence\": \"Fecha factura 30 de agosto de 1990\"}, \"total_amount\": {\"value\": \"19.04\", \"evidence\": \"TOTAL IMPORTE FACTURA 19,04\"}, \"currency\": {\"value\": \"EUR\", \"evidence\": \"IMPORTE FACTURA 19,04 €\"}, \"tax_id\": {\"value\": \"B54744073\", \"evidence\": \"CIF B54744073\"}, \"subtotal_amount\": {\"value\": \"18.42\", \"evidence\": \"IMPORTE TOTAL 18,42\"}, \"tax_amount\": {\"value\": \"0.62\", \"evidence\": \"IVA 0,16 and 21 % s/2,19 € 0,46\"}, \"customer_name\": {\"value\": \"PERSEO VENTURA IVAÑEZ\", \"evidence\": \"PERSEO VENTURA IVAÑEZ\"}, \"customer_tax_id\": {\"value\": \"47564174J\", \"evidence\": \"NIF 47564174J\"}}",
+  "model": "claude-haiku-4-5-20251001",
+  "input_tokens": 9318,
+  "output_tokens": 359,
+  "latency_ms": 4758,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0
+}
