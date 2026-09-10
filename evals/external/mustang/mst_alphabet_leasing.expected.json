@@ -1,0 +1,39 @@
+{
+  "document": "mst_alphabet_leasing.pdf",
+  "source": "mustang",
+  "reference_date": "2024-12-01",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "zugferd_sample",
+    "fixed_width_layout",
+    "scrambled_text_order",
+    "two_dates",
+    "german_number_format"
+  ],
+  "expected": {
+    "supplier_name": "Alphabet Fuhrparkmanagement GmbH",
+    "invoice_number": "2015738820",
+    "invoice_date": "2024-11-01",
+    "total_amount": "447.88",
+    "currency": "EUR",
+    "tax_id": "DE238574172",
+    "subtotal_amount": "376.37",
+    "tax_amount": "71.51",
+    "customer_name": "Muster GmbH",
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "Mustang project test resource ZTESTZUGFERD_1_INVDSS_012015738820PDF-1.pdf (Apache-2.0); label from the embedded CII XML, verified against the printed PDF text."
+}

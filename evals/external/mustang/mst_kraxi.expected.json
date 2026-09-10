@@ -1,0 +1,38 @@
+{
+  "document": "mst_kraxi.pdf",
+  "source": "mustang",
+  "reference_date": "2014-08-10",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "zugferd_sample",
+    "textual_german_date",
+    "german_number_format",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Kraxi GmbH",
+    "invoice_number": "2014-03",
+    "invoice_date": "2014-07-11",
+    "total_amount": "1005.55",
+    "currency": "EUR",
+    "tax_id": "DE123456789",
+    "subtotal_amount": "845.00",
+    "tax_amount": "160.55",
+    "customer_name": "Papierflieger-Vertriebs-GmbH",
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "Mustang project test resource zugferd_invoice.pdf (Apache-2.0); label from the embedded CII XML, verified against the printed PDF text."
+}

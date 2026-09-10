@@ -1,0 +1,39 @@
+{
+  "document": "mst_gnuaccounting_505.pdf",
+  "source": "mustang",
+  "reference_date": "2017-06-08",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "zugferd_sample",
+    "erp_layout",
+    "multi_vat",
+    "sidebar_supplier_block",
+    "german_number_format"
+  ],
+  "expected": {
+    "supplier_name": "Bei Spiel GmbH",
+    "invoice_number": "RE-20170509/505",
+    "invoice_date": "2017-05-09",
+    "total_amount": "571.04",
+    "currency": "EUR",
+    "tax_id": "DE136695976",
+    "subtotal_amount": "496.00",
+    "tax_amount": "75.04",
+    "customer_name": "Theodor Est",
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "Mustang project test resource MustangGnuaccountingBeispielRE-20170509_505.pdf (Apache-2.0); label from the embedded CII XML, verified against the printed PDF text."
+}

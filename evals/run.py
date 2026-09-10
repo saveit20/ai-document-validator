@@ -36,6 +36,7 @@ from validator.transport import AnthropicTransport, RecordedTransport
 EVALS_DIR = Path(__file__).resolve().parent
 SOURCES = {
     "mendeley": EVALS_DIR / "external" / "mendeley",
+    "mustang": EVALS_DIR / "external" / "mustang",
     "holdout": EVALS_DIR / "holdout",
 }
 SPLITS_FILE = EVALS_DIR / "splits.json"

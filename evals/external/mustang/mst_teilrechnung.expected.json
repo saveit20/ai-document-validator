@@ -1,0 +1,41 @@
+{
+  "document": "mst_teilrechnung.pdf",
+  "source": "mustang",
+  "reference_date": "2018-07-05",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "zugferd_sample",
+    "zugferd_visualisation",
+    "multi_page",
+    "multi_vat",
+    "prepayment",
+    "allowances_charges",
+    "german_number_format"
+  ],
+  "expected": {
+    "supplier_name": "Lieferant GmbH",
+    "invoice_number": "471102",
+    "invoice_date": "2018-06-05",
+    "total_amount": "197.65",
+    "currency": "EUR",
+    "tax_id": "DE123456789",
+    "subtotal_amount": "177.49",
+    "tax_amount": "20.16",
+    "customer_name": "Kunden AG Mitte",
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "Mustang project test resource EN16931_1_Teilrechnung.pdf (Apache-2.0); label from the embedded CII XML, verified against the printed PDF text."
+}

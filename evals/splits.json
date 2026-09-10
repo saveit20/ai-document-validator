@@ -1,9 +1,10 @@
 {
   "seed": 20260910,
-  "method": "each source (Mendeley, holdout batch A, holdout batch B) shuffled with the seed and split in half",
+  "method": "each source (Mendeley, Mustang, holdout batch A, holdout batch B) shuffled with the seed and split in half",
   "sources": {
     "mendeley": "evals/external/mendeley",
-    "holdout": "evals/holdout"
+    "holdout": "evals/holdout",
+    "mustang": "evals/external/mustang"
   },
   "dev": [
     "hA_01_two_column_header",
@@ -49,7 +50,10 @@
     "mdl_87428284",
     "mdl_90508672",
     "mdl_94404257",
-    "mdl_97675851"
+    "mdl_97675851",
+    "mst_fremdwaehrung",
+    "mst_kraxi",
+    "mst_teilrechnung"
   ],
   "test": [
     "hA_02_supplier_in_footer",
@@ -95,6 +99,9 @@
     "mdl_84635791",
     "mdl_90446683",
     "mdl_97159829",
-    "mdl_97511742"
+    "mdl_97511742",
+    "mst_alphabet_leasing",
+    "mst_gnuaccounting_505",
+    "mst_weclapp"
   ]
 }

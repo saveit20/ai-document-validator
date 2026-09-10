@@ -1,0 +1,41 @@
+{
+  "document": "mst_fremdwaehrung.pdf",
+  "source": "mustang",
+  "reference_date": "2025-12-31",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "zugferd_sample",
+    "zugferd_visualisation",
+    "multi_page",
+    "foreign_currency",
+    "tax_in_two_currencies",
+    "prepayment",
+    "german_number_format"
+  ],
+  "expected": {
+    "supplier_name": "Rohstoff AG Salzgitter",
+    "invoice_number": "47110815",
+    "invoice_date": "2025-12-01",
+    "total_amount": "1021.91",
+    "currency": "GBP",
+    "tax_id": "DE123456788",
+    "subtotal_amount": "858.75",
+    "tax_amount": "163.16",
+    "customer_name": "Metallbau Leipzig GmbH & Co. KG",
+    "customer_tax_id": null,
+    "verdict": "PASS"
+  },
+  "notes": "Mustang project test resource EXTENDED_Fremdwaehrung_wdis_fx-pdfa4.pdf (Apache-2.0); label from the embedded CII XML, verified against the printed PDF text."
+}

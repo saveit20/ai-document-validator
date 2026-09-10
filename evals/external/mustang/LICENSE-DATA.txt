@@ -1,0 +1,17 @@
+The invoices in this directory are taken from the test resources of the Mustang project:
+
+  https://github.com/ZUGFeRD/mustangproject (library/src/test/resources)
+
+licensed under the Apache License, Version 2.0:
+https://www.apache.org/licenses/LICENSE-2.0
+
+Changes made: six PDFs were selected and renamed to mst_<name>.pdf; the original file name is kept in
+the "notes" field of each *.expected.json. The PDFs themselves are unmodified. Near-duplicates (the same
+template and parties) and files without embedded invoice data were left out.
+
+The labels (*.expected.json) are derived from the ZUGFeRD / Factur-X XML embedded in each PDF (EN 16931
+business terms BT-1, BT-2, BT-5, BT-27, BT-31, BT-44, BT-48, BT-109, BT-110, BT-112) and checked against
+the text printed in the PDF. Where the XML and the printed text disagree, or a value is not printed, the
+label follows the printed document. Rule configurations and expected verdicts were added by this project.
+
+The invoices are fictitious test documents; they contain no real personal data.

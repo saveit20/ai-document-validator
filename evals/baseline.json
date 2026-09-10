@@ -1,26 +1,34 @@
 {
   "heuristic@dev/all": {
-    "verdict_agreement": 0.4772727272727273,
-    "field_exact_rate": 0.42272727272727273
+    "verdict_agreement": 0.46808510638297873,
+    "field_exact_rate": 0.49148936170212765
   },
   "heuristic@dev/mendeley": {
     "verdict_agreement": 0.5,
-    "field_exact_rate": 0.4166666666666667
+    "field_exact_rate": 0.5166666666666667
   },
   "heuristic@dev/holdout": {
     "verdict_agreement": 0.375,
-    "field_exact_rate": 0.45
+    "field_exact_rate": 0.4625
   },
   "heuristic@test/all": {
-    "verdict_agreement": 0.5,
-    "field_exact_rate": 0.4727272727272727
+    "verdict_agreement": 0.48936170212765956,
+    "field_exact_rate": 0.551063829787234
   },
   "heuristic@test/mendeley": {
     "verdict_agreement": 0.5,
-    "field_exact_rate": 0.4388888888888889
+    "field_exact_rate": 0.5388888888888889
   },
   "heuristic@test/holdout": {
     "verdict_agreement": 0.5,
-    "field_exact_rate": 0.625
+    "field_exact_rate": 0.6375
+  },
+  "heuristic@dev/mustang": {
+    "verdict_agreement": 0.3333333333333333,
+    "field_exact_rate": 0.26666666666666666
+  },
+  "heuristic@test/mustang": {
+    "verdict_agreement": 0.3333333333333333,
+    "field_exact_rate": 0.4666666666666667
   }
 }

@@ -1,0 +1,41 @@
+{
+  "document": "mst_weclapp.pdf",
+  "source": "mustang",
+  "reference_date": "2023-02-23",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR"
+    ]
+  },
+  "difficulty": [
+    "zugferd_sample",
+    "erp_layout",
+    "two_digit_year",
+    "split_net_and_vat_lines",
+    "xml_print_mismatch",
+    "german_number_format",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "weclapp.com",
+    "invoice_number": "RE1001",
+    "invoice_date": "2022-10-26",
+    "total_amount": "963.12",
+    "currency": "EUR",
+    "tax_id": null,
+    "subtotal_amount": null,
+    "tax_amount": null,
+    "customer_name": "Beispiel AG",
+    "customer_tax_id": null,
+    "verdict": "FAIL"
+  },
+  "notes": "Mustang project test resource MustangBeispiel20221026.pdf (Apache-2.0); label from the embedded CII XML, verified against the printed PDF text."
+}
