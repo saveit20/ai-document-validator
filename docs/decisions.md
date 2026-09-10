@@ -177,7 +177,9 @@ read a section only when you want to challenge the decision it covers.
   Every instruction is general; none targets a test case.
 - **Why:** v4b scored 99% of fields and 80/80 invoice dates, against 97% and 79/80 for v3. The comparison
   also showed that a sensible-sounding instruction ("decide the country, then read the date") made dates
-  worse (74/80), and the control showed that the two up-front properties are what brings dates to 80/80.
+  worse (74/80); adding the two up-front properties to that same prompt (v4b) brought them to 80/80,
+  more than cancelling the harm. A control without either reached 77/80; the properties were not tested
+  without the sentence.
   Verdict agreement stayed within one invoice across variants: the remaining `REVIEW`s come from text
   layers the grounding check cannot read, which no prompt fixes
   ([evaluation §9](evaluation.md#9-prompt-variants)).
@@ -208,7 +210,7 @@ read a section only when you want to challenge the decision it covers.
   On the test split, run once with prompt v4b, Opus 5 scored 98% of fields and 95% of verdicts at $0.034 per
   invoice, with no wrong `PASS`/`FAIL` ([evaluation §6](evaluation.md#6-final-results-on-the-test-split)).
 - **Rejected:** choosing by price alone; choosing after the fact.
-- **Revisit if:** the price of a manual review is known. Haiku at ~1/4.5 of the cost with more `REVIEW`s
+- **Revisit if:** the price of a manual review is known. Haiku at about a fifth of the cost with more `REVIEW`s
   could then be the right trade.
 
 ### B6 — No server-side model fallback, `effort: low`, no sampling parameters
@@ -266,7 +268,7 @@ read a section only when you want to challenge the decision it covers.
   (`Net worth`, `Gross worth`) were measured and removed.
 - **Why:** with them the heuristic scored 73% of fields and 78% of verdicts on test, and the hybrid saved a
   third of the cost; without them 64% and 55%. The gain was almost all on Mendeley, whose template is in
-  both dev and test; on the held-out set, whose layouts never repeat, the verdicts did not improve. A
+  both dev and test; on the stress set, whose layouts never repeat, the verdicts did not improve. A
   number learnt from the evaluation data would mislead anyone deploying this on new suppliers
   ([evaluation §6](evaluation.md#the-heuristic-improved-but-kept-general-on-purpose)).
 - **Rejected:** keeping the template labels (overfitting to our data); per-template rule files (the right
@@ -426,7 +428,7 @@ read a section only when you want to challenge the decision it covers.
   fields on them and about half on invoices written by someone else.
 - **Decision:** metrics use only: Mendeley (72, CC BY 4.0, US single template), Mustang (6, German
   ZUGFeRD), IDSEM (30, Spanish electricity bills), SalorWorks (10, Gulf, AED/KWD), GOBL (26, 14 countries,
-  credit/corrective notes), and a held-out set (16 PDFs written by two isolated agents that never saw the
+  credit/corrective notes), and a stress set (16 PDFs written by two isolated agents that never saw the
   code). The 14 author-written invoices are unit-test fixtures only. Every figure is reported per source.
 - **Why:** no single template can hide the hard layouts. Rejected sources and the reasons are in
   [evaluation §2](evaluation.md#sources-considered-and-rejected) (DocILE: no redistribution; RVL-CDIP and
@@ -451,8 +453,8 @@ read a section only when you want to challenge the decision it covers.
 
 - **Problem:** published labels can be wrong.
 - **Decision:** every label must appear in the printed text, and the printed document wins over embedded
-  XML/JSON. The held-out set was labelled twice, blind.
-- **Why:** of 76 Mendeley labels, 4 were wrong or unverifiable (~5%) and were excluded. The held-out set's
+  XML/JSON. The stress set was labelled twice, blind.
+- **Why:** of 76 Mendeley labels, 4 were wrong or unverifiable (~5%) and were excluded. The stress set's
   blind double labelling agreed on 159/160 fields, and the one disagreement was the second annotator's
   error.
 - **Rejected:** trusting published labels.
@@ -494,7 +496,7 @@ read a section only when you want to challenge the decision it covers.
 - **Problem:** the development machine had no Docker, and shipping an untested Dockerfile is worse than
   shipping none.
 - **Decision:** `pip install -e ".[dev]"` with bounded versions. GitHub Actions runs ruff, pytest and the
-  heuristic quality gate (`--check-baseline`), then runs `docker compose up --build` and polls `/health`.
+  three quality gates (`--check-baseline`: the heuristic, and the LLM and the hybrid on test, replayed), then runs `docker compose up --build` and polls `/health`.
 - **Why:** the reviewer installs no extra tools, and the container is tested on every push.
 - **Rejected:** uv (faster, with a lockfile, but one more tool to install); a Dockerfile nobody ran.
 - **Revisit if:** reproducible pinned installs matter more than setup friction. A lockfile would then be

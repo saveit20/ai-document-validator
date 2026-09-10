@@ -32,7 +32,7 @@ the reasons are listed in
 | IDSEM | 30 | 6 utility templates | ES | Spanish | EUR | 2–4 pages, dates written out in Spanish, VAT or IGIC per rate with no total line, scrambled text order |
 | SalorWorks | 10 | 1 family | AE, KW | English | AED, KWD, USD | three-decimal currency, discounts, freight and duty, a USD invoice from a UAE seller |
 | GOBL | 26 | 1 family, country variants | ES, FR, PL, DE, IT, PT, GR, MX, CO, AR, SA, SG, US, ZW | English, Spanish, French, Polish | EUR, USD, PLN, MXN, COP, ARS, SAR, SGD | credit notes, corrective and simplified invoices, reverse charge, tax-included prices, withholding, non-EU tax ids |
-| Held-out set | 16 | 16 | ES, FR, DE, IT, PT, CH, GB, US | Spanish, English, French, German, Italian | EUR, GBP, USD, CHF | two-column headers, name only in the footer, totals on page 2, distractor totals, OCR-like noise, Swiss number format |
+| Stress set | 16 | 16 | ES, FR, DE, IT, PT, CH, GB, US | Spanish, English, French, German, Italian | EUR, GBP, USD, CHF | two-column headers, name only in the footer, totals on page 2, distractor totals, OCR-like noise, Swiss number format |
 
 In total: 160 invoices from six sources, about 30 distinct layouts, 18 countries, 12 currencies and 6
 label languages. Split 50/50 per source into dev (80) and test (80).

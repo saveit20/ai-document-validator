@@ -4,7 +4,7 @@ How quality is measured, on which data, and why that data was chosen. The short 
 the system's author did not write, split 50/50 into a dev half we inspect and a test half we do not, with
 every number broken down by source.
 
-## 1. Why this matters more than the extractor
+## 1. Why the data matters more than the extractor
 
 The first version of the evaluation used 14 invoices written by the same person who wrote the heuristic
 extractor, and the extractor's patterns were checked against those invoices while it was being built. On
@@ -21,7 +21,7 @@ those 14 invoices are now used only as unit-test fixtures and appear in no metri
 | IDSEM, Spanish electricity bills (`evals/external/idsem/`) | third party (Scientific Data, 2022) | CC BY 4.0 | 30 (5 per template × 6) | dev + test |
 | SalorWorks invoice test pack (`evals/external/salorworks/`) | third party | CC BY 4.0 | 10 | dev + test |
 | GOBL example invoices (`evals/external/gobl/`) | third party (invopop), rendered to PDF by this project | Apache-2.0 | 26 | dev + test |
-| Held-out set (`evals/holdout/`) | two isolated agents that never saw the code | this project | 16 | dev + test |
+| Stress set (`evals/holdout/`) | two isolated agents that never saw the code | this project | 16 | dev + test |
 | Author-written invoices (`evals/golden/`) | the system's author | this project | 14 | unit tests only |
 
 **Mendeley.** Programmatically generated, single template, US style (month-first dates, `$`, US tax ids,
@@ -58,7 +58,8 @@ the structured JSON is the ground truth, checked against the printed text. It ad
 layout family. Two examples were left out: one names what looks like a real private person, and one prints a
 total that its data does not support.
 
-**Held-out set.** 16 PDFs with deliberately messy, European layouts: two-column headers, legal name only in
+**Stress set** (`evals/holdout/`; the folder keeps its first name). 16 PDFs written by two Claude
+subagents that never saw the code, with deliberately messy, European layouts: two-column headers, legal name only in
 the footer, totals on page two, label and value in separate table columns, several VAT rates, discounts,
 French / German / Italian labels, a US invoice, OCR-style noise, a credit note, a prepayment, a currency
 stated away from the totals. Each invoice is tagged with its difficulty.
@@ -81,7 +82,7 @@ processing agreement.
 
 Labels were not trusted blindly.
 
-- **Held-out set, labelled twice.** A third agent labelled all 16 PDFs without seeing the original labels,
+- **Stress set, labelled twice.** A third agent labelled all 16 PDFs without seeing the original labels,
   then compared. Agreement: 159/160 fields and 15/16 verdicts; the only disagreement was the second
   annotator's mistake (it read a middle dot `·` as `€`). 100% after adjudication.
 - **Mendeley, verified against the PDF.** Each of the 76 katanaml labels was matched to its PDF by invoice
@@ -94,9 +95,9 @@ Labels were not trusted blindly.
 ## 4. Split and protocol
 
 `evals/splits.json` records the split: each source is shuffled with a fixed seed and cut in half (IDSEM per
-template, the held-out set per batch).
+template, the stress set per batch).
 
-| Split | Mendeley | Mustang | IDSEM | SalorWorks | GOBL | Held-out | Total | Use |
+| Split | Mendeley | Mustang | IDSEM | SalorWorks | GOBL | Stress set | Total | Use |
 |---|---|---|---|---|---|---|---|---|
 | dev | 36 | 3 | 15 | 5 | 13 | 8 | 80 | failures inspected, bugs fixed |
 | test | 36 | 3 | 15 | 5 | 13 | 8 | 80 | aggregate metrics only; per-case failures hidden unless `--show-test-failures` |
@@ -106,7 +107,7 @@ Rules we held ourselves to:
 - Nothing is tuned against a test failure. The evaluation command hides test failures by default.
 - Fixes found on dev must be **general**. Dev and test share the Mendeley template, so a template-specific
   fix would raise the test score without making the system generalise.
-- Every exposure to held-out content is logged below, even accidental ones.
+- Every exposure to stress-set content is logged below, even accidental ones.
 - The first LLM prompt was written before the evaluation data existed. It was later improved only with
   general instructions driven by dev errors, and the final prompt was chosen by a controlled comparison on
   dev (§9). A draft that added instructions aimed at specific difficulty categories was reverted before any
@@ -117,8 +118,8 @@ Rules we held ourselves to:
 | When | What | Effect |
 |---|---|---|
 | Customer-block fix | A dev bug (PDF text loses blank lines, so the customer block never ended) was fixed with a general rule | Also raised the then-hidden held-out score; declared |
-| Formatting the generator | Reformatting `generate_batch_a.py` displayed part of one held-out invoice | No code or prompt changed; PDFs verified byte-identical |
-| Prompt draft | Five instructions mirrored held-out difficulty categories | Reverted before any model call |
+| Formatting the generator | Reformatting `generate_batch_a.py` displayed part of one stress-set invoice | No code or prompt changed; PDFs verified byte-identical |
+| Prompt draft | Five instructions mirrored stress-set difficulty categories | Reverted before any model call |
 | Haiku pilot on dev | Fields 96% but verdicts 27%: the grounding check rejected correct values (space thousands separators, US dates, bare `$`, evidence split across table columns). Fixed with general rules, each driven by a unit test written from invented inputs | Same recordings, dev verdicts 27% → 64%. Test not inspected |
 | Heuristic fixes after the test run | General fixes designed on dev errors only; heuristic and hybrid then re-run on test (a second look, for these two configurations only). A version with template-specific labels was measured and rejected as overfitting | Test figures for the heuristic and the hybrid in §6 are from this second run; the LLM figures are unchanged |
 | Finance labelling policy | IDSEM and GOBL labels were aligned with the pre-registered guide (tax total summed from per-rate lines, credit notes negative), by rule and without looking at any test output | The heuristic's IDSEM field score fell from 43% to 37% (it does not sum tax lines); its quality-gate baseline was lowered accordingly, with this reason |
@@ -152,7 +153,7 @@ frozen. `python -m evals.run --extractor llm --model claude-opus-5 --split test`
 | Hybrid, heuristic then Opus 5 | 98% | 95% | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
 
 Opus 5 per source (fields / verdicts): Mendeley 100% / 100%, Mustang 97% / 100%, IDSEM 100% / 93%,
-SalorWorks 94% / 100%, GOBL 95% / 77%, held-out 98% / 100%.
+SalorWorks 94% / 100%, GOBL 95% / 77%, stress set 98% / 100%.
 
 - **No wrong `PASS` or `FAIL`.** Of the four disagreements, three are invoices that should have passed and
   one that should have failed; the system sent all four to a person instead of deciding wrongly.
@@ -164,7 +165,7 @@ SalorWorks 94% / 100%, GOBL 95% / 77%, held-out 98% / 100%.
 
 The heuristic fails the other way: it wrongly rejects 25 of the 80 test invoices. On layouts it was not
 written for it misses a required field, and a field that is reliably absent is a `FAIL`. It never wrongly
-passes an invoice, but a system that rejects 25 of the 36 valid test invoices is not usable on varied layouts,
+passes an invoice, but a system that rejects 25 of the 36 valid test invoices (and fails one that should have gone to review) is not usable on varied layouts,
 which is why the LLM path exists.
 
 ### The heuristic: improved, but kept general on purpose
@@ -183,7 +184,7 @@ contamination log).
 | General fixes + the Mendeley template's own labels (`Net worth`, `Gross worth`) — not shipped | 73% | 78% | 36 of 80 | $0.023 |
 
 Per source, the template-specific version gained almost only on Mendeley (verdicts 50% → 100%), whose
-template is in both dev and test; on the held-out set, the only source whose layouts never repeat
+template is in both dev and test; on the stress set, the only source whose layouts never repeat
 between dev and test, it found more fields (64% → 78%) but its verdicts did not improve. Those two labels
 are not standard accounting vocabulary; they are that template's wording. Keeping them would have turned
 the hybrid into a 33% saving on our data by learning the evaluation set, so they were removed: the
@@ -311,7 +312,7 @@ input changes. Numbers as measured then; replayed with today's code, mode C reac
   image costs up to ~3× more tokens, so the premium is larger there; stage 3 measures it.
 - **Scanned PDFs.** Mode C could read image-only PDFs, but there would be no text to check the evidence
   against, so every field would be unverified. The pipeline keeps rejecting PDFs without a text layer;
-  accepting them would need OCR to produce a checkable text, which is out of scope (see Limitations).
+  accepting them would need OCR to produce a checkable text, which is out of scope (see the README, "What we would do with another day").
 
 **A pitfall found on the way (heuristic).** With layout text the *heuristic* reaches 100% verdict agreement on
 Mendeley dev while its field accuracy drops from 52% to 40%. The layout fixes the date and the totals (label
@@ -336,9 +337,9 @@ can be replayed with `python -m evals.run --extractor llm --model claude-haiku-4
 | v4c (control) | v4a with v3's date sentence and no preamble | 99% | 77/80 | 77/80 | 82% | $0.0074 |
 
 **Chosen: v4b.** It has the best field accuracy and the only perfect date score; its verdict agreement is
-one invoice in 80 below v3 and v4c, which is within noise. The control v4c shows where the date gain
-comes from: removing v4a's harmful sentence recovers most of it (74 → 77), and the preamble adds the last
-three (77 → 80). v4b is the service prompt (`src/validator/prompts.py`); the other variants remain in
+one invoice in 80 below v3 and v4c, which is within noise. What is established about dates: adding the preamble to v4a's prompt (that is, v4b) takes them from
+74/80 to 80/80, more than cancelling the harm of v4a's date sentence; the control v4c (v3's date
+sentence, no preamble) reaches 77/80. The preamble was not tested without v4a's sentence. v4b is the service prompt (`src/validator/prompts.py`); the other variants remain in
 `evals/prompt_variants.py` so their recordings stay replayable. The prompt was compared on Haiku to keep
 within the API budget and then applied to Opus 5, the model the selection rule picked; Opus dev numbers
 in §7 are with v3.
