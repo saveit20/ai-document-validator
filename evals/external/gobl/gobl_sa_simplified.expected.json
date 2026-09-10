@@ -35,7 +35,7 @@
     "tax_amount": "123.75",
     "customer_name": null,
     "customer_tax_id": null,
-    "verdict": "FAIL"
+    "verdict": "REVIEW"
   },
   "notes": "invopop/gobl.html example sa-invoice-simplified (Apache-2.0), printed to PDF with Edge headless; label from the GOBL JSON input, verified against the printed PDF text."
 }

@@ -124,6 +124,7 @@ Rules we held ourselves to:
 | Heuristic fixes after the test run | General fixes designed on dev errors only; heuristic and hybrid then re-run on test (a second look, for these two configurations only). A version with template-specific labels was measured and rejected as overfitting | Test figures for the heuristic and the hybrid in §6 are from this second run; the LLM figures are unchanged |
 | Finance labelling policy | IDSEM and GOBL labels were aligned with the pre-registered guide (tax total summed from per-rate lines, credit notes negative), by rule and without looking at any test output | The heuristic's IDSEM field score fell from 43% to 37% (it does not sum tax lines); its quality-gate baseline was lowered accordingly, with this reason |
 | Prompt v3 | Two general instructions: copy numbers in the evidence with their original separators (the model rewrote `$ 802,73` as `$ 802.73`, which the check rightly rejected), and read numeric dates in the issuer's convention | Recordings invalidated and re-recorded on dev |
+| Missing-field rule | After an independent review, a required field that was not extracted became `REVIEW` instead of `FAIL`: an extractor that finds nothing has not proved the document lacks the field (decisions D1). A change of definition, applied to every configuration and not tuned to any case; the two labels whose supplier is genuinely missing moved from `FAIL` to `REVIEW` by the same rule | All figures re-replayed: Opus on test 95% → 96%; the heuristic stays at 55% but its 26 wrong `FAIL`s became `REVIEW`s; CI baselines updated with this reason |
 
 ## 5. Metrics
 
@@ -148,25 +149,30 @@ frozen. `python -m evals.run --extractor llm --model claude-opus-5 --split test`
 
 | Configuration | Field exact match | Verdict agreement | Verdict errors | Mean / p95 latency | Cost / invoice |
 |---|---|---|---|---|---|
-| Heuristic | 64% | 55% | 36: 26 `FAIL` (25 on valid invoices), 10 `REVIEW` | 0.11 s / 0.44 s | $0 |
-| **Opus 5, PDF + text, prompt v4b** | **98%** | **95%** | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
-| Hybrid, heuristic then Opus 5 | 98% | 95% | 4, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
+| Heuristic | 64% | 55% | 36, all `REVIEW` (34 valid invoices, 2 that should fail) | 0.11 s / 0.44 s | $0 |
+| **Opus 5, PDF + text, prompt v4b** | **98%** | **96%** | 3, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
+| Hybrid, heuristic then Opus 5 | 98% | 96% | 3, all `REVIEW` | 7.0 s / 10.9 s | $0.034 |
 
 Opus 5 per source (fields / verdicts): Mendeley 100% / 100%, Mustang 97% / 100%, IDSEM 100% / 93%,
-SalorWorks 94% / 100%, GOBL 95% / 77%, stress set 98% / 100%.
+SalorWorks 94% / 100%, GOBL 95% / 85%, stress set 98% / 100%.
 
-- **No wrong `PASS` or `FAIL`.** Of the four disagreements, three are invoices that should have passed and
-  one that should have failed; the system sent all four to a person instead of deciding wrongly.
-- **Test is better than dev (95% against 90%)**, because the dev figure for Opus was measured with the
+- **No wrong `PASS` or `FAIL`.** The three disagreements are invoices that should have passed; the system
+  sent them to a person instead of deciding wrongly.
+- **How far that goes.** The split expects 36 `PASS`, 42 `FAIL` and 2 `REVIEW`, and most expected `FAIL`s
+  are an out-of-window date or a disallowed currency. Without the single-template Mendeley set, Opus agrees
+  on 41 of 44 verdicts (93%). Zero wrong decisions in 80 still allows a true rate of up to about 4% (95%
+  confidence).
+- **Test is better than dev (96% against 90%)**, because the dev figure for Opus was measured with the
   earlier prompt (v3) and the test run uses v4b. We report both.
 - **The weakest source is GOBL** (13 test invoices), the one with the most countries and document types.
   Per-case failures on test stay hidden by design.
 - **The hybrid saves nothing with a general heuristic**: it called the LLM on all 80 invoices.
 
-The heuristic fails the other way: it wrongly rejects 25 of the 80 test invoices. On layouts it was not
-written for it misses a required field, and a field that is reliably absent is a `FAIL`. It never wrongly
-passes an invoice, but a system that rejects 25 of the 36 valid test invoices (and fails one that should have gone to review) is not usable on varied layouts,
-which is why the LLM path exists.
+The heuristic is safe but rarely decides. On layouts it was not written for it misses required fields, and
+a field that was not extracted goes to `REVIEW` ([decisions.md](decisions.md) D1), so it sends 34 of the 36
+valid test invoices to a person. It made no wrong `PASS` or `FAIL` on test (on dev, one invoice that should
+have gone to review got `PASS`). That is acceptable as an offline fallback, not as the main path on varied
+layouts, which is why the LLM path exists.
 
 ### The heuristic: improved, but kept general on purpose
 

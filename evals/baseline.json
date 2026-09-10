@@ -1,6 +1,6 @@
 {
   "heuristic@dev/all": {
-    "verdict_agreement": 0.4125,
+    "verdict_agreement": 0.4,
     "field_exact_rate": 0.605
   },
   "heuristic@dev/mendeley": {
@@ -8,7 +8,7 @@
     "field_exact_rate": 0.7166666666666667
   },
   "heuristic@dev/stress": {
-    "verdict_agreement": 0.0,
+    "verdict_agreement": 0.125,
     "field_exact_rate": 0.6625
   },
   "heuristic@test/all": {
@@ -20,7 +20,7 @@
     "field_exact_rate": 0.7388888888888889
   },
   "heuristic@test/stress": {
-    "verdict_agreement": 0.25,
+    "verdict_agreement": 0.375,
     "field_exact_rate": 0.775
   },
   "heuristic@dev/mustang": {
@@ -28,7 +28,7 @@
     "field_exact_rate": 0.3333333333333333
   },
   "heuristic@test/mustang": {
-    "verdict_agreement": 0.3333333333333333,
+    "verdict_agreement": 0.0,
     "field_exact_rate": 0.6
   },
   "heuristic@dev/idsem": {
@@ -48,7 +48,7 @@
     "field_exact_rate": 0.8
   },
   "heuristic@dev/gobl": {
-    "verdict_agreement": 0.5384615384615384,
+    "verdict_agreement": 0.38461538461538464,
     "field_exact_rate": 0.4846153846153846
   },
   "heuristic@test/gobl": {
@@ -56,7 +56,7 @@
     "field_exact_rate": 0.49230769230769234
   },
   "llm:claude-opus-5+pdf@test/all": {
-    "verdict_agreement": 0.95,
+    "verdict_agreement": 0.9625,
     "field_exact_rate": 0.98375
   },
   "llm:claude-opus-5+pdf@test/mendeley": {
@@ -76,7 +76,7 @@
     "field_exact_rate": 0.94
   },
   "llm:claude-opus-5+pdf@test/gobl": {
-    "verdict_agreement": 0.7692307692307693,
+    "verdict_agreement": 0.8461538461538461,
     "field_exact_rate": 0.9461538461538461
   },
   "llm:claude-opus-5+pdf@test/stress": {
@@ -84,7 +84,7 @@
     "field_exact_rate": 0.975
   },
   "hybrid:claude-opus-5+pdf@test/all": {
-    "verdict_agreement": 0.95,
+    "verdict_agreement": 0.9625,
     "field_exact_rate": 0.98125
   },
   "hybrid:claude-opus-5+pdf@test/mendeley": {
@@ -104,7 +104,7 @@
     "field_exact_rate": 0.96
   },
   "hybrid:claude-opus-5+pdf@test/gobl": {
-    "verdict_agreement": 0.7692307692307693,
+    "verdict_agreement": 0.8461538461538461,
     "field_exact_rate": 0.9461538461538461
   },
   "hybrid:claude-opus-5+pdf@test/stress": {

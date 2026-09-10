@@ -29,14 +29,22 @@ def _result(rule_id: str, status: Status, message: str) -> RuleResult:
     return RuleResult(id=rule_id, passed=status is Status.PASS, status=status, message=message)
 
 
+def _is_blank(field: FieldValue) -> bool:
+    return field.value is None or (isinstance(field.value, str) and not field.value.strip())
+
+
 def _presence_problem(rule_id: str, name: str, field: FieldValue) -> RuleResult | None:
-    """FAIL if the field is absent, REVIEW if it is doubtful, None if it is present and reliable."""
-    if isinstance(field.value, str) and not field.value.strip():
-        return _result(rule_id, Status.FAIL, f"{name} is empty")
-    if field.value is None:
-        if field.confidence == 0.0:
-            return _result(rule_id, Status.FAIL, f"{name} not found in the document")
-        return _result(rule_id, Status.REVIEW, f"{name} found but could not be parsed reliably")
+    """REVIEW if the field was not extracted or is doubtful, None if it is present and reliable.
+
+    An extractor that finds nothing has not proved the document lacks the field, so absence alone is
+    never a FAIL: a person checks it. FAIL is kept for reliable values that break a rule.
+    """
+    if _is_blank(field):
+        if field.confidence > 0.0:
+            return _result(rule_id, Status.REVIEW, f"{name} found but could not be parsed reliably")
+        return _result(
+            rule_id, Status.REVIEW, f"{name} was not extracted from the document; check it manually"
+        )
     if field.confidence < 1.0:
         return _result(
             rule_id, Status.REVIEW, f"{name} extracted with low confidence ({field.confidence})"
@@ -132,10 +140,14 @@ class RequiredFieldsPresent:
         if not config.required_fields:
             return None
         fields = {name: extraction.field(name) for name in config.required_fields}
-        missing = [n for n, f in fields.items() if f.value is None and f.confidence == 0.0]
+        missing = [n for n, f in fields.items() if _is_blank(f)]
         doubtful = [n for n, f in fields.items() if n not in missing and f.confidence < 1.0]
         if missing:
-            return _result(self.id, Status.FAIL, f"required fields missing: {', '.join(missing)}")
+            return _result(
+                self.id,
+                Status.REVIEW,
+                f"required fields not extracted: {', '.join(missing)}; check them manually",
+            )
         if doubtful:
             return _result(
                 self.id,

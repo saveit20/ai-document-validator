@@ -70,13 +70,23 @@ def test_total_amount_must_be_positive(amount: str, expected: Status) -> None:
 
 def test_missing_supplier_fails_both_presence_rules() -> None:
     result = statuses(make(supplier_name=fv(None, 0.0)))
-    assert result["supplier_name_present"] is Status.FAIL
-    assert result["required_fields_present"] is Status.FAIL
+    assert result["supplier_name_present"] is Status.REVIEW
+    assert result["required_fields_present"] is Status.REVIEW
 
 
 @pytest.mark.parametrize("blank", ["", "   "])
-def test_blank_supplier_name_fails(blank: str) -> None:
-    assert statuses(make(supplier_name=fv(blank)))["supplier_name_present"] is Status.FAIL
+def test_blank_supplier_name_goes_to_review(blank: str) -> None:
+    result = statuses(make(supplier_name=fv(blank)))
+    assert result["supplier_name_present"] is Status.REVIEW
+    assert result["required_fields_present"] is Status.REVIEW
+
+
+def test_a_field_that_was_not_extracted_is_never_a_fail_on_its_own() -> None:
+    results = evaluate_rules(make(total_amount=fv(None, 0.0)), CONFIG, EvalContext(REF))
+    total = next(r for r in results if r.id == "total_amount_positive")
+    assert total.status is Status.REVIEW
+    assert "not extracted" in total.message
+    assert overall_status(results) is Status.REVIEW
 
 
 def test_low_confidence_field_is_review_not_fail() -> None:

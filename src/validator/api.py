@@ -5,6 +5,7 @@ import binascii
 import hashlib
 import json
 import logging
+import re
 import time
 import uuid
 from datetime import date
@@ -36,6 +37,9 @@ from validator.observability import configure_logging, request_id_var
 from validator.pipeline import ExtractionRun, Pipeline, ValidationRun, build_pipeline
 
 logger = logging.getLogger("validator.api")
+
+# A client-supplied request id is echoed into headers and logs, so it is kept short and plain.
+_REQUEST_ID = re.compile(r"[A-Za-z0-9._:-]{1,64}")
 
 EXAMPLE_CONFIG = {
     "document_type": "SUPPLIER_INVOICE",
@@ -212,7 +216,8 @@ def create_app(settings: Settings | None = None, pipeline: Pipeline | None = Non
 
     @app.middleware("http")
     async def request_context(request: Request, call_next):
-        request_id = request.headers.get("x-request-id") or uuid.uuid4().hex
+        supplied = request.headers.get("x-request-id", "")
+        request_id = supplied if _REQUEST_ID.fullmatch(supplied) else uuid.uuid4().hex
         token = request_id_var.set(request_id)
         started = time.perf_counter()
         try:

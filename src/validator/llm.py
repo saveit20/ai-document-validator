@@ -73,17 +73,6 @@ class LLMExtractor:
             pdf=pdf,
         )
         response = self._transport.complete(request)
-        try:
-            payload = json.loads(response.text)
-            if isinstance(payload, dict):
-                for name in self._prompt.preamble:
-                    payload.pop(name, None)
-            parsed = _InvoiceOut.model_validate(payload)
-        except (json.JSONDecodeError, ValidationError) as exc:
-            raise LLMInvalidOutput(
-                f"model output does not match the schema ({type(exc).__name__})"
-            ) from exc
-        candidates = {name: _candidate(getattr(parsed, name)) for name in FIELD_NAMES}
         info = LLMCallInfo(
             model=response.model,
             latency_ms=response.latency_ms,
@@ -99,4 +88,17 @@ class LLMExtractor:
             recorded=response.recorded,
             prompt_version=self._prompt.version,
         )
+        try:
+            payload = json.loads(response.text)
+            if isinstance(payload, dict):
+                for name in self._prompt.preamble:
+                    payload.pop(name, None)
+            parsed = _InvoiceOut.model_validate(payload)
+        except (json.JSONDecodeError, ValidationError) as exc:
+            error = LLMInvalidOutput(
+                f"model output does not match the schema ({type(exc).__name__})"
+            )
+            error.llm = info  # the call was paid for even though its output is unusable
+            raise error from exc
+        candidates = {name: _candidate(getattr(parsed, name)) for name in FIELD_NAMES}
         return ExtractorOutput(candidates=candidates, used="llm", llm=info)

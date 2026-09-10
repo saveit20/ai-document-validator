@@ -101,6 +101,17 @@ def test_pipeline_falls_back_to_heuristic(error: Exception) -> None:
     assert run.extraction.supplier_name.value == "ACME Industrial Supplies Ltd"
 
 
+def test_fallback_keeps_the_cost_of_a_paid_call_with_unusable_output() -> None:
+    pipeline = Pipeline(
+        LLMExtractor(FakeTransport("not json"), "claude-opus-5"), HeuristicExtractor()
+    )
+    run = pipeline.extract(DOCUMENT)
+    assert run.extractor_used == "heuristic:fallback"
+    assert run.llm is not None
+    assert run.llm.input_tokens > 0
+    assert run.llm.estimated_cost_usd > 0
+
+
 def _request(model: str = "claude-opus-5") -> LLMRequest:
     return LLMRequest(
         model=model, system="s", user="u", schema=OUTPUT_SCHEMA, prompt_version=PROMPT_VERSION

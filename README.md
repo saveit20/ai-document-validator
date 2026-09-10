@@ -11,11 +11,12 @@ the model is wrong, the invoice goes to a person (`REVIEW`); it does not get a w
 **Result on the test split** — 80 invoices from six independent sources, never used for tuning, run once
 with code and prompt frozen:
 
-- **With the LLM, no invoice got a wrong `PASS` or `FAIL`.** The 4 disagreements with the expected verdict
-  are all `REVIEW`s.
-- Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **95%** of
+- **With the LLM, no invoice got a wrong `PASS` or `FAIL`.** The 3 disagreements with the expected verdict
+  are valid invoices sent to `REVIEW`.
+- Claude Opus 5 extracts **98% of fields** correctly and agrees with the expected verdict on **96%** of
   invoices, at **$0.034** and ~7 s per invoice (p95 10.9 s).
-- The free rule-based extractor scores 64% of fields and 55% of verdicts on the same invoices.
+- The free rule-based extractor scores 64% of fields and 55% of verdicts on the same invoices; what it
+  cannot read goes to a person rather than to a wrong decision.
 
 ## How this answers the brief
 
@@ -26,7 +27,7 @@ with code and prompt frozen:
 | **Extraction + rules design** | Rules are small classes behind a `Protocol`; confidence comes from checking evidence against the document, never from the model | [Architecture](#architecture) |
 | **Evaluation mindset** | 160 invoices: five third-party datasets and a stress set written by AI agents that never saw the code; every label checked against the printed PDF, a dev half for fixing and a test half run once, metrics per source, failures printed | [Evaluation](#evaluation) |
 | **AI-assisted engineering** | What each tool did, the author's decisions and their reasons, what was rejected | [AI_USAGE.md](AI_USAGE.md) |
-| **Craft** | ruff, type hints, 259 tests including every LLM failure mode; CI runs lint, tests, three quality gates and the Docker image | [Testing](#testing) |
+| **Craft** | ruff, type hints, 273 tests including every LLM failure mode; CI runs lint, tests, three quality gates and the Docker image | [Testing](#testing) |
 
 ## Architecture
 
@@ -68,9 +69,9 @@ The three extractors do not run in parallel: a deployment uses one, chosen with 
 
 | Mode | Use it when | Test result |
 |---|---|---|
-| **`llm`** (Claude Opus 5) | **Recommended for production**: suppliers and layouts vary | 98% fields, 95% verdicts, no wrong `PASS`/`FAIL`, $0.034 per invoice |
+| **`llm`** (Claude Opus 5) | **Recommended for production**: suppliers and layouts vary | 98% fields, 96% verdicts, no wrong `PASS`/`FAIL`, $0.034 per invoice |
 | `hybrid` | Most invoices come from a few known templates with rules written for them; the heuristic answers those for free | Same as `llm` on our data: the general heuristic was never sure of a whole invoice |
-| `heuristic` | No API key or no network (the default, so the service runs offline), and as the automatic fallback when the LLM fails | 64% fields, 55% verdicts; it rejects valid invoices it cannot read and never passes a bad one |
+| `heuristic` | No API key or no network (the default, so the service runs offline), and as the automatic fallback when the LLM fails | 64% fields, 55% verdicts, no wrong `PASS`/`FAIL` on test; what it cannot read goes to `REVIEW` (34 of 36 valid invoices), so it is safe but rarely decides |
 
 The LLM sits behind two layers: a **transport** that only moves text (the Anthropic client, a replayer of
 recorded responses, or a test double) and a **typed layer** that parses, validates and grounds the answer.
@@ -87,7 +88,7 @@ repository and replayed.
 
 ```bash
 python -m venv .venv
-.venv/Scripts/activate            # Windows (Git Bash); on macOS/Linux: source .venv/bin/activate
+source .venv/Scripts/activate     # Windows (Git Bash); on macOS/Linux: source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env              # defaults run fully offline
 uvicorn validator.api:create_app --factory --port 8000
@@ -201,7 +202,8 @@ matrix, a breakdown per source and per difficulty, latency and cost, and prints 
 failures stay hidden unless `--show-test-failures`).
 
 **The evaluation set** (the brief's "golden set") is 160 invoices from six sources the author did not write,
-chosen so that no single template dominates: a US invoice template, German e-invoices, Spanish electricity
+chosen for variety (the largest source, one US invoice template, is 72 of the 160, so every result is also
+reported per source): a US invoice template, German e-invoices, Spanish electricity
 bills, Gulf invoices in AED and KWD, e-invoicing examples from 14 countries, and a "stress set" of 16
 deliberately messy layouts, mostly European, written by Claude subagents that never saw the code. 21 countries, 12 currencies, 6 label languages, credit
 notes, multi-page and multi-rate invoices. Every label was checked against the printed PDF. Each source is
@@ -212,9 +214,15 @@ in `evals/golden/` were written by the author and serve only as unit-test fixtur
 
 | Configuration | Field exact match | Verdict agreement | Wrong `PASS`/`FAIL` | LLM calls | Cost / invoice |
 |---|---|---|---|---|---|
-| Heuristic | 64% | 55% | 26 wrong `FAIL` (25 valid invoices rejected), 0 wrong `PASS` | 0 | $0 |
-| **LLM — Opus 5, PDF + text, final prompt** | **98%** | **95%** | **0** | 80 | $0.034 |
-| Hybrid — heuristic first, Opus 5 when unsure | 98% | 95% | 0 | 80 | $0.034 |
+| Heuristic | 64% | 55% | 0 (34 of 36 valid invoices sent to `REVIEW`) | 0 | $0 |
+| **LLM — Opus 5, PDF + text, final prompt** | **98%** | **96%** | **0** | 80 | $0.034 |
+| Hybrid — heuristic first, Opus 5 when unsure | 98% | 96% | 0 | 80 (no saving on this data) | $0.034 |
+
+**How far these numbers go.** The test split expects 36 `PASS`, 42 `FAIL` and 2 `REVIEW`; most expected
+`FAIL`s are an out-of-window date or a disallowed currency, which are easy verdicts once the fields are
+right. The single-template Mendeley set is 36 of the 80; without it, Opus agrees on 41 of 44 verdicts
+(93%). Zero wrong decisions in 80 invoices still allows a true rate of up to about 4% (95% confidence):
+strong evidence, not proof, which is why production monitoring samples `PASS` invoices.
 
 How the model, the input and the prompt were chosen on dev — three models, three ways of sending the
 document, four prompt variants — and every result per source: [docs/evaluation.md](docs/evaluation.md).
@@ -266,7 +274,7 @@ deploy; the CI quality gates block a regression before one.
   raised dev verdict agreement from 74% to 94% on Haiku for +57% cost. Evidence still has to quote our text,
   so every value stays checkable.
 - **Review over automation.** Doubtful fields go to `REVIEW` rather than risk a wrong decision: 0 wrong
-  `PASS`/`FAIL`, at the price of 4 reviews in 80.
+  `PASS`/`FAIL`, at the price of 3 reviews in 80.
 - **A general heuristic over a better score.** Template-specific rules would have lifted the heuristic from
   55% to 78% of verdicts on test — by learning our own data. We kept it general: in production, clear and
   recurring layouts get rules of their own and never reach the LLM; this service is judged on the hard,
@@ -319,7 +327,7 @@ documents (freely licensed real invoices do not exist, so the evaluation data is
 pytest -q
 ```
 
-259 tests. No test can reach the real API: a fixture removes the key, and every LLM failure mode —
+273 tests. No test can reach the real API: a fixture removes the key, and every LLM failure mode —
 timeouts, rate limits, malformed or truncated JSON, refusals, hallucinated values — is driven through a fake
 transport. Rules, normalisation, the heuristic, the hybrid, the HTTP API (JSON and multipart, errors,
 OpenAPI) and the evaluation metrics each have their own tests.

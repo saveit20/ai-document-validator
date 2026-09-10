@@ -37,7 +37,7 @@ what the assistant had produced; each one is a decision with a reason, not a pre
 ## 2. Suggestions we rejected, and why
 
 The three corrections below shaped the project most. In each, the assistant's proposal was reasonable and
-would have produced a working service; the author saw that it optimised the wrong thing.
+would have produced a working service; the author's correction changed what it optimised for.
 
 ### Example 1 — The model's input is part of the system, not only the prompt
 
@@ -85,7 +85,7 @@ and let the hybrid skip the LLM on 45% of invoices, but the gain came almost ent
 present in both halves.
 
 **Result.** The published figures describe invoices the system has not been tuned on (Opus 5 on test: 98%
-of fields, 95% of verdicts, no wrong `PASS` or `FAIL`), and the removed rules are documented as what they
+of fields, 96% of verdicts, no wrong `PASS` or `FAIL`), and the removed rules are documented as what they
 really are: per-customer configuration for known suppliers, the case the hybrid is built for
 ([decisions.md](docs/decisions.md) E1, B9).
 

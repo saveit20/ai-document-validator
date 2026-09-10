@@ -13,7 +13,7 @@
     "tax_amount": null,
     "customer_name": "Northwind Construction S.L.",
     "customer_tax_id": "ESB12345678",
-    "verdict": "FAIL"
+    "verdict": "REVIEW"
   },
   "notes": "No supplier legal name printed; only the customer is named."
 }

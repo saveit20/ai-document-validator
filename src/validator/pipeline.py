@@ -39,10 +39,12 @@ class Pipeline:
 
     def extract(self, document: Document) -> ExtractionRun:
         warnings: list[str] = []
+        failed_call: LLMCallInfo | None = None
         try:
             output = self._extractor.extract(document)
             used = output.used
         except LLMError as exc:
+            failed_call = exc.llm
             logger.warning(
                 "llm_extraction_failed", extra={"error": type(exc).__name__, "detail": str(exc)}
             )
@@ -52,7 +54,7 @@ class Pipeline:
             output = self._fallback.extract(document)
             used = "heuristic:fallback"
         extraction = build_extraction(output.candidates, document)
-        return ExtractionRun(extraction, used, output.llm, warnings)
+        return ExtractionRun(extraction, used, output.llm or failed_call, warnings)
 
     def validate(
         self, document: Document, config: RuleConfig, reference_date: date

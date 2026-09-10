@@ -12,7 +12,12 @@ import anthropic
 
 
 class LLMError(Exception):
-    """Base class for LLM failures that the pipeline recovers from."""
+    """Base class for LLM failures that the pipeline recovers from.
+
+    `llm` carries the call's metadata (tokens, cost) when the model answered before the failure.
+    """
+
+    llm: Any = None
 
 
 class LLMUnavailable(LLMError):

@@ -208,7 +208,7 @@ read a section only when you want to challenge the decision it covers.
   In that comparison no model produced a wrong `PASS`/`FAIL`, so what a cheaper model costs is mainly extra
   manual reviews, not wrong decisions ([evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5)). Replayed with
   today's code the numbers move by a point or two and the choice is the same.
-  On the test split, run once with prompt v4b, Opus 5 scored 98% of fields and 95% of verdicts at $0.034 per
+  On the test split, run once with prompt v4b, Opus 5 scored 98% of fields and 96% of verdicts at $0.034 per
   invoice, with no wrong `PASS`/`FAIL` ([evaluation §6](evaluation.md#6-final-results-on-the-test-split)).
 - **Why 3 points, and why fixed in advance.** Dev has 80 invoices, so one invoice moves a score by 1.25
   points. A gap of 3 points or less is two invoices: within the noise of a sample this size, so it counts
@@ -271,7 +271,7 @@ read a section only when you want to challenge the decision it covers.
   (0 < confidence < 1), or if one of the six brief fields is missing. A missing optional field does not
   trigger a call. After the call, each field keeps whichever candidate scores higher; ties go to the LLM.
   All three modes are measured on the same data.
-- **Why:** measured on test, the hybrid matches the LLM (98% fields, 95% verdicts, no wrong `PASS`/`FAIL`)
+- **Why:** measured on test, the hybrid matches the LLM (98% fields, 96% verdicts, no wrong `PASS`/`FAIL`)
   but saves nothing: the general heuristic (B9) is never sure of a whole invoice on these varied layouts,
   so it called the LLM on 80 of 80. With rules written for one frequent template it skipped the LLM on 36
   of 80 invoices at the same verdict agreement and cut the cost per invoice by a third ($0.034 → $0.023).
@@ -411,14 +411,23 @@ read a section only when you want to challenge the decision it covers.
 
 - **Problem:** the brief asks for `PASS | FAIL | REVIEW` but does not define `REVIEW`, or whether "present"
   means "extracted" or "extracted reliably".
-- **Decision:** a field reliably absent (confidence 0.0) → `FAIL`. A doubtful field → `REVIEW`. Precedence
-  is FAIL > REVIEW > PASS. Two cases were chosen deliberately: a missing currency when `allowed_currencies`
-  is set gives `REVIEW` (the rule does not say "must be present"), and subtotal + tax ≠ total (±0.01) gives
-  `REVIEW`, because withholdings such as Spanish IRPF and discounts legitimately break the identity.
+- **Decision:** `FAIL` only when reliable values break a rule: a date too old or in the future, a total
+  ≤ 0, a currency outside the list, another customer. A required field that was not extracted, or one that
+  is doubtful, gives `REVIEW` with a message that says so. Precedence is FAIL > REVIEW > PASS. Two more
+  cases give `REVIEW` on purpose: a missing currency when `allowed_currencies` is set, and subtotal + tax ≠
+  total (±0.01), because withholdings such as Spanish IRPF and discounts legitimately break the identity.
 - **Why:** it keeps "the document is non-compliant" separate from "a person should look", which is what a
-  compliance workflow needs.
-- **Rejected:** binary PASS/FAIL (hides uncertainty); `REVIEW` for any missing field (weakens FAIL).
-- **Revisit if:** operations says the `REVIEW` rate is too high. Calibrating C1 comes before loosening D1.
+  compliance workflow needs. An extractor that finds nothing has not proved the document lacks the field:
+  on unfamiliar layouts, most "missing" fields are printed but not read. Measured on test, treating
+  absence as `FAIL` made the offline heuristic reject 25 of the 36 valid invoices with a message ("not found
+  in the document") that was not true; as `REVIEW`, it makes no wrong decision and sends them to a person.
+  The LLM's figures barely move (95% → 96% of verdicts), because it rarely misses a printed field.
+- **Rejected:** binary PASS/FAIL (hides uncertainty); `FAIL` for a field that was not extracted (the first
+  version of this rule, changed after an independent review: it turned extraction misses into
+  rejections of valid invoices).
+- **Revisit if:** an extractor can prove absence, for example a structured e-invoice whose XML has no such
+  element; absence could then be a `FAIL` for that source. If the `REVIEW` rate is too high, calibrating C1
+  comes before loosening D1.
 
 ### D2 — Rules as small classes behind a `Protocol`
 
