@@ -110,6 +110,11 @@ def test_transport_sends_the_pdf_as_a_document_block_before_the_text() -> None:
     assert text == {"type": "text", "text": "u"}
 
 
+def test_default_input_sends_the_pdf_with_plain_text() -> None:
+    settings = load_settings({})
+    assert (settings.pdf_text, settings.llm_input) == ("plain", "pdf")
+
+
 def test_settings_read_the_input_modes() -> None:
     settings = load_settings({"PDF_TEXT": "layout", "LLM_INPUT": "pdf"})
     assert (settings.pdf_text, settings.llm_input) == ("layout", "pdf")

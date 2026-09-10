@@ -59,7 +59,8 @@ ISO_CURRENCIES = frozenset([
     "EUR", "GBP", "USD", "CHF", "SEK", "NOK", "DKK", "ISK", "PLN", "CZK", "HUF", "RON", "BGN", "RSD",
     "UAH", "RUB", "TRY", "ILS", "AED", "SAR", "QAR", "KWD", "BHD", "OMR", "EGP", "MAD", "NGN", "KES",
     "ZAR", "INR", "PKR", "BDT", "LKR", "CNY", "HKD", "TWD", "JPY", "KRW", "SGD", "MYR", "THB", "IDR",
-    "PHP", "VND", "AUD", "NZD", "CAD", "MXN", "BRL", "ARS", "CLP", "COP", "PEN", "UYU",
+    "PHP", "VND", "AUD", "NZD", "CAD", "MXN", "BRL", "ARS", "CLP", "COP", "PEN", "UYU", "JOD", "TND",
+    "LYD", "IQD",
 ])  # fmt: skip
 _CURRENCY_CODE = re.compile(r"\b[A-Z]{3}\b")
 # (symbol, ISO code, ambiguous). Letter-prefixed dollars must be tried before the bare "$".
@@ -202,7 +203,16 @@ def normalize_date(raw: str | None, order: DateOrder | None = None) -> date | No
     return found[0][0] if found else None
 
 
-def parse_amount(token: str) -> tuple[Decimal, bool] | None:
+THREE_DECIMAL_CURRENCIES = frozenset(["KWD", "BHD", "OMR", "JOD", "TND", "LYD", "IQD"])
+
+
+def amount_decimals(text: str) -> int:
+    """3 when the document is in a currency with three minor digits (KWD, BHD, OMR...), else 2."""
+    codes = {code for code, _, _ in find_currencies(text)}
+    return 3 if codes & THREE_DECIMAL_CURRENCIES else 2
+
+
+def parse_amount(token: str, three_decimals: bool = False) -> tuple[Decimal, bool] | None:
     """Parse one numeric token into (value, ambiguous).
 
     Spaces and apostrophes are thousands separators. A single '.' or ',' followed by exactly three
@@ -223,6 +233,8 @@ def parse_amount(token: str) -> tuple[Decimal, bool] | None:
             if any(len(tail) != 3 for tail in tails):
                 return None
             digits = digits.replace(sep, "")
+        elif len(tails[0]) == 3 and three_decimals and sep == ".":
+            digits = digits.replace(sep, ".")
         elif len(tails[0]) == 3:
             digits = digits.replace(sep, "")
             ambiguous = True
@@ -237,7 +249,7 @@ def parse_amount(token: str) -> tuple[Decimal, bool] | None:
     return (-value if negative else value), ambiguous
 
 
-def find_amounts(text: str) -> list[tuple[Decimal, bool, str]]:
+def find_amounts(text: str, three_decimals: bool = False) -> list[tuple[Decimal, bool, str]]:
     """Numeric amounts in `text` as (value, ambiguous, token).
 
     Skips numbers glued to letters (postcodes, item codes such as 'M12') and percentages. Reads
@@ -252,7 +264,7 @@ def find_amounts(text: str) -> list[tuple[Decimal, bool, str]]:
             continue
         if end < len(text) and (text[end].isalpha() or text[end] == "%"):
             continue
-        if not (parsed := parse_amount(token)):
+        if not (parsed := parse_amount(token, three_decimals)):
             continue
         value, ambiguous = parsed
         has_decimals = bool(_DECIMALS.search(token))
@@ -267,10 +279,10 @@ def find_amounts(text: str) -> list[tuple[Decimal, bool, str]]:
     return amounts
 
 
-def normalize_amount(raw: str | None) -> Decimal | None:
+def normalize_amount(raw: str | None, three_decimals: bool = False) -> Decimal | None:
     if not raw:
         return None
-    amounts = find_amounts(raw)
+    amounts = find_amounts(raw, three_decimals)
     return amounts[-1][0] if amounts else None
 
 

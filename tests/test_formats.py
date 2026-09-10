@@ -210,3 +210,21 @@ def test_evidence_with_a_line_missing_from_the_document_is_not_grounded() -> Non
     text = "SUMMARY\nNet worth\n20,00\n"
     field = llm_field("subtotal_amount", "20.00", "Net amount\n20,00", text)
     assert field.confidence == 0.3
+
+
+@pytest.mark.parametrize(
+    ("text", "decimals"), [("Total KWD 46.500", 3), ("Total 46.500 BHD", 3), ("Total EUR 1.500", 2)]
+)
+def test_documents_in_three_decimal_currencies_are_detected(text: str, decimals: int) -> None:
+    assert n.amount_decimals(text) == decimals
+
+
+def test_three_decimal_currency_reads_a_dot_as_the_decimal_separator() -> None:
+    assert n.normalize_amount("46.500", three_decimals=True) == Decimal("46.500")
+    assert n.normalize_amount("1,250.500", three_decimals=True) == Decimal("1250.500")
+    assert n.normalize_amount("1,500", three_decimals=True) == Decimal("1500")
+
+
+def test_kuwaiti_dinar_total_is_read_and_confirmed() -> None:
+    field = llm_field("total_amount", "46.500", "Total KWD 46.500", "Total KWD 46.500\n")
+    assert (field.value, field.confidence) == (Decimal("46.500"), 1.0)

@@ -25,7 +25,7 @@ class Settings:
     recordings_dir: Path = DEFAULT_RECORDINGS_DIR
     log_level: str = "INFO"
     pdf_text: str = "plain"
-    llm_input: str = "text"
+    llm_input: str = "pdf"
 
 
 def load_settings(env: Mapping[str, str] | None = None) -> Settings:
@@ -42,7 +42,7 @@ def load_settings(env: Mapping[str, str] | None = None) -> Settings:
         recordings_dir=Path(env.get("RECORDINGS_DIR", str(DEFAULT_RECORDINGS_DIR))),
         log_level=env.get("LOG_LEVEL", "INFO").strip().upper(),
         pdf_text=env.get("PDF_TEXT", "plain").strip().lower(),
-        llm_input=env.get("LLM_INPUT", "text").strip().lower(),
+        llm_input=env.get("LLM_INPUT", "pdf").strip().lower(),
     )
     if settings.pdf_text not in {"plain", "layout"}:
         raise ConfigError(f"PDF_TEXT must be plain or layout, not '{settings.pdf_text}'")

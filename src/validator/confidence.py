@@ -15,7 +15,7 @@ AMBIGUOUS = 0.6
 UNGROUNDED = 0.3
 MISSING = 0.0
 
-_AMOUNT_FIELDS = frozenset({"total_amount", "subtotal_amount", "tax_amount"})
+AMOUNT_FIELDS = frozenset({"total_amount", "subtotal_amount", "tax_amount"})
 
 
 def score(
@@ -63,8 +63,10 @@ def supports(field: str, value: Any, evidence: str, document_text: str = "") -> 
             if order is not None and value == normalize.pick_reading(readings, order):
                 return True, False
         return False, False
-    if field in _AMOUNT_FIELDS:
-        flags = [amb for amount, amb, _ in normalize.find_amounts(evidence) if amount == value]
+    if field in AMOUNT_FIELDS:
+        three_decimals = normalize.amount_decimals(document_text) == 3
+        amounts = normalize.find_amounts(evidence, three_decimals)
+        flags = [amb for amount, amb, _ in amounts if amount == value]
         return bool(flags), bool(flags) and all(flags)
     if field == "currency":
         flags = [amb for code, amb, _ in normalize.find_currencies(evidence) if code == value]

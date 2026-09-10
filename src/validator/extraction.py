@@ -47,12 +47,15 @@ def build_extraction(candidates: dict[str, Candidate], document: Document) -> Ex
     """Normalise every candidate and score it against the document. Same path for all extractors."""
     fields = {}
     order = normalize.date_order(document.text)
+    three_decimals = normalize.amount_decimals(document.text) == 3
     for name in FIELD_NAMES:
         candidate = candidates.get(name, Candidate())
         if not candidate.raw:
             value = None
         elif name == "invoice_date":
             value = normalize.normalize_date(candidate.raw, order)
+        elif name in confidence.AMOUNT_FIELDS:
+            value = normalize.normalize_amount(candidate.raw, three_decimals)
         else:
             value = NORMALIZERS[name](candidate.raw)
         conf = confidence.score(
