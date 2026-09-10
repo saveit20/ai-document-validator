@@ -236,9 +236,11 @@ These are the numbers measured when the choice was made. Replaying the same reco
 
 - **The rule selects Opus 5.** Haiku is 11 verdict points behind and Sonnet 17, both outside the 3-point
   margin. Sonnet does not beat Haiku on this data despite costing twice as much.
-- **No model produced a wrong `PASS` or `FAIL`.** Every verdict error of every model is a `REVIEW` on an
+- **No model produced a wrong `PASS` or `FAIL` in this comparison.** Every verdict error of every model is a `REVIEW` on an
   invoice that should have passed or failed: when the model is wrong, the grounding check catches it.
-  The cost of a weaker model is more manual reviews, not wrong decisions.
+  The cost of a weaker model is more manual reviews, not wrong decisions. (Replayed on the final
+  80-invoice dev split with prompt v3, Haiku gives one wrong `PASS`; the review cost is priced in
+  [decisions.md](decisions.md) B5.)
 - **The hybrid saves nothing here** (with the heuristic of that time; see §6 for the final one). On these varied layouts the heuristic is never confident about every
   field, so the cascade calls the LLM on 67 of 67 invoices. It would pay off on a stream dominated by a few
   known, clean templates, where the heuristic alone reaches full confidence (see the README on when not to

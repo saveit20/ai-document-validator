@@ -1,8 +1,8 @@
 # AI usage
 
-This project was built with AI coding assistants throughout, under a written working protocol (kept outside
-the repository): phases with exit criteria (understand → plan → build → evaluate → harden), a decision log,
-and explicit stop points where the author reviewed the work and decided. AI output was never taken on
+This project was built with AI coding assistants throughout, under a written working protocol, summarised
+in [docs/process.md](docs/process.md): phases with exit criteria (understand → plan → build → evaluate →
+harden), a decision log, and explicit stop points where the author reviewed the work and decided. AI output was never taken on
 trust: it was checked by tests, by the evaluation, and by independent review agents, and the author took
 every scope and trade-off decision. What was rejected is listed below.
 

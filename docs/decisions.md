@@ -55,9 +55,11 @@ read a section only when you want to challenge the decision it covers.
 - **Problem:** an LLM can return plausible but wrong values, and a compliance verdict has to be auditable.
 - **Decision:** every extractor (heuristic, LLM, hybrid) returns only raw value + evidence candidates. The
   same deterministic path then normalises, scores confidence, applies the rules and computes the verdict.
-- **Why:** a wrong model answer becomes a `REVIEW` instead of a wrong decision. On dev, across all three
-  models, every verdict error was a `REVIEW` on an invoice that should have passed or failed. None was a
-  wrong `PASS` or `FAIL` ([evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5)).
+- **Why:** a wrong model answer becomes a `REVIEW` instead of a wrong decision. When the models were
+  compared on dev, every verdict error of all three was a `REVIEW` on an invoice that should have passed or
+  failed ([evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5)); on the final dev split one
+  Haiku answer still slips through as a wrong `PASS` (B5). Opus 5 made no wrong `PASS` or `FAIL` on dev or
+  test.
 - **Rejected:** having the LLM return the verdict, because it cannot be audited or tested deterministically.
 - **Revisit if:** a wrong `PASS`/`FAIL` caused by the LLM shows up in evaluation. That would mean the
   checks are too permissive.
@@ -203,14 +205,38 @@ read a section only when you want to challenge the decision it covers.
   | Opus 5 | 98% | 90% | $0.0351 | 8.6 s |
 
   Haiku is 11 verdict points behind and Sonnet 17, both outside the margin. Sonnet does not beat Haiku here.
-  Because no model produced a wrong `PASS`/`FAIL`, what a cheaper model costs is extra manual reviews, not
-  wrong decisions ([evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5)). Replayed with
+  In that comparison no model produced a wrong `PASS`/`FAIL`, so what a cheaper model costs is mainly extra
+  manual reviews, not wrong decisions ([evaluation §7](evaluation.md#stage-3-result-the-rule-picks-opus-5)). Replayed with
   today's code the numbers move by a point or two and the choice is the same.
   On the test split, run once with prompt v4b, Opus 5 scored 98% of fields and 95% of verdicts at $0.034 per
   invoice, with no wrong `PASS`/`FAIL` ([evaluation §6](evaluation.md#6-final-results-on-the-test-split)).
+- **Why 3 points, and why fixed in advance.** Dev has 80 invoices, so one invoice moves a score by 1.25
+  points. A gap of 3 points or less is two invoices: within the noise of a sample this size, so it counts
+  as a tie and the cheaper model wins. A wider gap is a real difference in quality. Writing the rule down
+  before the runs means the result could not bend the criterion; the latency clause exists because this is
+  a synchronous API.
+- **Is Opus worth about five times the price? Measured, yes.** Same 80 dev invoices, same prompt (v3),
+  same input, replayed with today's code:
+
+  | | Opus 5 | Haiku 4.5 |
+  |---|---|---|
+  | Cost per invoice | $0.0335 | $0.0073 |
+  | Invoices left undecided (`REVIEW` where a `PASS` or `FAIL` was due) | 8 of 80 | 13 of 80 |
+  | Wrong decisions | 0 | 1 (an invoice that should `FAIL` got `PASS`) |
+
+  With the final prompt (v4b) Haiku makes no wrong decision but leaves 15 of 80 undecided. Per 1,000
+  invoices, Haiku saves about **$26** and adds about **90 manual reviews** (plus, with v3, about a dozen
+  wrong `PASS`es). Opus pays for itself as soon as one review costs more than **about $0.30**, which is
+  under a minute of a finance clerk's time; a real review (open the PDF, check the fields, decide) takes
+  several. A wrong `PASS` costs far more: an invoice paid that should have been rejected. The extra cost of
+  Opus is cheaper than the work and the risk it removes.
+- **Where the difference is.** On the clean, single-template Mendeley invoices Haiku is as good as Opus
+  (94% vs 92% of verdicts). The gap is on hard layouts: on the Spanish utility bills (IDSEM) Opus agrees on
+  73% of verdicts, Haiku on 27%. That is the traffic the LLM path is for; clean, recurring layouts should
+  not reach an LLM at all (B8, B9).
 - **Rejected:** choosing by price alone; choosing after the fact.
-- **Revisit if:** the price of a manual review is known. Haiku at about a fifth of the cost with more `REVIEW`s
-  could then be the right trade.
+- **Revisit if:** the customer's traffic is mostly clean layouts, or a manual review is measured to cost
+  under about $0.30. Then Haiku at a fifth of the price is the right trade.
 
 ### B6 — No server-side model fallback, `effort: low`, no sampling parameters
 
@@ -260,6 +286,13 @@ read a section only when you want to challenge the decision it covers.
 
 - **Problem:** the heuristic improves fastest by adding the exact labels of the templates it fails on. On an
   evaluation set whose templates also appear in the test half, that looks like progress but is memory.
+- **How we think about it.** In production, invoices with a clear, recurring structure (a customer's
+  frequent suppliers) would be handled by rules written for those templates, deterministic and free, and
+  would never reach the LLM (B8). What this service has to prove is the other case: invoices with
+  unconventional, difficult layouts from suppliers nobody wrote rules for. The evaluation was built to
+  measure exactly that (six sources, 21 countries, deliberately hard layouts). Teaching the general
+  heuristic the templates of our own evaluation set would only make that measurement lie. Template rules
+  are per-customer configuration, not general code.
 - **Decision:** only general fixes, each driven by a dev error and covered by a unit test on invented
   inputs: a value on the line after its label, tables printed as labels then values, standard accounting
   labels in German, French, Italian, Portuguese and Dutch, an invoice number must contain a digit, a date

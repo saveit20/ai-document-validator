@@ -268,12 +268,18 @@ deploy; the CI quality gates block a regression before one.
 - **Review over automation.** Doubtful fields go to `REVIEW` rather than risk a wrong decision: 0 wrong
   `PASS`/`FAIL`, at the price of 4 reviews in 80.
 - **A general heuristic over a better score.** Template-specific rules would have lifted the heuristic from
-  55% to 78% of verdicts on test — by learning our own data. We kept it general.
+  55% to 78% of verdicts on test — by learning our own data. We kept it general: in production, clear and
+  recurring layouts get rules of their own and never reach the LLM; this service is judged on the hard,
+  unconventional ones, and tuning to our own templates would only make that measurement lie.
 - **Accounting rules, still verified.** Credit notes are booked negative and a tax total may be the sum of
   the printed per-rate lines, as a finance team books them; the sum is trusted only when subtotal + tax =
   total.
-- **The most accurate model by a rule fixed in advance**, not by price or by taste: the cheapest model
-  within 3 points of the best on dev.
+- **Opus 5 over a model five times cheaper, by a rule fixed in advance:** the cheapest model within 3 points
+  of the best on dev (3 points is two invoices out of 80, the noise of the sample). Haiku 4.5 is 8 verdict
+  points behind. Per 1,000 invoices it would save about $26 and add about 90 manual reviews, so Opus pays
+  for itself as soon as a review costs more than about $0.30 — under a minute of a clerk's time. Haiku
+  matches Opus on clean layouts; the gap is on hard ones, which is what the LLM is for
+  ([decisions.md](docs/decisions.md) B5).
 
 Every decision — problem, choice, evidence, rejected alternatives, when to revisit — is in
 [docs/decisions.md](docs/decisions.md), starting with a one-page table.
@@ -297,8 +303,8 @@ available, EU inference.
 
 ## What we would do with another day
 
-1. **Re-run the model comparison with the final prompt.** It was tuned on the cheapest model; with it Haiku
-   extracts 99% of dev fields, so Haiku at a fifth of the cost may now be the better trade.
+1. **Route by layout, and price a review.** Send known, clean templates to rules or to Haiku and only hard
+   layouts to Opus; measure what a manual review costs the customer, which settles the model trade-off.
 2. **Match evidence by position, not only by text.** The Spanish utility bills print labels and amounts in
    separate blocks, so correct answers cannot be verified and go to `REVIEW`.
 3. **OCR for scanned invoices,** producing a text layer the same checks can use.
@@ -321,7 +327,8 @@ OpenAPI) and the evaluation metrics each have their own tests.
 ## AI usage
 
 Which AI tools did what, the decisions the author took and why, what was rejected, and the extraction
-prompt: [AI_USAGE.md](AI_USAGE.md).
+prompt: [AI_USAGE.md](AI_USAGE.md). How the work was run — phases, gates, who decided what:
+[docs/process.md](docs/process.md).
 
 ## Data attribution
 
