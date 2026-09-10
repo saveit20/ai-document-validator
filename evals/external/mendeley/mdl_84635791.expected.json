@@ -1,0 +1,37 @@
+{
+  "document": "mdl_84635791.pdf",
+  "source": "mendeley",
+  "reference_date": "2020-05-17",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Jimenez, Cummings and Ross",
+    "invoice_number": "84635791",
+    "invoice_date": "2020-04-17",
+    "total_amount": "351.96",
+    "currency": "USD",
+    "tax_id": "929712703",
+    "subtotal_amount": "319.96",
+    "tax_amount": "32.00",
+    "customer_name": "Jones Ltd",
+    "customer_tax_id": "977918574",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

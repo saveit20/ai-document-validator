@@ -1,0 +1,35 @@
+{
+  "document": "mdl_81384146.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-02-23",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Long, Craig and Ford",
+    "invoice_number": "81384146",
+    "invoice_date": "2015-01-24",
+    "total_amount": "356.68",
+    "currency": "USD",
+    "tax_id": "919960967",
+    "subtotal_amount": "324.25",
+    "tax_amount": "32.43",
+    "customer_name": "Golden PLC",
+    "customer_tax_id": "975880557",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

@@ -1,0 +1,38 @@
+{
+  "document": "mdl_75299595.pdf",
+  "source": "mendeley",
+  "reference_date": "2011-07-03",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Cox, Bell and Rodriguez",
+    "invoice_number": "75299595",
+    "invoice_date": "2011-06-03",
+    "total_amount": "272.65",
+    "currency": "USD",
+    "tax_id": "999836062",
+    "subtotal_amount": "247.86",
+    "tax_amount": "24.79",
+    "customer_name": "Jackson Group",
+    "customer_tax_id": "942808954",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

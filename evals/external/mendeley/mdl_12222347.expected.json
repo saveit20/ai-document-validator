@@ -1,0 +1,35 @@
+{
+  "document": "mdl_12222347.pdf",
+  "source": "mendeley",
+  "reference_date": "2017-04-17",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Gregory, Patterson and Fischer",
+    "invoice_number": "12222347",
+    "invoice_date": "2017-03-18",
+    "total_amount": "136.13",
+    "currency": "USD",
+    "tax_id": "958946606",
+    "subtotal_amount": "123.75",
+    "tax_amount": "12.38",
+    "customer_name": "Wilson PLC",
+    "customer_tax_id": "928912431",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

@@ -1,0 +1,35 @@
+{
+  "document": "mdl_61874671.pdf",
+  "source": "mendeley",
+  "reference_date": "2018-08-25",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Gonzales-Faulkner",
+    "invoice_number": "61874671",
+    "invoice_date": "2018-07-26",
+    "total_amount": "312.93",
+    "currency": "USD",
+    "tax_id": "992828738",
+    "subtotal_amount": "284.48",
+    "tax_amount": "28.45",
+    "customer_name": "Garcia-Jones",
+    "customer_tax_id": "918903872",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

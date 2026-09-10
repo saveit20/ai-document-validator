@@ -1,0 +1,35 @@
+{
+  "document": "mdl_76588527.pdf",
+  "source": "mendeley",
+  "reference_date": "2018-12-21",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Oliver and Sons",
+    "invoice_number": "76588527",
+    "invoice_date": "2018-11-21",
+    "total_amount": "747.96",
+    "currency": "USD",
+    "tax_id": "991795422",
+    "subtotal_amount": "679.96",
+    "tax_amount": "68.00",
+    "customer_name": "Kirby-Charles",
+    "customer_tax_id": "982953864",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

@@ -1,0 +1,36 @@
+{
+  "document": "mdl_24048799.pdf",
+  "source": "mendeley",
+  "reference_date": "2014-09-18",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Rodriguez-Jackson",
+    "invoice_number": "24048799",
+    "invoice_date": "2014-05-21",
+    "total_amount": "5.45",
+    "currency": "USD",
+    "tax_id": "983858151",
+    "subtotal_amount": "4.95",
+    "tax_amount": "0.50",
+    "customer_name": "Williams, Fletcher and Taylor",
+    "customer_tax_id": "932730724",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

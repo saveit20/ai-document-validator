@@ -1,0 +1,36 @@
+{
+  "document": "mdl_62517865.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-07-02",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Trujillo-Hunt",
+    "invoice_number": "62517865",
+    "invoice_date": "2015-06-02",
+    "total_amount": "9.35",
+    "currency": "USD",
+    "tax_id": "992718540",
+    "subtotal_amount": "8.50",
+    "tax_amount": "0.85",
+    "customer_name": "Lee and Sons",
+    "customer_tax_id": "929860601",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

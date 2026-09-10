@@ -1,0 +1,37 @@
+{
+  "document": "mdl_58478169.pdf",
+  "source": "mendeley",
+  "reference_date": "2016-11-01",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Conley Ltd",
+    "invoice_number": "58478169",
+    "invoice_date": "2016-07-04",
+    "total_amount": "12261.98",
+    "currency": "USD",
+    "tax_id": "919798417",
+    "subtotal_amount": "11147.25",
+    "tax_amount": "1114.73",
+    "customer_name": "Wells-Avery",
+    "customer_tax_id": "965907208",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

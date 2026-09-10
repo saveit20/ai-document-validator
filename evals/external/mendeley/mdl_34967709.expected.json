@@ -1,0 +1,35 @@
+{
+  "document": "mdl_34967709.pdf",
+  "source": "mendeley",
+  "reference_date": "2018-02-15",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Burns, King and Serrano",
+    "invoice_number": "34967709",
+    "invoice_date": "2018-01-16",
+    "total_amount": "549.98",
+    "currency": "USD",
+    "tax_id": "913918891",
+    "subtotal_amount": "499.98",
+    "tax_amount": "50.00",
+    "customer_name": "Bryant-Wall",
+    "customer_tax_id": "995752976",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

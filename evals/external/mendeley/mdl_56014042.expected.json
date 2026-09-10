@@ -1,0 +1,38 @@
+{
+  "document": "mdl_56014042.pdf",
+  "source": "mendeley",
+  "reference_date": "2014-10-31",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Nichols-Barajas",
+    "invoice_number": "56014042",
+    "invoice_date": "2014-10-01",
+    "total_amount": "65.45",
+    "currency": "USD",
+    "tax_id": "953876813",
+    "subtotal_amount": "59.50",
+    "tax_amount": "5.95",
+    "customer_name": "Mckay PLC",
+    "customer_tax_id": "965908517",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

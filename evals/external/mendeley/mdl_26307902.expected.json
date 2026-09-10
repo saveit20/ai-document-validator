@@ -1,0 +1,38 @@
+{
+  "document": "mdl_26307902.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-11-04",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Moore Ltd",
+    "invoice_number": "26307902",
+    "invoice_date": "2015-10-05",
+    "total_amount": "104.06",
+    "currency": "USD",
+    "tax_id": "931796223",
+    "subtotal_amount": "94.60",
+    "tax_amount": "9.46",
+    "customer_name": "Johnson, Harvey and Richardson",
+    "customer_tax_id": "905876840",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

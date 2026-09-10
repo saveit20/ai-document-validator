@@ -1,0 +1,36 @@
+{
+  "document": "mdl_29086575.pdf",
+  "source": "mendeley",
+  "reference_date": "2020-08-07",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Booth, Weber and Wall",
+    "invoice_number": "29086575",
+    "invoice_date": "2020-07-08",
+    "total_amount": "17124.42",
+    "currency": "USD",
+    "tax_id": "972704421",
+    "subtotal_amount": "15567.65",
+    "tax_amount": "1556.77",
+    "customer_name": "Randolph and Sons",
+    "customer_tax_id": "904852535",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

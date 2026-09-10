@@ -1,0 +1,35 @@
+{
+  "document": "mdl_61942465.pdf",
+  "source": "mendeley",
+  "reference_date": "2012-09-26",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Jones Ltd",
+    "invoice_number": "61942465",
+    "invoice_date": "2012-08-27",
+    "total_amount": "44.00",
+    "currency": "USD",
+    "tax_id": "936722389",
+    "subtotal_amount": "40.00",
+    "tax_amount": "4.00",
+    "customer_name": "Williams, Kelley and Watts",
+    "customer_tax_id": "963789800",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

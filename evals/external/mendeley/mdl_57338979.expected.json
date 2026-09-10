@@ -1,0 +1,38 @@
+{
+  "document": "mdl_57338979.pdf",
+  "source": "mendeley",
+  "reference_date": "2021-06-09",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Estrada and Sons",
+    "invoice_number": "57338979",
+    "invoice_date": "2021-05-10",
+    "total_amount": "15089.59",
+    "currency": "USD",
+    "tax_id": "926740874",
+    "subtotal_amount": "13717.81",
+    "tax_amount": "1371.78",
+    "customer_name": "Santana-Sherman",
+    "customer_tax_id": "939814695",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

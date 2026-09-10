@@ -1,0 +1,35 @@
+{
+  "document": "mdl_54394190.pdf",
+  "source": "mendeley",
+  "reference_date": "2021-03-25",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Nelson, Bird and Mendoza",
+    "invoice_number": "54394190",
+    "invoice_date": "2021-02-23",
+    "total_amount": "3695.93",
+    "currency": "USD",
+    "tax_id": "976765964",
+    "subtotal_amount": "3359.94",
+    "tax_amount": "335.99",
+    "customer_name": "Allen Inc",
+    "customer_tax_id": "925901124",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

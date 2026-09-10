@@ -1,0 +1,36 @@
+{
+  "document": "mdl_42760323.pdf",
+  "source": "mendeley",
+  "reference_date": "2021-01-21",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Martin-Butler",
+    "invoice_number": "42760323",
+    "invoice_date": "2020-09-23",
+    "total_amount": "27862.96",
+    "currency": "USD",
+    "tax_id": "965862430",
+    "subtotal_amount": "25329.96",
+    "tax_amount": "2533.00",
+    "customer_name": "Patterson, Garza and Adkins",
+    "customer_tax_id": "979984396",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

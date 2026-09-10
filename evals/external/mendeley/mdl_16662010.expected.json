@@ -1,0 +1,36 @@
+{
+  "document": "mdl_16662010.pdf",
+  "source": "mendeley",
+  "reference_date": "2016-12-26",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Smith-Cook",
+    "invoice_number": "16662010",
+    "invoice_date": "2016-08-28",
+    "total_amount": "2259.10",
+    "currency": "USD",
+    "tax_id": "959842124",
+    "subtotal_amount": "2053.73",
+    "tax_amount": "205.37",
+    "customer_name": "Snyder-Johnson",
+    "customer_tax_id": "938854960",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

@@ -1,0 +1,36 @@
+{
+  "document": "mdl_87428284.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-10-15",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Grant and Sons",
+    "invoice_number": "87428284",
+    "invoice_date": "2015-06-17",
+    "total_amount": "21.52",
+    "currency": "USD",
+    "tax_id": "990750951",
+    "subtotal_amount": "19.56",
+    "tax_amount": "1.96",
+    "customer_name": "Meza, Harrison and Campbell",
+    "customer_tax_id": "934801178",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

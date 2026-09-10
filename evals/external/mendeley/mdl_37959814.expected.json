@@ -1,0 +1,36 @@
+{
+  "document": "mdl_37959814.pdf",
+  "source": "mendeley",
+  "reference_date": "2013-08-11",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Moore, Wells and Wilson",
+    "invoice_number": "37959814",
+    "invoice_date": "2013-07-12",
+    "total_amount": "7285.98",
+    "currency": "USD",
+    "tax_id": "967922894",
+    "subtotal_amount": "6623.62",
+    "tax_amount": "662.36",
+    "customer_name": "Hopkins-Moreno",
+    "customer_tax_id": "970948001",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

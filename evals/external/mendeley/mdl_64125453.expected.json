@@ -1,0 +1,37 @@
+{
+  "document": "mdl_64125453.pdf",
+  "source": "mendeley",
+  "reference_date": "2013-04-24",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Soto and Sons",
+    "invoice_number": "64125453",
+    "invoice_date": "2013-03-25",
+    "total_amount": "296.91",
+    "currency": "USD",
+    "tax_id": "953836829",
+    "subtotal_amount": "269.92",
+    "tax_amount": "26.99",
+    "customer_name": "Campos PLC",
+    "customer_tax_id": "942986009",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

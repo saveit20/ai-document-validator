@@ -1,0 +1,37 @@
+{
+  "document": "mdl_36279024.pdf",
+  "source": "mendeley",
+  "reference_date": "2014-09-17",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Baker, Michael and Martin",
+    "invoice_number": "36279024",
+    "invoice_date": "2014-08-18",
+    "total_amount": "1255.17",
+    "currency": "USD",
+    "tax_id": "986850797",
+    "subtotal_amount": "1141.06",
+    "tax_amount": "114.11",
+    "customer_name": "Werner-Castillo",
+    "customer_tax_id": "990967449",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

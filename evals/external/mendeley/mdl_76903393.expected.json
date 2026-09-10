@@ -1,0 +1,37 @@
+{
+  "document": "mdl_76903393.pdf",
+  "source": "mendeley",
+  "reference_date": "2012-08-23",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Young, Owens and Hall",
+    "invoice_number": "76903393",
+    "invoice_date": "2012-07-24",
+    "total_amount": "5230.40",
+    "currency": "USD",
+    "tax_id": "964861473",
+    "subtotal_amount": "4754.91",
+    "tax_amount": "475.49",
+    "customer_name": "King-Wells",
+    "customer_tax_id": "993823637",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

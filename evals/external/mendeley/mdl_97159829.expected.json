@@ -1,0 +1,37 @@
+{
+  "document": "mdl_97159829.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-10-18",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Bradley-Andrade",
+    "invoice_number": "97159829",
+    "invoice_date": "2015-09-18",
+    "total_amount": "978.12",
+    "currency": "USD",
+    "tax_id": "985738194",
+    "subtotal_amount": "889.20",
+    "tax_amount": "88.92",
+    "customer_name": "Castro PLC",
+    "customer_tax_id": "994721270",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

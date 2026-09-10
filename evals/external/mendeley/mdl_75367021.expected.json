@@ -1,0 +1,36 @@
+{
+  "document": "mdl_75367021.pdf",
+  "source": "mendeley",
+  "reference_date": "2018-12-12",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Martinez-Ramirez",
+    "invoice_number": "75367021",
+    "invoice_date": "2018-11-12",
+    "total_amount": "36651.71",
+    "currency": "USD",
+    "tax_id": "937843596",
+    "subtotal_amount": "33319.74",
+    "tax_amount": "3331.97",
+    "customer_name": "Lawrence, Stevens and Robinson",
+    "customer_tax_id": "912779229",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

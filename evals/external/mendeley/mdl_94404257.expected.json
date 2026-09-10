@@ -1,0 +1,37 @@
+{
+  "document": "mdl_94404257.pdf",
+  "source": "mendeley",
+  "reference_date": "2013-10-31",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Cruz PLC",
+    "invoice_number": "94404257",
+    "invoice_date": "2013-07-03",
+    "total_amount": "138.90",
+    "currency": "USD",
+    "tax_id": "964998203",
+    "subtotal_amount": "126.27",
+    "tax_amount": "12.63",
+    "customer_name": "Sandoval-Phillips",
+    "customer_tax_id": "976945245",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

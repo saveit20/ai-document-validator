@@ -1,0 +1,35 @@
+{
+  "document": "mdl_77404624.pdf",
+  "source": "mendeley",
+  "reference_date": "2014-11-19",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Hayes-Mcdonald",
+    "invoice_number": "77404624",
+    "invoice_date": "2014-10-20",
+    "total_amount": "9556.58",
+    "currency": "USD",
+    "tax_id": "906998086",
+    "subtotal_amount": "8687.80",
+    "tax_amount": "868.78",
+    "customer_name": "Sheppard, Guerrero and Castillo",
+    "customer_tax_id": "960844731",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

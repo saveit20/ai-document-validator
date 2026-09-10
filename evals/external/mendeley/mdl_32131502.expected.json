@@ -1,0 +1,35 @@
+{
+  "document": "mdl_32131502.pdf",
+  "source": "mendeley",
+  "reference_date": "2019-03-28",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Campbell, Mathis and Johnson",
+    "invoice_number": "32131502",
+    "invoice_date": "2019-02-26",
+    "total_amount": "6640.07",
+    "currency": "USD",
+    "tax_id": "909790983",
+    "subtotal_amount": "6036.43",
+    "tax_amount": "603.64",
+    "customer_name": "Jimenez, Smith and Lee",
+    "customer_tax_id": "958904314",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

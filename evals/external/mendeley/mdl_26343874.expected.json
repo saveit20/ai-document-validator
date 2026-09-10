@@ -1,0 +1,36 @@
+{
+  "document": "mdl_26343874.pdf",
+  "source": "mendeley",
+  "reference_date": "2013-11-14",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Smith Ltd",
+    "invoice_number": "26343874",
+    "invoice_date": "2013-07-17",
+    "total_amount": "3490.29",
+    "currency": "USD",
+    "tax_id": "916976743",
+    "subtotal_amount": "3172.99",
+    "tax_amount": "317.30",
+    "customer_name": "Herring-Floyd",
+    "customer_tax_id": "913804636",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

@@ -1,0 +1,38 @@
+{
+  "document": "mdl_53339803.pdf",
+  "source": "mendeley",
+  "reference_date": "2018-10-11",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Evans LLC",
+    "invoice_number": "53339803",
+    "invoice_date": "2018-09-11",
+    "total_amount": "16830.00",
+    "currency": "USD",
+    "tax_id": "968837054",
+    "subtotal_amount": "15300.00",
+    "tax_amount": "1530.00",
+    "customer_name": "Ball, Smith and Rhodes",
+    "customer_tax_id": "991831943",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

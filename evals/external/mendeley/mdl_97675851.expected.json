@@ -1,0 +1,36 @@
+{
+  "document": "mdl_97675851.pdf",
+  "source": "mendeley",
+  "reference_date": "2016-09-22",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Baird PLC",
+    "invoice_number": "97675851",
+    "invoice_date": "2016-05-25",
+    "total_amount": "154.74",
+    "currency": "USD",
+    "tax_id": "927991999",
+    "subtotal_amount": "140.67",
+    "tax_amount": "14.07",
+    "customer_name": "Smith, Reynolds and Dunn",
+    "customer_tax_id": "922987164",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

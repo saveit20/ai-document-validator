@@ -1,0 +1,36 @@
+{
+  "document": "mdl_90508672.pdf",
+  "source": "mendeley",
+  "reference_date": "2020-08-14",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Stone-Waller",
+    "invoice_number": "90508672",
+    "invoice_date": "2020-04-16",
+    "total_amount": "7052.49",
+    "currency": "USD",
+    "tax_id": "994996683",
+    "subtotal_amount": "6411.35",
+    "tax_amount": "641.14",
+    "customer_name": "Shaw Group",
+    "customer_tax_id": "914798228",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

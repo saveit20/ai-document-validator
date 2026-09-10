@@ -1,0 +1,36 @@
+{
+  "document": "mdl_77833987.pdf",
+  "source": "mendeley",
+  "reference_date": "2013-09-17",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Freeman and Sons",
+    "invoice_number": "77833987",
+    "invoice_date": "2013-05-20",
+    "total_amount": "129.53",
+    "currency": "USD",
+    "tax_id": "973768676",
+    "subtotal_amount": "117.75",
+    "tax_amount": "11.78",
+    "customer_name": "Houston Group",
+    "customer_tax_id": "901881175",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

@@ -1,0 +1,35 @@
+{
+  "document": "mdl_52093915.pdf",
+  "source": "mendeley",
+  "reference_date": "2017-09-28",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Cooper Group",
+    "invoice_number": "52093915",
+    "invoice_date": "2017-08-29",
+    "total_amount": "1722.39",
+    "currency": "USD",
+    "tax_id": "955787390",
+    "subtotal_amount": "1565.81",
+    "tax_amount": "156.58",
+    "customer_name": "West LLC",
+    "customer_tax_id": "997812291",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

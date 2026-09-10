@@ -1,10 +1,14 @@
-"""Golden-set evaluation over the dev set and the independently written held-out set.
+"""Evaluation over two independent sources, split 50/50 into dev and test (see evals/splits.json).
 
-python -m evals.run --extractor heuristic
-python -m evals.run --extractor llm --model claude-sonnet-5            # replay recordings
-python -m evals.run --extractor llm --model claude-sonnet-5 --record   # call the API for misses
-python -m evals.run --all [--check-baseline | --update-baseline]
-python -m evals.run --set holdout --show-holdout-failures              # only after development
+  python -m evals.run --extractor heuristic
+  python -m evals.run --extractor llm --model claude-sonnet-5            # replay recordings
+  python -m evals.run --extractor llm --model claude-sonnet-5 --record   # call the API for misses
+  python -m evals.run --all [--check-baseline | --update-baseline]
+  python -m evals.run --split test --show-test-failures                  # only once development is frozen
+
+Every report is broken down by source, so the single-template Mendeley set cannot hide how the
+layout-rich held-out invoices behave. The invoices written by the system's author (evals/golden) are
+circular and are used only as unit-test fixtures, never here.
 """
 
 import argparse
@@ -30,9 +34,11 @@ from validator.pipeline import Pipeline
 from validator.transport import AnthropicTransport, RecordedTransport
 
 EVALS_DIR = Path(__file__).resolve().parent
-GOLDEN_DIR = EVALS_DIR / "golden"
-HOLDOUT_DIR = EVALS_DIR / "holdout"
-SETS = {"dev": GOLDEN_DIR, "holdout": HOLDOUT_DIR}
+SOURCES = {
+    "mendeley": EVALS_DIR / "external" / "mendeley",
+    "holdout": EVALS_DIR / "holdout",
+}
+SPLITS_FILE = EVALS_DIR / "splits.json"
 RECORDINGS_DIR = EVALS_DIR / "recordings"
 RESULTS_DIR = EVALS_DIR / "results"
 BASELINE_FILE = EVALS_DIR / "baseline.json"
@@ -49,6 +55,7 @@ DEFAULT_CONFIG = {
 @dataclass(frozen=True)
 class Case:
     id: str
+    source: str
     path: Path
     media_type: str
     reference_date: date
@@ -58,23 +65,30 @@ class Case:
     tags: tuple[str, ...]
 
 
-def load_cases(directory: Path) -> list[Case]:
+def load_cases(split: str) -> list[Case]:
+    """Cases of one split ('dev' or 'test'), from every source, in manifest order."""
+    wanted = set(json.loads(SPLITS_FILE.read_text(encoding="utf-8"))[split])
     cases = []
-    for spec_path in sorted(directory.glob("*.expected.json")):
-        spec = json.loads(spec_path.read_text(encoding="utf-8"))
-        document = directory / spec["document"]
-        cases.append(
-            Case(
-                id=spec_path.name.removesuffix(".expected.json"),
-                path=document,
-                media_type="application/pdf" if document.suffix == ".pdf" else "text/plain",
-                reference_date=date.fromisoformat(spec["reference_date"]),
-                config=RuleConfig.model_validate(spec.get("config") or DEFAULT_CONFIG),
-                expected={name: spec["expected"][name] for name in FIELD_NAMES},
-                verdict=spec["expected"]["verdict"],
-                tags=tuple(spec.get("difficulty", ())),
+    for source, directory in SOURCES.items():
+        for spec_path in sorted(directory.glob("*.expected.json")):
+            case_id = spec_path.name.removesuffix(".expected.json")
+            if case_id not in wanted:
+                continue
+            spec = json.loads(spec_path.read_text(encoding="utf-8"))
+            document = directory / spec["document"]
+            cases.append(
+                Case(
+                    id=case_id,
+                    source=source,
+                    path=document,
+                    media_type="application/pdf" if document.suffix == ".pdf" else "text/plain",
+                    reference_date=date.fromisoformat(spec["reference_date"]),
+                    config=RuleConfig.model_validate(spec.get("config") or DEFAULT_CONFIG),
+                    expected={name: spec["expected"][name] for name in FIELD_NAMES},
+                    verdict=spec["expected"]["verdict"],
+                    tags=tuple(spec.get("difficulty", ())),
+                )
             )
-        )
     return cases
 
 
@@ -88,7 +102,7 @@ def _as_text(value: object) -> str | None:
     return str(value)
 
 
-def evaluate(name: str, pipeline: Pipeline, cases: list[Case]) -> Summary:
+def run_cases(pipeline: Pipeline, cases: list[Case]) -> list[CaseResult]:
     results = []
     for case in cases:
         document = document_from_bytes(case.path.read_bytes(), case.media_type, case.path.name)
@@ -106,7 +120,18 @@ def evaluate(name: str, pipeline: Pipeline, cases: list[Case]) -> Summary:
                 tags=case.tags,
             )
         )
-    return summarise(name, results)
+    return results
+
+
+def summaries_by_source(name: str, cases: list[Case], results: list[CaseResult]) -> list[Summary]:
+    """One summary for all cases, then one per source."""
+    source_of = {case.id: case.source for case in cases}
+    summaries = [summarise(f"{name}/all", results)]
+    for source in SOURCES:
+        subset = [result for result in results if source_of[result.case_id] == source]
+        if subset:
+            summaries.append(summarise(f"{name}/{source}", subset))
+    return summaries
 
 
 def build(extractor: str, model: str, record: bool) -> tuple[str, Pipeline]:
@@ -160,13 +185,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--extractor", choices=("heuristic", "llm", "hybrid"), default="heuristic")
     parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--set", choices=("dev", "holdout", "both"), default="both")
+    parser.add_argument("--split", choices=("dev", "test", "both"), default="both")
     parser.add_argument("--record", action="store_true", help="call the API for missing recordings")
     parser.add_argument("--all", action="store_true", help="heuristic, every model, and hybrid")
     parser.add_argument(
-        "--show-holdout-failures",
+        "--show-test-failures",
         action="store_true",
-        help="print per-case failures for the held-out set (only once development is frozen)",
+        help="print per-case failures for the test split (only once development is frozen)",
     )
     gate = parser.add_mutually_exclusive_group()
     gate.add_argument("--check-baseline", action="store_true")
@@ -179,24 +204,23 @@ def main(argv: list[str] | None = None) -> int:
         configs += [("hybrid", DEFAULT_MODEL)]
     else:
         configs = [(args.extractor, args.model)]
-    set_names = ["dev", "holdout"] if args.set == "both" else [args.set]
+    splits = ["dev", "test"] if args.split == "both" else [args.split]
     pipelines = [build(extractor, model, args.record) for extractor, model in configs]
-    summaries = [
-        evaluate(f"{name}@{set_name}", pipeline, load_cases(SETS[set_name]))
-        for set_name in set_names
-        for name, pipeline in pipelines
-    ]
+
+    summaries: list[Summary] = []
+    for split in splits:
+        cases = load_cases(split)
+        for name, pipeline in pipelines:
+            summaries += summaries_by_source(f"{name}@{split}", cases, run_cases(pipeline, cases))
 
     report = "\n".join(
-        render(s, show_failures=args.show_holdout_failures or s.name.endswith("@dev"))
-        for s in summaries
+        render(s, show_failures=args.show_test_failures or "@dev/" in s.name) for s in summaries
     )
-    if len(summaries) > 1:
-        report = render_comparison(summaries) + "\n" + report
+    report = render_comparison(summaries) + "\n" + report
     print(report)
 
     RESULTS_DIR.mkdir(exist_ok=True)
-    target = "latest.md" if args.all else f"{configs[0][0]}_{args.set}.md"
+    target = "latest.md" if args.all else f"{configs[0][0]}_{args.split}.md"
     (RESULTS_DIR / target).write_text(report, encoding="utf-8")
 
     if args.update_baseline:

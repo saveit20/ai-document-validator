@@ -1,10 +1,26 @@
 {
-  "heuristic@dev": {
-    "verdict_agreement": 1.0,
-    "field_exact_rate": 1.0
+  "heuristic@dev/all": {
+    "verdict_agreement": 0.4772727272727273,
+    "field_exact_rate": 0.42272727272727273
   },
-  "heuristic@holdout": {
-    "verdict_agreement": 0.4375,
-    "field_exact_rate": 0.5375
+  "heuristic@dev/mendeley": {
+    "verdict_agreement": 0.5,
+    "field_exact_rate": 0.4166666666666667
+  },
+  "heuristic@dev/holdout": {
+    "verdict_agreement": 0.375,
+    "field_exact_rate": 0.45
+  },
+  "heuristic@test/all": {
+    "verdict_agreement": 0.5,
+    "field_exact_rate": 0.4727272727272727
+  },
+  "heuristic@test/mendeley": {
+    "verdict_agreement": 0.5,
+    "field_exact_rate": 0.4388888888888889
+  },
+  "heuristic@test/holdout": {
+    "verdict_agreement": 0.5,
+    "field_exact_rate": 0.625
   }
 }

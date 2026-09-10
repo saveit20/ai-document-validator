@@ -1,0 +1,37 @@
+{
+  "document": "mdl_14878236.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-05-26",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Hernandez, Coleman and Alvarado",
+    "invoice_number": "14878236",
+    "invoice_date": "2015-04-26",
+    "total_amount": "568.49",
+    "currency": "USD",
+    "tax_id": "988794495",
+    "subtotal_amount": "516.81",
+    "tax_amount": "51.68",
+    "customer_name": "Turner-Green",
+    "customer_tax_id": "950705065",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

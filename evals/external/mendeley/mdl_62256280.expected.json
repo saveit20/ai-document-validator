@@ -1,0 +1,37 @@
+{
+  "document": "mdl_62256280.pdf",
+  "source": "mendeley",
+  "reference_date": "2021-03-08",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Myers Inc",
+    "invoice_number": "62256280",
+    "invoice_date": "2020-11-08",
+    "total_amount": "2970.00",
+    "currency": "USD",
+    "tax_id": "989813221",
+    "subtotal_amount": "2700.00",
+    "tax_amount": "270.00",
+    "customer_name": "Cook-Smith",
+    "customer_tax_id": "912762889",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

@@ -1,0 +1,36 @@
+{
+  "document": "mdl_97511742.pdf",
+  "source": "mendeley",
+  "reference_date": "2016-05-07",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Decker PLC",
+    "invoice_number": "97511742",
+    "invoice_date": "2016-04-07",
+    "total_amount": "4746.42",
+    "currency": "USD",
+    "tax_id": "957874031",
+    "subtotal_amount": "4314.93",
+    "tax_amount": "431.49",
+    "customer_name": "Boyle Ltd",
+    "customer_tax_id": "993863706",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

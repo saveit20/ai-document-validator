@@ -1,0 +1,38 @@
+{
+  "document": "mdl_34528548.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-12-02",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Garcia, Stewart and Payne",
+    "invoice_number": "34528548",
+    "invoice_date": "2015-11-02",
+    "total_amount": "802.73",
+    "currency": "USD",
+    "tax_id": "949785411",
+    "subtotal_amount": "729.75",
+    "tax_amount": "72.98",
+    "customer_name": "Huerta Ltd",
+    "customer_tax_id": "972742815",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

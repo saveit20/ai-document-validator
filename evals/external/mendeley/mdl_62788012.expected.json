@@ -1,0 +1,36 @@
+{
+  "document": "mdl_62788012.pdf",
+  "source": "mendeley",
+  "reference_date": "2013-04-11",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Barker-Fletcher",
+    "invoice_number": "62788012",
+    "invoice_date": "2013-03-12",
+    "total_amount": "219.89",
+    "currency": "USD",
+    "tax_id": "977941841",
+    "subtotal_amount": "199.90",
+    "tax_amount": "19.99",
+    "customer_name": "Anderson, Webb and Perkins",
+    "customer_tax_id": "999978734",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

@@ -1,0 +1,35 @@
+{
+  "document": "mdl_71748307.pdf",
+  "source": "mendeley",
+  "reference_date": "2012-01-23",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Velasquez, Ward and Ballard",
+    "invoice_number": "71748307",
+    "invoice_date": "2011-12-24",
+    "total_amount": "1576.90",
+    "currency": "USD",
+    "tax_id": "950744484",
+    "subtotal_amount": "1433.55",
+    "tax_amount": "143.35",
+    "customer_name": "Lewis Group",
+    "customer_tax_id": "996868087",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

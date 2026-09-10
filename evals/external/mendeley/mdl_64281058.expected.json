@@ -1,0 +1,36 @@
+{
+  "document": "mdl_64281058.pdf",
+  "source": "mendeley",
+  "reference_date": "2019-12-08",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Zuniga, Short and Jensen",
+    "invoice_number": "64281058",
+    "invoice_date": "2019-11-08",
+    "total_amount": "15416.49",
+    "currency": "USD",
+    "tax_id": "984918764",
+    "subtotal_amount": "14014.99",
+    "tax_amount": "1401.50",
+    "customer_name": "Wells Ltd",
+    "customer_tax_id": "951972583",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

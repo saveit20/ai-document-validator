@@ -1,0 +1,36 @@
+{
+  "document": "mdl_18001573.pdf",
+  "source": "mendeley",
+  "reference_date": "2013-04-29",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Mcgrath-Ruiz",
+    "invoice_number": "18001573",
+    "invoice_date": "2012-12-30",
+    "total_amount": "111.07",
+    "currency": "USD",
+    "tax_id": "911769645",
+    "subtotal_amount": "100.97",
+    "tax_amount": "10.10",
+    "customer_name": "Chavez, Burke and Jones",
+    "customer_tax_id": "976732435",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

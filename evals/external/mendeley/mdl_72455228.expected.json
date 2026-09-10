@@ -1,0 +1,38 @@
+{
+  "document": "mdl_72455228.pdf",
+  "source": "mendeley",
+  "reference_date": "2021-06-10",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Potts, Reed and Miller",
+    "invoice_number": "72455228",
+    "invoice_date": "2021-05-11",
+    "total_amount": "2155.98",
+    "currency": "USD",
+    "tax_id": "913825781",
+    "subtotal_amount": "1959.98",
+    "tax_amount": "196.00",
+    "customer_name": "Brady LLC",
+    "customer_tax_id": "953750545",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

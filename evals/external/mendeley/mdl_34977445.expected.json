@@ -1,0 +1,36 @@
+{
+  "document": "mdl_34977445.pdf",
+  "source": "mendeley",
+  "reference_date": "2012-01-03",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Pace-Baker",
+    "invoice_number": "34977445",
+    "invoice_date": "2011-12-04",
+    "total_amount": "15094.83",
+    "currency": "USD",
+    "tax_id": "923744920",
+    "subtotal_amount": "13722.57",
+    "tax_amount": "1372.26",
+    "customer_name": "Stanley, Cooper and Koch",
+    "customer_tax_id": "996963571",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

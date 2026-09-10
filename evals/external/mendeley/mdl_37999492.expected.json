@@ -1,0 +1,35 @@
+{
+  "document": "mdl_37999492.pdf",
+  "source": "mendeley",
+  "reference_date": "2017-11-21",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Smith Ltd",
+    "invoice_number": "37999492",
+    "invoice_date": "2017-10-22",
+    "total_amount": "4949.18",
+    "currency": "USD",
+    "tax_id": "953767010",
+    "subtotal_amount": "4499.25",
+    "tax_amount": "449.93",
+    "customer_name": "Jones, Miller and Yoder",
+    "customer_tax_id": "977768087",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

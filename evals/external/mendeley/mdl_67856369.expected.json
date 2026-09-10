@@ -1,0 +1,36 @@
+{
+  "document": "mdl_67856369.pdf",
+  "source": "mendeley",
+  "reference_date": "2020-09-24",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Pierce PLC",
+    "invoice_number": "67856369",
+    "invoice_date": "2020-05-27",
+    "total_amount": "4952.82",
+    "currency": "USD",
+    "tax_id": "959994796",
+    "subtotal_amount": "4502.56",
+    "tax_amount": "450.26",
+    "customer_name": "Cochran-Alvarez",
+    "customer_tax_id": "961727276",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

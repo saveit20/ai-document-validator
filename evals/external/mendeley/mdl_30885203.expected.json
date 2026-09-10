@@ -1,0 +1,35 @@
+{
+  "document": "mdl_30885203.pdf",
+  "source": "mendeley",
+  "reference_date": "2020-04-27",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Shepard PLC",
+    "invoice_number": "30885203",
+    "invoice_date": "2020-03-28",
+    "total_amount": "355.07",
+    "currency": "USD",
+    "tax_id": "929841184",
+    "subtotal_amount": "322.79",
+    "tax_amount": "32.28",
+    "customer_name": "Mays and Sons",
+    "customer_tax_id": "937726142",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

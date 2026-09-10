@@ -1,0 +1,37 @@
+{
+  "document": "mdl_17619666.pdf",
+  "source": "mendeley",
+  "reference_date": "2020-07-07",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Wilkerson Ltd",
+    "invoice_number": "17619666",
+    "invoice_date": "2020-03-09",
+    "total_amount": "41419.40",
+    "currency": "USD",
+    "tax_id": "941979699",
+    "subtotal_amount": "37654.00",
+    "tax_amount": "3765.40",
+    "customer_name": "English-Brown",
+    "customer_tax_id": "937797558",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

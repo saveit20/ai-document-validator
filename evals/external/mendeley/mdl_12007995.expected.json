@@ -1,0 +1,38 @@
+{
+  "document": "mdl_12007995.pdf",
+  "source": "mendeley",
+  "reference_date": "2012-05-08",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Jones and Sons",
+    "invoice_number": "12007995",
+    "invoice_date": "2012-04-08",
+    "total_amount": "22.00",
+    "currency": "USD",
+    "tax_id": "964770583",
+    "subtotal_amount": "20.00",
+    "tax_amount": "2.00",
+    "customer_name": "Jenkins, Cobb and Woods",
+    "customer_tax_id": "951949050",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

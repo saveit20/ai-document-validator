@@ -1,0 +1,36 @@
+{
+  "document": "mdl_90446683.pdf",
+  "source": "mendeley",
+  "reference_date": "2016-03-12",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Chang-Cooper",
+    "invoice_number": "90446683",
+    "invoice_date": "2016-02-11",
+    "total_amount": "216.67",
+    "currency": "USD",
+    "tax_id": "911962770",
+    "subtotal_amount": "196.97",
+    "tax_amount": "19.70",
+    "customer_name": "Peterson-Long",
+    "customer_tax_id": "911967248",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

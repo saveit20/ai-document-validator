@@ -1,0 +1,38 @@
+{
+  "document": "mdl_23152691.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-08-31",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Whitaker Ltd",
+    "invoice_number": "23152691",
+    "invoice_date": "2015-08-01",
+    "total_amount": "4783.70",
+    "currency": "USD",
+    "tax_id": "931730965",
+    "subtotal_amount": "4348.82",
+    "tax_amount": "434.88",
+    "customer_name": "Stout-Miller",
+    "customer_tax_id": "938725881",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

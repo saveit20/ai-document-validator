@@ -1,0 +1,37 @@
+{
+  "document": "mdl_13194726.pdf",
+  "source": "mendeley",
+  "reference_date": "2021-06-28",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed"
+  ],
+  "expected": {
+    "supplier_name": "Hopkins and Sons",
+    "invoice_number": "13194726",
+    "invoice_date": "2021-05-29",
+    "total_amount": "640.12",
+    "currency": "USD",
+    "tax_id": "952737223",
+    "subtotal_amount": "581.93",
+    "tax_amount": "58.19",
+    "customer_name": "Sims PLC",
+    "customer_tax_id": "995889495",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

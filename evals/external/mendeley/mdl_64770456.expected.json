@@ -1,0 +1,36 @@
+{
+  "document": "mdl_64770456.pdf",
+  "source": "mendeley",
+  "reference_date": "2012-02-10",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "date_out_of_window"
+  ],
+  "expected": {
+    "supplier_name": "Adams-Johnson",
+    "invoice_number": "64770456",
+    "invoice_date": "2011-10-13",
+    "total_amount": "2349.03",
+    "currency": "USD",
+    "tax_id": "960742081",
+    "subtotal_amount": "2135.48",
+    "tax_amount": "213.55",
+    "customer_name": "Boyer, Wilson and Ortiz",
+    "customer_tax_id": "944840139",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

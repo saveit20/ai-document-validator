@@ -1,0 +1,35 @@
+{
+  "document": "mdl_18531177.pdf",
+  "source": "mendeley",
+  "reference_date": "2015-05-30",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "USD"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template"
+  ],
+  "expected": {
+    "supplier_name": "Adkins, Campbell and Butler",
+    "invoice_number": "18531177",
+    "invoice_date": "2015-04-30",
+    "total_amount": "245.20",
+    "currency": "USD",
+    "tax_id": "948877876",
+    "subtotal_amount": "222.91",
+    "tax_amount": "22.29",
+    "customer_name": "Bird, Bates and Johnston",
+    "customer_tax_id": "910929312",
+    "verdict": "PASS"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}

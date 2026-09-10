@@ -1,0 +1,38 @@
+{
+  "document": "mdl_67583819.pdf",
+  "source": "mendeley",
+  "reference_date": "2012-07-01",
+  "config": {
+    "document_type": "SUPPLIER_INVOICE",
+    "max_age_days": 90,
+    "required_fields": [
+      "supplier_name",
+      "invoice_number",
+      "invoice_date",
+      "total_amount"
+    ],
+    "allowed_currencies": [
+      "EUR",
+      "GBP"
+    ]
+  },
+  "difficulty": [
+    "mendeley_template",
+    "currency_not_allowed",
+    "us_date"
+  ],
+  "expected": {
+    "supplier_name": "Gibson Ltd",
+    "invoice_number": "67583819",
+    "invoice_date": "2012-06-01",
+    "total_amount": "978.64",
+    "currency": "USD",
+    "tax_id": "911943128",
+    "subtotal_amount": "889.67",
+    "tax_amount": "88.97",
+    "customer_name": "Gomez-Martinez",
+    "customer_tax_id": "911973515",
+    "verdict": "FAIL"
+  },
+  "notes": "Mendeley 'Samples of electronic invoices' (CC BY 4.0); label from katanaml (MIT), verified against the PDF."
+}
