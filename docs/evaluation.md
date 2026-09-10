@@ -117,7 +117,7 @@ Rules we held ourselves to:
 
 | When | What | Effect |
 |---|---|---|
-| Customer-block fix | A dev bug (PDF text loses blank lines, so the customer block never ended) was fixed with a general rule | Also raised the then-hidden held-out score; declared |
+| Customer-block fix | A dev bug (PDF text loses blank lines, so the customer block never ended) was fixed with a general rule | Also raised the then-hidden stress-set score; declared |
 | Formatting the generator | Reformatting `generate_batch_a.py` displayed part of one stress-set invoice | No code or prompt changed; PDFs verified byte-identical |
 | Prompt draft | Five instructions mirrored stress-set difficulty categories | Reverted before any model call |
 | Haiku pilot on dev | Fields 96% but verdicts 27%: the grounding check rejected correct values (space thousands separators, US dates, bare `$`, evidence split across table columns). Fixed with general rules, each driven by a unit test written from invented inputs | Same recordings, dev verdicts 27% → 64%. Test not inspected |

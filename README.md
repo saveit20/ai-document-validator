@@ -51,6 +51,17 @@ and any rule that depends on it returns `REVIEW`. The same checks apply to all t
 what makes them comparable. Letting the model return the verdict was rejected as untestable; agents, model
 ensembles or a vector store, because nothing in the brief needs them.
 
+**Per-field confidence, our definition** (the same for every extractor, never reported by the model):
+
+| Confidence | Meaning |
+|---|---|
+| 1.0 | grounded and unambiguous |
+| 0.6 | grounded but ambiguous: a number such as `1.500`, a date that reads both ways, a tax total summed from printed lines that the totals do not yet confirm |
+| 0.3 | not grounded (possible hallucination) or not parseable |
+| 0.0 | not found |
+
+Any rule that depends on a field below 1.0 returns `REVIEW`.
+
 The three extractors do not run in parallel: a deployment uses one, chosen with `EXTRACTOR`.
 
 ### Which mode to use
